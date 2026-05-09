@@ -1,5 +1,9 @@
 # NgMusicFlow
 
+## RSSchool Angular 2026Q2 Team Project: Jamendo Music Discovery
+
+A collaborative web application built with Angular 21 for the RSSchool course. The project leverages the Jamendo API to provide users with a seamless music streaming and discovery experience, featuring advanced filtering, playlist management, and a modern UI.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
 
 ## Development server
