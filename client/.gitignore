@@ -6,6 +6,12 @@
 /out-tsc
 /bazel-out
 
+# Vitest
+.vitest-attachments/
+
+# Angular cache
+.angular/
+
 # Node
 /node_modules
 npm-debug.log

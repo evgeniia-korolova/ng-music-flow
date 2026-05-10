@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "client/src/**/*.{ts,html,scss}": [
+      "npm run lint:fix --prefix client",
+      "prettier --write"
+    ]
+  }
+}
