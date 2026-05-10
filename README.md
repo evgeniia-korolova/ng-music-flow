@@ -6,15 +6,55 @@ A collaborative web application built with Angular 21 for the RSSchool course. T
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
 
+## 🚀 Stack
+- **Framework:** Angular 21 (Zoneless mode)
+- **State Management:** Signals / NgRx Signals
+- **Styling:** SCSS + Tailwind CSS (planned)
+- **Testing:** Vitest + Playwright (Browser Mode)
+- **Automation:** Husky, Lint-staged, Semantic Release
+- **API:** [Jamendo API](https://jamendo.com)
+
+
+
 ## Development server
 
-To start a local development server, run:
+1. **Clone repo:**
+   ```bash
+   git clone https://github.com
+   cd ng-music-flow
+   ```
 
-```bash
-ng serve
-```
+2. **Install dependencies (in two folders):**
+   ```bash
+   npm install           
+   cd client && npm install 
+   ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+3. **Start local development:**
+   ```bash
+   npm start # (inside client folder)
+   ```
+
+## 🧪 Testing and Linting
+
+
+- **Linting:** `npm run lint`
+- **Testing:** `npm run test:ci` (with Chromium Headless)
+- **Formatting:** `npm run lint:fix` 
+
+## 📋 Tasks management
+All actual tasks, progress and backlog is on our [GitHub Project Board](https://github.com/users/evgeniia-korolova/projects/2/views/1).
+
+
+## 🛡 Workflow
+1. **Branching Strategy**: All features must be developed in separate branches branched off from `dev`.
+2. **Commit Standards**: Use [Conventional Commits](https://conventionalcommits.org) (e.g., `feat: add player service`, `fix: handle api error`).
+3. **Merging**: **Merging**: Direct pushes to `dev` and `main` are prohibited. 
+   - All code must be merged via **Pull Request**.
+   - At least one **Code Review** approval is required to merge into `dev`.
+   - Final merge from `dev` to `main` happens at the end of the sprint.
+4. **Pre-commit Checks**: Every commit is automatically verified by Husky (Linter + Tests). Please ensure your code passes all checks locally.
+
 
 ## Code scaffolding
 

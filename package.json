@@ -1,0 +1,20 @@
+{
+  "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.6",
+    "@semantic-release/release-notes-generator": "^14.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "semantic-release": "^24.2.9"
+  },
+  "scripts": {
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "client/src/**/*.{ts,html,scss}": [
+      "npm run lint:fix --prefix client",
+      "npx prettier --write"
+    ]
+  }
+}
