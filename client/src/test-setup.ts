@@ -3,5 +3,5 @@ import '@analogjs/vitest-angular/setup-snapshots';
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 
 setupTestBed({
-  browserMode: true, // Enables visual test preview
+  browserMode: false, // Enables visual test preview
 });

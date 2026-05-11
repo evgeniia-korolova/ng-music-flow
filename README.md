@@ -6,6 +6,11 @@ A collaborative web application built with Angular 21 for the RSSchool course. T
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
 
+## Team members
+- [Evgeniia Korolova](https://github.com/evgeniia-korolova) — Team Lead, Infrastructure, Architecture, Development
+- [Merab Kopaleishvili](https://github.com/mero93) — Developer
+- [Viktor Petsko](https://github.com/vitiok2021) — Developer
+
 ## 🚀 Stack
 - **Framework:** Angular 21 (Zoneless mode)
 - **State Management:** Signals / NgRx Signals
@@ -28,6 +33,11 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
    ```bash
    npm install           
    cd client && npm install 
+   ```
+   **or in the root**
+   This command installs both root tools (Husky, Linters) and Angular client dependencies:
+   ```bash
+   npm run install-all
    ```
 
 3. **Start local development:**

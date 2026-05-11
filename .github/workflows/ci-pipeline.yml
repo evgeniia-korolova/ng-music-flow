@@ -41,6 +41,9 @@ jobs:
 
       - name: Unit tests
         run: npm run test:ci --prefix client
+
+      - name: Build
+        run: npm run build --prefix client
      
 
       - name: Upload build artifact
