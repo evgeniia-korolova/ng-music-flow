@@ -8,6 +8,14 @@ const unicorn = require('eslint-plugin-unicorn').default;
 
 module.exports = defineConfig([
   {
+    ignores: [
+      '**/.angular/**', 
+      '**/dist/**', 
+      '**/node_modules/**', 
+      'src/styles.scss'
+    ],
+  },
+  {
     files: ['**/*.ts'],
     extends: [
       eslint.configs.recommended,
@@ -41,7 +49,7 @@ module.exports = defineConfig([
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/filename-case': ['error', { case: 'kebabCase' }],
-      "unicorn/no-null": "off",
+      "unicorn/no-null": "off",      
     },
   },
   {

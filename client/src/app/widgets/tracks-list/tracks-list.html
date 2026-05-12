@@ -1,0 +1,20 @@
+<div class="p-4">
+  <h2 class="text-2xl font-bold mb-4">Тест API Jamendo</h2>
+
+  @if (store.isLoading()) {
+    <p class="animate-pulse text-accent">Загрузка треков...</p>
+  }
+
+  @if (store.error()) {
+    <p class="text-red-500">{{ store.error() }}</p>
+  }
+
+  <ul class="space-y-2">
+    @for (track of store.items(); track track.id) {
+      <li class="border-b border-gray-700 py-2">
+        <span class="font-semibold">{{ track.name }}</span> —
+        <span class="text-gray-400">{{ track.artist_name }}</span>
+      </li>
+    }
+  </ul>
+</div>
