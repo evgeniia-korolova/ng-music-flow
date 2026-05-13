@@ -1,4 +1,4 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Track } from './track.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
@@ -25,21 +25,25 @@ export const TracksStore = signalStore(
     loadTracks: rxMethod<void>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
+
         switchMap(() =>
           jamendoApi
             .get<Track>('tracks', {
-              order: 'popularity_total',
+              order: 'releasedate_desc',
               limit: 20,
             })
             .pipe(
               tapResponse({
-                next: (response) =>
+                next: (response) => {
+                  console.log('--- [STORE MATCHING LOG] ---', response);
+
                   patchState(store, {
                     items: response.results,
                     isLoading: false,
-                  }),
+                  });
+                },
                 error: (err) => {
-                  console.error('API error:', err);
+                  console.error('API error inside store:', err);
                   patchState(store, {
                     error: 'Failed to load tracks. Try to reload page.',
                     isLoading: false,
@@ -51,4 +55,9 @@ export const TracksStore = signalStore(
       ),
     ),
   })),
+  withHooks({
+    onInit(store) {
+      store.loadTracks();
+    },
+  }),
 );

@@ -11,6 +11,12 @@ export class JamendoApiService {
   private readonly baseUrl = environment.apiUrl;
   private readonly clientId = environment.jamendoClientId;
 
+  // get<T>(endpoint: string, params: Record<string, any> = {}) {
+  //   console.log(`--- [MOCK ACTIVE] Имитируем запрос к эндпоинту: ${endpoint} ---`);
+
+  //   return this.http.get<JamendoResponse<T>>('/mock-tracks.json');
+  // }
+
   get<T>(endpoint: string, params: Record<string, string | number | boolean> = {}) {
     const httpParams = new HttpParams({
       fromObject: {
