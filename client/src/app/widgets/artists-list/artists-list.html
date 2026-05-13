@@ -1,1 +1,5 @@
-<p>artists-list works!</p>
+<div class="grid grod-cols-2 md:grid-cols-4 gap-4">
+  @for (item of store.artists(); track item.id) {
+    <app-artist-card [artist]="item"></app-artist-card>
+  }
+</div>
