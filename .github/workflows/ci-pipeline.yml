@@ -53,7 +53,7 @@ jobs:
 
   notify-discord:
     needs: [build-test]
-    if: always() # This ensures it runs even if the build fails
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Send PR notification to Discord
