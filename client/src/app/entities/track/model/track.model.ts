@@ -1,4 +1,4 @@
-export interface Track {
+export interface TrackDto {
   id: string;
   name: string;
   duration: number;
@@ -13,4 +13,16 @@ export interface Track {
     rate_total: number;
     playcount_total: number;
   };
+}
+
+export interface Track {
+  id: string;
+  name: string;
+  duration: number;
+  artistName: string;
+  albumName: string;
+  image: string;
+  audio: string;
+
+  waveform: number[];
 }

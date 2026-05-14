@@ -51,3 +51,9 @@ jobs:
         with:
           name: ng-music-flow-build
           path: dist/ng-music-flow/browser
+
+      - name: Discord Notification
+        uses: IlshatSultanov/discord-webhook-action@v1.2.4
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK }}

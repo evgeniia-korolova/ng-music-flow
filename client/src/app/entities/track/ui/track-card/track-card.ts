@@ -1,7 +1,8 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Track } from '../../model/track.model';
 import { TrackWaveform } from '../track-waveform/track-waveform';
 import { AudioPlayerService } from '../../../../shared/api/audio-player-service';
+import { generateFakePeaks } from '../../../../shared/lib/waveform';
 
 @Component({
   selector: 'app-track-card',
@@ -14,9 +15,20 @@ export class TrackCard {
   readonly track = input.required<Track>();
   readonly isPlaying = input<boolean>();
 
-  onPlayClick(): void {
-    this.playerService.playTrack(this.track());
-  }
+  readonly progress = computed(() => {
+    if (!this.isCurrentTrack()) {
+      return 0;
+    }
+    return this.playerService.progressPercent();
+  });
+
+  readonly waveform = computed(() => {
+    const duration = this.track().duration;
+
+    const length = duration ? Math.floor(duration / 2) : 60;
+
+    return generateFakePeaks(length);
+  });
 
   isCurrentTrack(): boolean {
     return this.playerService.currentTrack()?.id === this.track().id;

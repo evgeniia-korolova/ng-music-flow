@@ -1,10 +1,11 @@
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { Track } from './track.model';
+import { Track, TrackDto } from './track.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { mapTrack } from '../../../shared/lib/map-track';
 
 export interface TracksState {
   items: Track[];
@@ -28,17 +29,15 @@ export const TracksStore = signalStore(
 
         switchMap(() =>
           jamendoApi
-            .get<Track>('tracks', {
+            .get<TrackDto>('tracks', {
               order: 'releasedate_desc',
               limit: 20,
             })
             .pipe(
               tapResponse({
                 next: (response) => {
-                  console.log('--- [STORE MATCHING LOG] ---', response);
-
                   patchState(store, {
-                    items: response.results,
+                    items: response.results.map(mapTrack),
                     isLoading: false,
                   });
                 },
