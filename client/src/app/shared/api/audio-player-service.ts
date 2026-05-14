@@ -15,14 +15,15 @@ export class AudioPlayerService {
   readonly currentTime = signal<number>(0);
   readonly duration = signal<number>(0);
 
-  readonly progressPercent = computed(() => {
+  progressPercent = computed(() => {
+    const time = this.currentTime();
     const duration = this.duration();
 
-    if (!duration) {
+    if (!Number.isFinite(duration) || duration <= 0) {
       return 0;
     }
 
-    return (this.currentTime() / duration) * 100;
+    return Math.min(100, (time / duration) * 100);
   });
 
   constructor() {

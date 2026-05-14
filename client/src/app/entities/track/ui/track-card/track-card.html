@@ -13,9 +13,10 @@
       [class.opacity-100]="isPlaying()"
       [class.opacity-0]="!isPlaying()"
       [class.group-hover:opacity-100]="!isPlaying()"
-      [aria-label]="isPlaying() ? 'Pause' : 'Play'"
+      [aria-label]="isPlaying() && isCurrentTrack() ? 'Pause' : 'Play'"
+      (click)="play(track())"
     >
-      @if (isPlaying()) {
+      @if (isPlaying() && isCurrentTrack()) {
         <svg
           xmlns="w3.org"
           class="h-6 w-6 text-[var(--color-accent)] fill-current"

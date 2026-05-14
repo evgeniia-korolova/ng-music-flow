@@ -13,7 +13,7 @@
     @for (track of store.items(); track track.id) {
       @defer (on viewport) {
         <li class="w-full block">
-          <app-track-card [track]="track" [isPlaying]="false" />
+          <app-track-card [track]="track" />
         </li>
       } @placeholder (minimum 500ms) {
         <div

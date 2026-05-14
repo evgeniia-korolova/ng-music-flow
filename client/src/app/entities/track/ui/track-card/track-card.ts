@@ -13,7 +13,7 @@ import { generateFakePeaks } from '../../../../shared/lib/waveform';
 export class TrackCard {
   protected playerService = inject(AudioPlayerService);
   readonly track = input.required<Track>();
-  readonly isPlaying = input<boolean>();
+  readonly isPlaying = this.playerService.isPlaying;
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {
@@ -30,7 +30,11 @@ export class TrackCard {
     return generateFakePeaks(length);
   });
 
-  isCurrentTrack(): boolean {
-    return this.playerService.currentTrack()?.id === this.track().id;
+  readonly isCurrentTrack = computed(
+    () => this.playerService.currentTrack()?.id === this.track().id,
+  );
+
+  play(track: Track): void {
+    this.playerService.playTrack(track);
   }
 }

@@ -1,11 +1,12 @@
 import {
-  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   effect,
   ElementRef,
   input,
+  signal,
   viewChild,
+  OnDestroy,
 } from '@angular/core';
 
 @Component({
@@ -15,94 +16,78 @@ import {
   styleUrl: './track-waveform.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TrackWaveform {
+export class TrackWaveform implements OnDestroy {
   readonly peaks = input.required<number[]>();
   readonly progress = input(0);
 
   readonly isActive = input(false);
   protected readonly canvasRef = viewChild.required<ElementRef<HTMLCanvasElement>>('canvas');
 
-  private context?: CanvasRenderingContext2D;
-
-  private readonly barWidth = 3;
-  private readonly gap = 2;
-  private readonly minGap = 1;
+  private contextSignal = signal<CanvasRenderingContext2D | null>(null);
 
   constructor() {
-    afterNextRender(() => {
-      this.initializeCanvas();
-      this.drawWaveform();
-    });
-
     effect(() => {
-      this.peaks();
-      this.progress();
-      this.isActive();
+      const canvasEl = this.canvasRef()?.nativeElement;
+      if (!canvasEl) return;
 
-      if (!this.context) {
-        return;
+      if (!this.contextSignal()) {
+        const rect = canvasEl.getBoundingClientRect();
+        const parentWidth = canvasEl.parentElement?.getBoundingClientRect().width;
+
+        canvasEl.width =
+          parentWidth && parentWidth > 0 ? parentWidth : rect.width > 0 ? rect.width : 300;
+        canvasEl.height = 32;
+
+        const ctx = canvasEl.getContext('2d');
+        if (ctx) {
+          this.contextSignal.set(ctx);
+        }
       }
 
-      this.drawWaveform();
+      const ctx = this.contextSignal();
+      if (!ctx) return;
+
+      const peaksData = this.peaks();
+      const currentProgress = this.progress();
+
+      this.drawWaveform(canvasEl, ctx, peaksData, currentProgress);
     });
   }
 
-  private initializeCanvas(): void {
-    const canvas = this.canvasRef().nativeElement;
-
-    const rect = canvas.getBoundingClientRect();
-
-    canvas.width = rect.width;
-    canvas.height = rect.height;
-
-    this.context = canvas.getContext('2d') ?? undefined;
-  }
-
-  private drawWaveform(): void {
-    if (!this.context) {
-      return;
-    }
-
-    const canvas = this.canvasRef().nativeElement;
-    const ctx = this.context;
-    const peaks = this.peaks();
-    const progress = this.progress();
+  private drawWaveform(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    peaks: number[],
+    progress: number,
+  ): void {
     const width = canvas.width;
     const height = canvas.height;
 
-    const totalBarsWidth = peaks.length * this.barWidth;
+    ctx.clearRect(0, 0, width, height);
 
-    const activeBarsCount = Math.floor((progress / 100) * this.peaks.length);
+    const barWidth = 2;
+    const minGap = 1;
+
+    const currentProgressX = (progress / 100) * width;
+
+    const totalBarsWidth = peaks.length * barWidth;
     const remainingWidth = width - totalBarsWidth;
-    const gap = peaks.length > 1 ? Math.max(this.minGap, remainingWidth / (peaks.length - 1)) : 0;
+    const gap =
+      peaks.length > 1 && remainingWidth > 0
+        ? Math.max(minGap, remainingWidth / (peaks.length - 1))
+        : minGap;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    peaks?.forEach((peak, index) => {
-      const x = index * (this.barWidth + gap);
-
-      const maxBarHeight = height * 0.9;
-      const barHeight = peak * maxBarHeight;
-
+    peaks.forEach((peak, index) => {
+      const x = index * (barWidth + gap);
+      const barHeight = peak * height;
       const y = (height - barHeight) / 2;
 
-      const isPlayed = index <= activeBarsCount;
-
-      ctx.fillStyle = this.getBarColor(isPlayed);
-
-      ctx.beginPath();
-
-      ctx.roundRect(x, y, this.barWidth, barHeight, 999);
-
-      ctx.fill();
+      ctx.fillStyle = x <= currentProgressX ? '#ec4899' : '#4a4a4a';
+      ctx.fillRect(x, y, barWidth, barHeight);
     });
   }
 
-  private getBarColor(isPlayed: boolean): string {
-    if (isPlayed) {
-      return this.isActive() ? '#ec4899' : '#9ca3af';
-    }
-
-    return '#3f3f46';
+  ngOnDestroy(): void {
+    this.contextSignal.set(null);
   }
 }
