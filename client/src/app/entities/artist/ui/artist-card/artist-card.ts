@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { Artist } from '../../model/artist.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-artist-card',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './artist-card.html',
   styleUrl: './artist-card.scss',
 })

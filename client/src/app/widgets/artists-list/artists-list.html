@@ -1,4 +1,6 @@
-<div class="grid grod-cols-2 md:grid-cols-4 gap-4">
+<div
+  class="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-[1em] md:gap-[1.5em]"
+>
   @for (item of store.artists(); track item.id) {
     <app-artist-card [artist]="item"></app-artist-card>
   }
