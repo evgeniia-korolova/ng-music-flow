@@ -41,7 +41,7 @@ module.exports = defineConfig([
       'unicorn/prevent-abbreviations': 'off',
       'unicorn/prefer-top-level-await': 'off',
       'unicorn/filename-case': ['error', { case: 'kebabCase' }],
-      "unicorn/no-null": "off",
+      'unicorn/no-null': 'off',
     },
   },
   {
