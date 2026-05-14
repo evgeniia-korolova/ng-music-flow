@@ -1,31 +1,31 @@
 {
-    "headers": { "status": "success", "code": 0, "results_count": 2 },
-    "results": [
-      {
-        "id": "1",
-        "name": "Evolution (Test Rock)",
-        "duration": 185,
-        "artist_id": "101",
-        "artist_name": "Benjamin Tissot",
-        "album_name": "Sci-Fi Album",
-        "album_id": "201",
-        "image": "picsum.photos",
-        "audio": "soundhelix.com",
-        "audiodownload": "",
-        "stats": { "rate_total": 5, "playcount_total": 1250 }
-      },
-      {
-        "id": "2",
-        "name": "Acoustic Breeze (Test Pop)",
-        "duration": 240,
-        "artist_id": "102",
-        "artist_name": "Bensound Jazz",
-        "album_name": "Chill Album",
-        "album_id": "202",
-        "image": "picsum.photos",
-        "audio": "soundhelix.com",
-        "audiodownload": "",
-        "stats": { "rate_total": 4, "playcount_total": 850 }
-      }
-    ]
-  }
+  "headers": { "status": "success", "code": 0, "results_count": 2 },
+  "results": [
+    {
+      "id": "1",
+      "name": "Evolution (Test Rock)",
+      "duration": 185,
+      "artist_id": "101",
+      "artist_name": "Benjamin Tissot",
+      "album_name": "Sci-Fi Album",
+      "album_id": "201",
+      "image": "picsum.photos",
+      "audio": "soundhelix.com",
+      "audiodownload": "",
+      "stats": { "rate_total": 5, "playcount_total": 1250 }
+    },
+    {
+      "id": "2",
+      "name": "Acoustic Breeze (Test Pop)",
+      "duration": 240,
+      "artist_id": "102",
+      "artist_name": "Bensound Jazz",
+      "album_name": "Chill Album",
+      "album_id": "202",
+      "image": "picsum.photos",
+      "audio": "soundhelix.com",
+      "audiodownload": "",
+      "stats": { "rate_total": 4, "playcount_total": 850 }
+    }
+  ]
+}

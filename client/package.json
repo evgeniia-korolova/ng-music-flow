@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "vitest",
-    "test:ci": "vitest run --watch=false",
+    "test:ci": "vitest run",
     "lint": "ng lint",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write ."
