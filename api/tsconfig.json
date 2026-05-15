@@ -13,7 +13,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "paths": {
-      "*": ["./*"] 
+      "*": ["./*"]
     },
     "target": "ES2023",
     "incremental": true,
