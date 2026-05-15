@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 
 import angular from '@analogjs/vite-plugin-angular';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
-import { playwright } from '@vitest/browser-playwright';
+
 
 export default defineConfig(({ mode }) => ({
   plugins: [angular(), viteTsConfigPaths()],
@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => ({
     include: ['src/**/*.spec.ts', 'src/**/*.test.ts'],
     reporters: ['default'],
     environment: 'jsdom',
-  },
+  }, 
   optimizeDeps: {
     include: [
       '@angular/core',
