@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
+import { environment } from '../../../environments/environment';
 import { JamendoResponse } from './jamendo-response.model';
 
 @Injectable({
@@ -10,6 +10,8 @@ export class JamendoApiService {
   private http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
   private readonly clientId = environment.jamendoClientId;
+
+  // in case jamendo doesn't work
 
   // get<T>(endpoint: string, params: Record<string, any> = {}) {
   //   console.log(`--- [MOCK ACTIVE] Имитируем запрос к эндпоинту: ${endpoint} ---`);
