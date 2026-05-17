@@ -13,7 +13,10 @@ describe('ThemeToggler', () => {
 
     fixture = TestBed.createComponent(ThemeToggler);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+
+    fixture.componentRef.setInput('currentTheme', 'system');
+
+    fixture.detectChanges();
   });
 
   it('should create', () => {
