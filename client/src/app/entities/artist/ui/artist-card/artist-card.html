@@ -2,15 +2,21 @@
   class="bg-[var(--color-surface)] shadow-lg rounded-lg overflow-hidden block group"
   routerLink="."
 >
-  <div class="w-full aspect-video overflow-hidden bg-gray-400">
-    <img
-      class="object-cover w-full h-full group-hover:scale-103 transition duration-300 ease-in-out"
-      src="{{ artist().image }}"
-      alt="{{ artist().name }}"
-    />
+  <div class="w-full aspect-video overflow-hidden bg-gray-400 flex justify-center items-center">
+    @if (artist().image) {
+      <img
+        class="object-cover w-full h-full group-hover:scale-105 transition duration-300 ease-in-out"
+        [src]="artist().image"
+        [alt]="artist().name"
+      />
+    } @else {
+      <span class="text-3xl text-gray-100">No image</span>
+    }
   </div>
-  <div class="p-4 md:p-6 flex flex-col gap-1">
-    <h3 class="text-lg font-semibold truncate">{{ artist().name }}</h3>
+  <div class="p-[1em] md:p-[1.5em] flex flex-col gap-1">
+    <h3 class="text-lg font-semibold truncate hover:underline">
+      {{ artist().name }}
+    </h3>
     <p class="text-sm">{{ artist().website }}</p>
     <p class="text-sm">{{ artist().joinDate }}</p>
     <p class="text-sm">{{ artist().shortUrl }}</p>
