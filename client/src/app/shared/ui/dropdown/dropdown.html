@@ -1,15 +1,16 @@
 <div class="relative inline-block">
-  <ng-content select="[trigger]"></ng-content>
+  <ng-content select="[trigger]" active="isOpen()"></ng-content>
 
   @if (isOpen()) {
     <ul
-      class="absolute top-full left-0 z-50 mt-1 flex min-w-48 flex-col justify-start rounded-md border border-neutral-200 bg-accent p-1 align-top shadow-md"
+      class="absolute top-full z-50 mt-1 flex w-fit flex-col justify-start gap-1 rounded-md border border-neutral-200 bg-accent p-1 align-top shadow-md"
+      [class]="alignment() === 'left' ? 'left-0' : 'right-0'"
     >
-      @for (dropdownItem of dropdownItems; track $index) {
+      @for (dropdownItem of dropdownItems(); track $index) {
         <li
-          class="flex w-full cursor-pointer justify-center bg-emerald-300 text-left align-middle text-accent hover:bg-emerald-500"
+          class="flex shrink-0 cursor-pointer justify-center bg-emerald-100 text-left align-middle text-accent hover:bg-emerald-200"
         >
-          <ng-container [ngTemplateOutlet]="dropdownItem" />
+          <ng-template *ngTemplateOutlet="dropdownItem" />
         </li>
       }
     </ul>
