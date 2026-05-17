@@ -1,0 +1,82 @@
+<article
+  class="box-border flex w-full items-center gap-4 rounded-lg bg-accent px-4! py-3! shadow-md transition-colors hover:bg-white/5"
+>
+  <div class="group relative h-12 w-12 flex-none overflow-hidden rounded-md bg-blue-900 text-white">
+    <img
+      class="h-full w-full object-cover"
+      [src]="track().image"
+      [alt]="track().name"
+      class="h-16 w-16 flex-none rounded-md object-cover"
+    />
+    <button
+      class="absolute inset-0 flex items-center justify-center bg-black/50 transition-opacity focus:outline-none"
+      [class.opacity-100]="isPlaying()"
+      [class.opacity-0]="!isPlaying()"
+      [class.group-hover:opacity-100]="!isPlaying()"
+      [aria-label]="isPlaying() && isCurrentTrack() ? 'Pause' : 'Play'"
+      (click)="play(track())"
+    >
+      @if (isPlaying() && isCurrentTrack()) {
+        <svg xmlns="w3.org" class="h-6 w-6 fill-current text-accent" viewBox="0 0 24 24">
+          <path fill-rule="evenodd" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" clip-rule="evenodd" />
+        </svg>
+      } @else {
+        <svg xmlns="w3.org" class="ml-0.5 h-6 w-6 fill-current text-white" viewBox="0 0 24 24">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      }
+    </button>
+  </div>
+
+  <div class="flex w-45 min-w-0 flex-none flex-col">
+    <h3 class="truncate font-bold text-primary">{{ track().name }}</h3>
+    <p class="truncate text-sm text-gray-400">{{ track().artistName }}</p>
+  </div>
+
+  <div class="flex h-8 min-w-0 flex-auto items-center rounded px-3">
+    <app-track-waveform [isActive]="isCurrentTrack()" [progress]="progress()" [peaks]="waveform()">
+    </app-track-waveform>
+  </div>
+
+  <div class="flex flex-none items-center gap-3">
+    <span class="mr-2 font-mono text-xs text-gray-400">
+      {{ track().duration }}
+    </span>
+
+    <button
+      class="p-1 text-gray-400 transition-colors hover:text-red-500 focus:outline-none"
+      aria-label="Add to favorites"
+    >
+      <svg
+        xmlns="w3.org"
+        class="h-5 w-5 fill-none stroke-current"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+        />
+      </svg>
+    </button>
+
+    <button
+      class="p-1 text-gray-400 transition-colors hover:text-accent focus:outline-none"
+      aria-label="Download track"
+    >
+      <svg
+        xmlns="w3.org"
+        class="h-5 w-5 fill-none stroke-current"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+        />
+      </svg>
+    </button>
+  </div>
+</article>

@@ -77,6 +77,6 @@ export default defineConfig([
     },
   },
   {
-    ignores: ['.angular/**/*', 'dist/**/*', '**/*.scss', '**/*.css'],
+    ignores: ['.angular/**/*', 'dist/**/*', '**/node_modules/**', '**/*.scss', '**/*.css'],
   },
 ]);
