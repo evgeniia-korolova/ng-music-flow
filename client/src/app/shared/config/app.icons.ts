@@ -1,3 +1,17 @@
-import { LucideLogIn, LucideLogOut } from '@lucide/angular';
+import {
+  LucideLogIn,
+  LucideLogOut,
+  LucideMenu,
+  LucideMoonStar,
+  LucideShirt,
+  LucideSun,
+} from '@lucide/angular';
 
-export const APP_ICONS = [LucideLogIn, LucideLogOut];
+export const APP_ICONS = [
+  LucideLogIn,
+  LucideLogOut,
+  LucideMenu,
+  LucideMoonStar,
+  LucideSun,
+  LucideShirt,
+];
