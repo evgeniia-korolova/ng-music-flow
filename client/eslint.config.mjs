@@ -76,4 +76,7 @@ export default defineConfig([
       'better-tailwindcss/enforce-consistent-class-order': 'error',
     },
   },
+  {
+    ignores: ['.angular/**/*', 'dist/**/*', '**/*.scss', '**/*.css'],
+  },
 ]);

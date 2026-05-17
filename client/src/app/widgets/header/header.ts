@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { LucideDynamicIcon } from '@lucide/angular';
 
 @Component({
   selector: 'app-header',
-  imports: [],
+  imports: [LucideDynamicIcon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

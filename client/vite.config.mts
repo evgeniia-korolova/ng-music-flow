@@ -6,6 +6,7 @@ import { playwright } from '@vitest/browser-playwright';
 
 export default defineConfig(({ mode }) => ({
   plugins: [angular(), viteTsConfigPaths()],
+  
   test: {
     globals: true,
     setupFiles: ['src/test-setup.ts'],

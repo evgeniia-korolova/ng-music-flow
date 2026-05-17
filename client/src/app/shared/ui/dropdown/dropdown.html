@@ -1,0 +1,17 @@
+<div class="relative inline-block">
+  <ng-content select="[trigger]"></ng-content>
+
+  @if (isOpen()) {
+    <ul
+      class="absolute top-full left-0 z-50 mt-1 flex min-w-48 flex-col justify-start rounded-md border border-neutral-200 bg-accent p-1 align-top shadow-md"
+    >
+      @for (dropdownItem of dropdownItems; track $index) {
+        <li
+          class="flex w-full cursor-pointer justify-center bg-emerald-300 text-left align-middle text-accent hover:bg-emerald-500"
+        >
+          <ng-container [ngTemplateOutlet]="dropdownItem" />
+        </li>
+      }
+    </ul>
+  }
+</div>
