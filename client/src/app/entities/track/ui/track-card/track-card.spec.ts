@@ -11,17 +11,11 @@ describe('TrackCard', () => {
     id: '1',
     name: 'Test Track',
     duration: 180,
-    artist_id: '101',
-    artist_name: 'Test Artist',
-    album_id: '201',
-    album_name: 'Test Album',
+    artistName: 'Test Artist',
+    albumName: 'Test Album',
     image: 'test-image.jpg',
     audio: 'test-audio.mp3',
-    audiodownload: 'test-download.mp3',
-    stats: {
-      rate_total: 5,
-      playcount_total: 1000,
-    },
+    waveform: [2, 5, 4],
   };
 
   beforeEach(async () => {
