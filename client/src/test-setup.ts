@@ -2,7 +2,7 @@ import '@angular/compiler';
 import '@analogjs/vitest-angular/setup-snapshots';
 import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed';
 import { provideLucideIcons } from '@lucide/angular';
-import { APP_ICONS } from './app/shared/config/app.icons';
+import { APP_ICONS } from './app/shared/constants/app.icons';
 
 setupTestBed({
   browserMode: false,

@@ -3,12 +3,7 @@ import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeMode } from './theme.store';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
-
-const themeStates: Record<ThemeMode, string> = {
-  light: 'sun',
-  dark: 'moon-star',
-  system: 'shirt',
-};
+import { themeStates } from '../../shared/constants/theme-states';
 
 @Component({
   selector: 'app-theme-toggler',

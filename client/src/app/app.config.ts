@@ -3,7 +3,7 @@ import { provideRouter, withComponentInputBinding, withViewTransitions } from '@
 
 import { routes } from './app.routes';
 import { provideLucideIcons } from '@lucide/angular';
-import { APP_ICONS } from './shared/config/app.icons';
+import { APP_ICONS } from './shared/constants/app.icons';
 import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
