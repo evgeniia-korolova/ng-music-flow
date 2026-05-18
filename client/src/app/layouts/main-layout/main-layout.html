@@ -1,7 +1,7 @@
-<div class="flex flex-col min-h-dvh flex-none">
-  <app-header class="h-[var(--header-height)]" />
-  <main class="flex-auto">
-    <router-outlet />
-  </main>
-  <app-footer class="h-[var(--footer-height)] flex-none" />
-</div>
+<app-header />
+<main class="flex-1">
+  <router-outlet />
+</main>
+<footer>
+  <app-footer />
+</footer>

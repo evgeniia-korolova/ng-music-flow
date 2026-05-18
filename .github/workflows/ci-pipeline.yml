@@ -53,7 +53,7 @@ jobs:
 
   notify-discord:
     needs: [build-test]
-    if: always()
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Send PR notification to Discord

@@ -1,23 +1,23 @@
 <div class="p-4">
-  <h1 class="text-2xl font-bold mb-4">Tracks List</h1>
+  <h1 class="mb-4 text-2xl font-bold">Tracks List</h1>
 
   @if (store.isLoading()) {
-    <p class="animate-pulse text-accent">Загрузка треков...</p>
+    <p class="animate-pulse text-accent">Loading tracks...</p>
   }
 
   @if (store.error()) {
     <p class="text-red-500">{{ store.error() }}</p>
   }
 
-  <ul class="flex flex-col gap-3 list-none p-0 m-0">
+  <ul class="m-0 flex list-none flex-col gap-3 p-0">
     @for (track of store.items(); track track.id) {
       @defer (on viewport) {
-        <li class="w-full block">
+        <li class="block w-full">
           <app-track-card [track]="track" />
         </li>
       } @placeholder (minimum 500ms) {
         <div
-          class="bg-[var(--color-surface)] !px-4 !py-3 rounded-lg shadow-[var(--shadow-header)] h-12 border border-slate-900 w-full box-border"
+          class="box-border h-12 w-full rounded-lg border border-slate-900 bg-accent px-4 py-3 shadow-md"
         >
           Loading...
         </div>

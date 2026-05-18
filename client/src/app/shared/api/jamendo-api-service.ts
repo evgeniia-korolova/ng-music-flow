@@ -7,7 +7,7 @@ import { JamendoResponse } from './jamendo-response.model';
   providedIn: 'root',
 })
 export class JamendoApiService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
   private readonly baseUrl = environment.apiUrl;
   private readonly clientId = environment.jamendoClientId;
 

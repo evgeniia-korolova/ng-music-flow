@@ -1,45 +1,9 @@
-@use 'tailwindcss';
+@import './styles/tailwind-theme.css';
 
-:root {
-  /* --- LIGHT THEME (DEFAULT) --- */
-  --color-bg: #f8f8f8;
-  --color-on-bg: #000000;
-  --color-bg-accent: #ff4757;
-  --color-on-bg-accent: #ffffff;
-  --color-surface: #e9dcdc;
-  --color-on-surface: #333333;
+$header-width: 1800px;
 
-  --color-text-main: #333333;
-  --color-accent: #ff4757;
-
-  --shadow-header: 0 2px 10px rgba(165, 158, 158, 0.5);
-  --shadow-footer: 2px 0 10px rgba(165, 158, 158, 0.5);
-
-  --header-height: 72px;
-  --footer-height: 72px;
-
-  --content-min-height: calc(100dvh - var(--header-height) - var(--footer-height));
-}
-
-/* --- DARK MODE (OUTSIDE THEME BLOCK) --- */
-
-.dark {
-  --color-bg: #3d3c3c;
-  --color-on-bg: #f5f5f5;
-  --color-bg-accent: #ff6b81;
-  --color-on-bg-accent: #000000;
-  --color-surface: #121212;
-  --color-on-surface: #f5f5f5;
-
-  --color-header-bg: #1a1a1a;
-  --color-text-main: #f5f5f5;
-  --color-accent: #ff6b81;
-
-  --shadow-header: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
 }
