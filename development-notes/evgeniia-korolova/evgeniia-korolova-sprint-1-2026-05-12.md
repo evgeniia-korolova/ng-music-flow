@@ -10,7 +10,9 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 - Git Hooks: Configured **Husky** and **lint-staged** to run linters automatically before each commit.
 - CI/CD: Set up a basic **GitHub Actions** workflow to validate the build and linting on every Pull Request.
 - install Zone.js
-- created tracks-list and track-card with fake sound-vawe
+- created tracks-list and track-card with fake sound-wave
+- get tracks data in the service and store in the signalStore (sorry that it comes up so early)
+- tacks data is transferred from the list to the card by means of input()
 
 **Problems**:
 -- **encountered difficulties with Vitest settings for ci/cd. Meanwile settled with the help of Gemini and repo of Rainer Hahnekamp**
