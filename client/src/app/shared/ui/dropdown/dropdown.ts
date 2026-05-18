@@ -3,11 +3,13 @@ import {
   Component,
   contentChild,
   contentChildren,
+  DOCUMENT,
   effect,
   ElementRef,
   HostListener,
   inject,
   input,
+  Renderer2,
   signal,
   TemplateRef,
 } from '@angular/core';
@@ -24,17 +26,27 @@ export class Dropdown {
   private readonly el = inject(ElementRef);
   alignment = input<'left' | 'right'>('left');
 
+  private readonly document = inject(DOCUMENT);
+  private readonly renderer = inject(Renderer2);
+
   constructor() {
-    effect(() => {
+    effect((onCleanup) => {
       const el = this.triggerButton()?.nativeElement;
+      const body = this.document.body;
 
       if (!el) return;
 
       if (this.isOpen()) {
         el.dataset['active'] = 'true';
+        this.renderer.addClass(body, 'overflow-hidden');
       } else {
         delete el.dataset['active'];
+        this.renderer.removeClass(body, 'overflow-hidden');
       }
+
+      onCleanup(() => {
+        this.renderer.removeClass(body, 'overflow-hidden');
+      });
     });
   }
 
