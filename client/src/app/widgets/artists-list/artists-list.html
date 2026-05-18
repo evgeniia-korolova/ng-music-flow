@@ -1,0 +1,16 @@
+<ul
+  class="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-[1em] md:gap-[1.5em]"
+  aria-label="Artists"
+>
+  @for (item of store.artists(); track item.id) {
+    @defer (on viewport) {
+      <li>
+        <app-artist-card [artist]="item"></app-artist-card>
+      </li>
+    } @placeholder (minimum 500ms) {
+      <li
+        class="block h-80 w-full animate-pulse overflow-hidden rounded-lg bg-accent shadow-lg"
+      ></li>
+    }
+  }
+</ul>

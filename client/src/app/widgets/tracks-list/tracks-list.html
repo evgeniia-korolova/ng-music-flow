@@ -1,0 +1,27 @@
+<div class="p-4">
+  <h1 class="mb-4 text-2xl font-bold">Newest Songs</h1>
+
+  @if (store.isLoading()) {
+    <p class="animate-pulse text-accent">Loading tracks...</p>
+  }
+
+  @if (store.error()) {
+    <p class="text-red-500">{{ store.error() }}</p>
+  }
+
+  <ul class="m-0 flex list-none flex-col gap-3 p-0">
+    @for (track of store.items(); track track.id) {
+      @defer (on viewport) {
+        <li class="block w-full">
+          <app-track-card [track]="track" />
+        </li>
+      } @placeholder (minimum 500ms) {
+        <div
+          class="box-border h-12 w-full rounded-lg border border-slate-900 bg-accent px-4 py-3 shadow-md"
+        >
+          Loading...
+        </div>
+      }
+    }
+  </ul>
+</div>

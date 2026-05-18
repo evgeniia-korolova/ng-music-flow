@@ -1,0 +1,9 @@
+@import './styles/tailwind-theme.css';
+
+$header-width: 1800px;
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
