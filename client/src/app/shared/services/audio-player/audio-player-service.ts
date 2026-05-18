@@ -1,5 +1,5 @@
 import { computed, Injectable, signal } from '@angular/core';
-import { Track } from '../../entities/track/model/track.model';
+import { Track } from '../../../entities/track/model/track.model';
 
 @Injectable({
   providedIn: 'root',
