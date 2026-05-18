@@ -46,11 +46,11 @@ Signals are used as the primary reactive mechanism across the application.
 
 ### Home Page
 
-![Home Page](./public/screenshots/home-page.png)
+![Home Page](./client/public/screenshots/home-page.png)
 
 ### Artists Page
 
-![Home Page](./public/screenshots/artists-page.png)
+![Artists Page](./client/public/screenshots/artists-page.png)
 
 ## Development server
 
