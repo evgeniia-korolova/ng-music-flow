@@ -12,21 +12,52 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 - [Merab Kopaleishvili](https://github.com/mero93) — Developer
 - [Viktor Petsko](https://github.com/vitiok2021) — Developer
 
+## 🏗 Architecture
+
+The project follows a modular Angular architecture with separation between:
+
+- shared UI components
+- feature-level business logic
+- API/data access layer
+- reusable services and utilities
+
+Signals are used as the primary reactive mechanism across the application.
+
 ## 🚀 Stack
 
-- **Framework:** Angular 21
+- **Framework:** Angular 21 (Zone mode)
 - **State Management:** Signals / NgRx Signals
-- **Styling:** SCSS + Tailwind CSS (planned)
+- **Styling:** SCSS + Tailwind CSS
 - **Testing:** Vitest + Playwright (Browser Mode)
 - **Automation:** Husky, Lint-staged, Semantic Release
 - **API:** [Jamendo API](https://jamendo.com)
+
+## ✨ Features
+
+- Music discovery via Jamendo API
+- Audio playback with waveform visualization
+- Artists and tracks browsing
+- Theme switching
+- Responsive UI
+- Advanced filtering and search
+- Modern Angular Signals-based architecture
+
+## 📸 Screenshots
+
+### Home Page
+
+![Home Page](./client/public/screenshots/home-page.png)
+
+### Artists Page
+
+![Artists Page](./client/public/screenshots/artists-page.png)
 
 ## Development server
 
 1. **Clone repo:**
 
    ```bash
-   git clone https://github.com
+   git clone https://github.com/evgeniia-korolova/ng-music-flow.git
    cd ng-music-flow
    ```
 
@@ -66,7 +97,7 @@ All actual tasks, progress and backlog is on our [GitHub Project Board](https://
 
 1. **Branching Strategy**: All features must be developed in separate branches branched off from `dev`.
 2. **Commit Standards**: Use [Conventional Commits](https://conventionalcommits.org) (e.g., `feat: add player service`, `fix: handle api error`).
-3. **Merging**: **Merging**: Direct pushes to `dev` and `main` are prohibited.
+3. **Merging**: Direct pushes to `dev` and `main` are prohibited.
    - All code must be merged via **Pull Request**.
    - At least one **Code Review** approval is required to merge into `dev`.
    - Final merge from `dev` to `main` happens at the end of the sprint.
