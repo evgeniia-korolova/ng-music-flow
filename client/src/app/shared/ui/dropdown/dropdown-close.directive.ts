@@ -1,15 +1,17 @@
-import { Directive, HostListener, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { Dropdown } from './dropdown';
 
 @Directive({
   selector: '[appDropdownClose]',
   standalone: true,
+  host: {
+    '(click)': 'closeDropdown()',
+  },
 })
 export class DropdownCloseDirective {
   private readonly parentDropdown = inject(Dropdown);
 
-  @HostListener('click')
-  onClick() {
-    this.parentDropdown.isOpen.update(() => false);
+  closeDropdown() {
+    this.parentDropdown.isOpen.set(false);
   }
 }

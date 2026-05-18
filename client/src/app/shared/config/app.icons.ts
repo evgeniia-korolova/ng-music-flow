@@ -5,6 +5,7 @@ import {
   LucideMoonStar,
   LucideShirt,
   LucideSun,
+  LucideX,
 } from '@lucide/angular';
 
 export const APP_ICONS = [
@@ -14,4 +15,5 @@ export const APP_ICONS = [
   LucideMoonStar,
   LucideSun,
   LucideShirt,
+  LucideX,
 ];
