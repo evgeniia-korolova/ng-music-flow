@@ -27,7 +27,7 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 
 - ...
 - **Thoughts / plans:** what's next?
-- **Time spent:** 3-6 hour per day
+- **Time spent:** 3-6 hour per day - total about 30 hours
 
 ## Plan for Sprint 2
 
