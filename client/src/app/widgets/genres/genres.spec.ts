@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Genres } from './genres';
+import Genres from './genres';
 
 describe('Genres', () => {
   let component: Genres;
