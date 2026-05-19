@@ -8,7 +8,28 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/home/home'),
+        loadComponent: () => import('./pages/explore/explore'),
+        children: [
+          {
+            path: '',
+            redirectTo: 'popular',
+            pathMatch: 'full',
+          },
+          {
+            path: 'popular',
+            loadComponent: () => import('./widgets/tracks-list/tracks-list'),
+            data: { order: 'popularity_month' },
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./widgets/tracks-list/tracks-list'),
+            data: { order: 'releasedate_desc' },
+          },
+          {
+            path: 'genres',
+            loadComponent: () => import('./widgets/genres/genres'),
+          },
+        ],
       },
       { path: 'artists', loadComponent: () => import('./pages/artists/artists') },
     ],

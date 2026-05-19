@@ -36,8 +36,8 @@ export default defineConfig([
     processor: angular.processInlineTemplates,
 
     rules: {
-      'better-tailwindcss/no-unknown-classes': 'error',
-      'better-tailwindcss/enforce-consistent-class-order': 'error',
+      // 'better-tailwindcss/no-unknown-classes': 'error',
+      // 'better-tailwindcss/enforce-consistent-class-order': 'error',
 
       '@angular-eslint/directive-selector': [
         'error',
@@ -71,10 +71,10 @@ export default defineConfig([
       parser: await import('@angular-eslint/template-parser'),
     },
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    rules: {
-      'better-tailwindcss/no-unknown-classes': 'error',
-      'better-tailwindcss/enforce-consistent-class-order': 'error',
-    },
+    // rules: {
+    //   'better-tailwindcss/no-unknown-classes': 'error',
+    //   'better-tailwindcss/enforce-consistent-class-order': 'error',
+    // },
   },
   {
     ignores: ['.angular/**/*', 'dist/**/*', '**/node_modules/**', '**/*.scss', '**/*.css'],

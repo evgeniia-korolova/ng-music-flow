@@ -13,6 +13,7 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 - created tracks-list and track-card with fake sound-wave
 - get tracks data in the service and store in the signalStore (sorry that it comes up so early)
 - tacks data is transferred from the list to the card by means of input()
+- add layout for Explore page with tabs and routes
 
 **Problems**:
 -- **encountered difficulties with Vitest settings for ci/cd. Meanwile settled with the help of Gemini and repo of Rainer Hahnekamp**
