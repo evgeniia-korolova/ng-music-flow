@@ -7,5 +7,6 @@ import { Header } from '../../widgets/header/header';
   selector: 'app-main-layout',
   imports: [Header, Footer, RouterOutlet],
   templateUrl: './main-layout.html',
+  styleUrl: './main-layout.scss',
 })
 export class MainLayout {}

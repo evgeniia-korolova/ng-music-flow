@@ -1,7 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { Track } from '../../model/track.model';
 import { TrackWaveform } from '../track-waveform/track-waveform';
-import { AudioPlayerService } from '../../../../shared/api/audio-player-service';
+import { AudioPlayerService } from '../../../../shared/services/audio-player/audio-player-service';
 import { generateFakePeaks } from '../../../../shared/lib/waveform';
 
 @Component({

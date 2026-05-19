@@ -7,107 +7,98 @@ A collaborative web application built with Angular 21 for the RSSchool course. T
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
 
 ## Team members
+
 - [Evgeniia Korolova](https://github.com/evgeniia-korolova) — Team Lead, Infrastructure, Architecture, Development
 - [Merab Kopaleishvili](https://github.com/mero93) — Developer
 - [Viktor Petsko](https://github.com/vitiok2021) — Developer
 
+## 🏗 Architecture
+
+The project follows a modular Angular architecture with separation between:
+
+- shared UI components
+- feature-level business logic
+- API/data access layer
+- reusable services and utilities
+
+Signals are used as the primary reactive mechanism across the application.
+
 ## 🚀 Stack
-- **Framework:** Angular 21 (Zoneless mode)
+
+- **Framework:** Angular 21 (Zone mode)
 - **State Management:** Signals / NgRx Signals
-- **Styling:** SCSS + Tailwind CSS (planned)
+- **Styling:** SCSS + Tailwind CSS
 - **Testing:** Vitest + Playwright (Browser Mode)
 - **Automation:** Husky, Lint-staged, Semantic Release
 - **API:** [Jamendo API](https://jamendo.com)
 
+## ✨ Features
 
+- Music discovery via Jamendo API
+- Audio playback with waveform visualization
+- Artists and tracks browsing
+- Theme switching
+- Responsive UI
+- Advanced filtering and search
+- Modern Angular Signals-based architecture
+
+## 📸 Screenshots
+
+### Home Page
+
+![Home Page](./client/public/screenshots/home-page.png)
+
+### Artists Page
+
+![Artists Page](./client/public/screenshots/artists-page.png)
 
 ## Development server
 
 1. **Clone repo:**
+
    ```bash
-   git clone https://github.com
+   git clone https://github.com/evgeniia-korolova/ng-music-flow.git
    cd ng-music-flow
    ```
 
 2. **Install dependencies (in two folders):**
+
    ```bash
-   npm install           
-   cd client && npm install 
+   npm install
+   cd client && npm install
+   cd ..
+   cd api && npm install
    ```
+
    **or in the root**
-   This command installs both root tools (Husky, Linters) and Angular client dependencies:
+   This command installs both root tools (Husky, Linters), Angular client and NestJS api dependencies:
+
    ```bash
    npm run install-all
    ```
 
 3. **Start local development:**
+
    ```bash
-   npm start # (inside client folder)
+   npm start # (inside root folder)
    ```
 
 ## 🧪 Testing and Linting
 
-
-- **Linting:** `npm run lint`
-- **Testing:** `npm run test:ci` (with Chromium Headless)
-- **Formatting:** `npm run lint:fix` 
+- **Linting:** `npm run lint-all`
+- **Testing:** `npm run test-all` (with Chromium Headless)
+- **Formatting:** `cd client && npm run format`
 
 ## 📋 Tasks management
+
 All actual tasks, progress and backlog is on our [GitHub Project Board](https://github.com/users/evgeniia-korolova/projects/2/views/1).
 
-
 ## 🛡 Workflow
+
 1. **Branching Strategy**: All features must be developed in separate branches branched off from `dev`.
 2. **Commit Standards**: Use [Conventional Commits](https://conventionalcommits.org) (e.g., `feat: add player service`, `fix: handle api error`).
-3. **Merging**: **Merging**: Direct pushes to `dev` and `main` are prohibited. 
+3. **Merging**: Direct pushes to `dev` and `main` are prohibited.
    - All code must be merged via **Pull Request**.
    - At least one **Code Review** approval is required to merge into `dev`.
    - Final merge from `dev` to `main` happens at the end of the sprint.
 4. **Pre-commit Checks**: Every commit is automatically verified by Husky (Linter + Tests). Please ensure your code passes all checks locally.
-
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
