@@ -8,7 +8,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () => import('./pages/explore/explore'),
+        loadComponent: () => import('./pages/discover/discover'),
         children: [
           {
             path: '',
