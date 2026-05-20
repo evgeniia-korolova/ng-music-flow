@@ -9,6 +9,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () => import('./pages/discover/discover'),
+        title: 'Discover',
         children: [
           {
             path: '',
@@ -19,15 +20,18 @@ export const routes: Routes = [
             path: 'popular',
             loadComponent: () => import('./widgets/tracks-list/tracks-list'),
             data: { order: 'popularity_month' },
+            title: 'Popular tracks',
           },
           {
             path: 'new',
             loadComponent: () => import('./widgets/tracks-list/tracks-list'),
             data: { order: 'releasedate_desc' },
+            title: 'New releases',
           },
           {
             path: 'genres',
             loadComponent: () => import('./widgets/genres/genres'),
+            title: 'Genres',
           },
         ],
       },

@@ -1,5 +1,5 @@
 @use 'tailwindcss';
-@import './styles/tailwind-theme.css';
+// @import './styles/tailwind-theme.css';
 
 $header-width: 1800px;
 
@@ -7,4 +7,12 @@ $header-width: 1800px;
   html {
     scrollbar-gutter: stable;
   }
+}
+
+:root {
+  --bg-primary: rgb(251, 244, 245);
+}
+
+.dark {
+  --bg-primary: rgb(3, 3, 89);
 }
