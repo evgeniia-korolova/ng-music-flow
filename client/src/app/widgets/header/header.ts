@@ -1,9 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { LucideDynamicIcon } from '@lucide/angular';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
 
 @Component({
@@ -18,14 +18,21 @@ import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Header {
+export class Header implements OnInit {
   themeStore = inject(ThemeStore);
   private readonly router = inject(Router);
 
-  get navItems() {
+  protected navItems: Route[] = [];
+
+  setNavItems() {
     const routes = this.router.config.flatMap((layout) => layout.children || []);
 
-    return routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
+    this.navItems = routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
+  }
+
+  ngOnInit(): void {
+    this.setNavItems();
   }
 }
