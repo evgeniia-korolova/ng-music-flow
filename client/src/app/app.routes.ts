@@ -7,9 +7,10 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       {
-        path: '',
+        path: 'discover',
         loadComponent: () => import('./pages/discover/discover'),
         title: 'Discover',
+        data: { displayOnNavbar: true },
         children: [
           {
             path: '',
@@ -35,7 +36,17 @@ export const routes: Routes = [
           },
         ],
       },
-      { path: 'artists', loadComponent: () => import('./pages/artists/artists') },
+      {
+        path: 'artists',
+        loadComponent: () => import('./pages/artists/artists'),
+        title: 'Artists',
+        data: { displayOnNavbar: true },
+      },
+      {
+        path: '',
+        redirectTo: 'discover',
+        pathMatch: 'full',
+      },
     ],
   },
 ];
