@@ -1,6 +1,7 @@
 .explore {
   padding: 1rem;
-  background: var(--bg-primary);
+  background: var(--color-bg);
+  color: var(--color-on-bg);
 }
 
 .explore_list {
@@ -12,7 +13,7 @@
   display: block;
   padding: 8px 16px;
   text-decoration: none;
-  background: oklch(0.925 0.005 214.3);
+  background: transparent;
   transition: background 0.2s ease;
   font-size: clamp(1rem, 0.875rem + 0.555vi, 1.5rem);
   font-weight: 600;
@@ -20,10 +21,7 @@
 }
 
 .explore__link.active-tab {
-  background: oklch(0.45 0.085 224.283);
-  color: white;
-}
-
-.explore_list__item:not(:last-child) {
-  border-right: 1px solid black;
+  border-radius: 1rem;
+  background: var(--color-bg-accent);
+  color: var(--color-on-bg-accent);
 }

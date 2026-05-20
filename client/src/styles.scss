@@ -1,4 +1,5 @@
 @use 'tailwindcss';
+@use 'styles/colors' as colors;
 // @import './styles/tailwind-theme.css';
 
 $header-width: 1800px;
@@ -10,9 +11,31 @@ $header-width: 1800px;
 }
 
 :root {
-  --bg-primary: rgb(251, 244, 245);
+  --color-bg: #{colors.$light-bg};
+  --color-on-bg: #{colors.$light-on-bg};
+
+  --color-bg-accent: #{colors.$light-bg-accent};
+  --color-on-bg-accent: #{colors.$light-on-bg-accent};
+
+  --color-surface: #{colors.$light-surface};
+  --color-on-surface: #{colors.$light-on-surface};
 }
 
 .dark {
-  --bg-primary: rgb(3, 3, 89);
+  --color-bg: #{colors.$dark-bg};
+  --color-on-bg: #{colors.$dark-on-bg};
+
+  --color-bg-accent: #{colors.$dark-bg-accent};
+  --color-on-bg-accent: #{colors.$dark-on-bg-accent};
+
+  --color-surface: #{colors.$dark-surface};
+  --color-on-surface: #{colors.$dark-on-surface};
 }
+
+// :root {
+//   --bg-primary: rgb(251, 244, 245);
+// }
+
+// .dark {
+//   --bg-primary: rgb(3, 3, 89);
+// }
