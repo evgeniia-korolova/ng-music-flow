@@ -1,0 +1,29 @@
+.explore {
+  padding: 1rem;
+  background: var(--bg-primary);
+}
+
+.explore_list {
+  display: flex;
+  list-style: none;
+}
+
+.explore__link {
+  display: block;
+  padding: 8px 16px;
+  text-decoration: none;
+  background: oklch(0.925 0.005 214.3);
+  transition: background 0.2s ease;
+  font-size: clamp(1rem, 0.875rem + 0.555vi, 1.5rem);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.explore__link.active-tab {
+  background: oklch(0.45 0.085 224.283);
+  color: white;
+}
+
+.explore_list__item:not(:last-child) {
+  border-right: 1px solid black;
+}
