@@ -68,7 +68,7 @@ export class TrackWaveform implements OnDestroy {
     const height = canvas.height;
     const rootStyles = getComputedStyle(document.documentElement);
 
-    const colorOnSurface = rootStyles.getPropertyValue('--color-on-surface').trim() || '#4a4a4a';
+    const colorOnSurface = rootStyles.getPropertyValue('--color-text-on-bg').trim() || '#4a4a4a';
 
     ctx.clearRect(0, 0, width, height);
 

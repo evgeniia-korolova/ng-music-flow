@@ -1,0 +1,16 @@
+@use 'themes' as t;
+
+@mixin generate-theme-variables {
+  :root {
+    @each $name, $value in map-get(t.$themes, light) {
+      --color-#{$name}: #{$value};
+    }
+  }
+
+  :root.dark,
+  body.dark {
+    @each $name, $value in map-get(t.$themes, dark) {
+      --color-#{$name}: #{$value};
+    }
+  }
+}

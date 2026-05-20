@@ -7,7 +7,7 @@ import tseslint from 'typescript-eslint';
 import angular from 'angular-eslint';
 import unusedImports from 'eslint-plugin-unused-imports';
 import unicorn from 'eslint-plugin-unicorn';
-// import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
+import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 
 const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
@@ -15,13 +15,13 @@ const __filename = fileURLToPath(import.meta.url);
 export default defineConfig([
   {
     ignores: [
-      '.angular/**/*', 
-      'dist/**/*', 
-      '**/node_modules/**', 
-      '**/*.scss', 
+      '.angular/**/*',
+      'dist/**/*',
+      '**/node_modules/**',
+      '**/*.scss',
       '**/*.css',
       'src/styles/**/*',
-      '**/_*.scss'
+      '**/_*.scss',
     ],
   },
   // {
@@ -42,13 +42,13 @@ export default defineConfig([
     plugins: {
       'unused-imports': unusedImports,
       unicorn: unicorn,
-      // 'better-tailwindcss': betterTailwindcss,
+      'better-tailwindcss': betterTailwindcss,
     },
     processor: angular.processInlineTemplates,
 
     rules: {
-      // 'better-tailwindcss/no-unknown-classes': 'error',
-      // 'better-tailwindcss/enforce-consistent-class-order': 'error',
+      'better-tailwindcss/no-unknown-classes': 'off',
+      'better-tailwindcss/enforce-consistent-class-order': 'warn',
 
       '@angular-eslint/directive-selector': [
         'error',
@@ -75,16 +75,16 @@ export default defineConfig([
   },
   {
     files: ['**/*.html'],
-    // plugins: {
-    //   'better-tailwindcss': betterTailwindcss,
-    // },
+    plugins: {
+      'better-tailwindcss': betterTailwindcss,
+    },
     languageOptions: {
       parser: await import('@angular-eslint/template-parser'),
     },
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
-    // rules: {
-    //   'better-tailwindcss/no-unknown-classes': 'error',
-    //   'better-tailwindcss/enforce-consistent-class-order': 'error',
-    // },
-  },  
+    rules: {
+      'better-tailwindcss/no-unknown-classes': 'off',
+      'better-tailwindcss/enforce-consistent-class-order': 'warn',
+    },
+  },
 ]);

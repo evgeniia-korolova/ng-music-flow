@@ -1,6 +1,6 @@
 @use 'tailwindcss';
-@use 'styles/colors' as colors;
-// @import './styles/tailwind-theme.css';
+@use 'styles/mixins' as m;
+@include m.generate-theme-variables;
 
 $header-width: 1800px;
 
@@ -10,32 +10,39 @@ $header-width: 1800px;
   }
 }
 
-:root {
-  --color-bg: #{colors.$light-bg};
-  --color-on-bg: #{colors.$light-on-bg};
-
-  --color-bg-accent: #{colors.$light-bg-accent};
-  --color-on-bg-accent: #{colors.$light-on-bg-accent};
-
-  --color-surface: #{colors.$light-surface};
-  --color-on-surface: #{colors.$light-on-surface};
-}
-
-.dark {
-  --color-bg: #{colors.$dark-bg};
-  --color-on-bg: #{colors.$dark-on-bg};
-
-  --color-bg-accent: #{colors.$dark-bg-accent};
-  --color-on-bg-accent: #{colors.$dark-on-bg-accent};
-
-  --color-surface: #{colors.$dark-surface};
-  --color-on-surface: #{colors.$dark-on-surface};
-}
-
 // :root {
-//   --bg-primary: rgb(251, 244, 245);
+//   --color-bg: #{colors.$light-bg};
+//   --color-on-bg: #{colors.$light-on-bg};
+
+//   --color-bg-accent: #{colors.$light-bg-accent};
+//   --color-on-bg-accent: #{colors.$light-on-bg-accent};
+
+//   --color-surface: #{colors.$light-surface};
+//   --color-on-surface: #{colors.$light-on-surface};
 // }
 
 // .dark {
-//   --bg-primary: rgb(3, 3, 89);
+//   --color-bg: #{colors.$dark-bg};
+//   --color-on-bg: #{colors.$dark-on-bg};
+
+//   --color-bg-accent: #{colors.$dark-bg-accent};
+//   --color-on-bg-accent: #{colors.$dark-on-bg-accent};
+
+//   --color-surface: #{colors.$dark-surface};
+//   --color-on-surface: #{colors.$dark-on-surface};
 // }
+
+@mixin generate-theme-variables {
+  :root {
+    @each $name, $value in map-get(c.$themes, light) {
+      --color-#{$name}: #{$value};
+    }
+  }
+
+  :root.dark,
+  body.dark {
+    @each $name, $value in map-get(c.$themes, dark) {
+      --color-#{$name}: #{$value};
+    }
+  }
+}
