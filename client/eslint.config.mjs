@@ -23,14 +23,7 @@ export default defineConfig([
       'src/styles/**/*',
       '**/_*.scss',
     ],
-  },
-  // {
-  //   settings: {
-  //     'better-tailwindcss': {
-  //       entryPoint: path.resolve(__dirname, 'src/styles/tailwind-theme.css'),
-  //     },
-  //   },
-  // },
+  },  
   {
     files: ['**/*.ts'],
     extends: [
@@ -86,5 +79,8 @@ export default defineConfig([
       'better-tailwindcss/no-unknown-classes': 'off',
       'better-tailwindcss/enforce-consistent-class-order': 'warn',
     },
+  },
+  {
+    ignores: ['.angular/**/*', 'dist/**/*', '**/node_modules/**', '**/*.scss', '**/*.css'],
   },
 ]);
