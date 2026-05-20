@@ -6,6 +6,13 @@
       <button trigger #trigger>
         <svg lucideIcon="menu"></svg>
       </button>
+      @for (item of navItems; track $index) {
+        <ng-template #item>
+          <a [routerLink]="[item.path]" routerLinkActive="bg-red-400!" appDropdownClose
+            >{{ item.title }}
+          </a>
+        </ng-template>
+      }
     </app-dropdown>
     <div
       class="absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer justify-center rounded-xl border-2 border-primary bg-primary/10 px-2 py-1 align-middle transition-all duration-300 hover:bg-primary/30"
