@@ -1,5 +1,7 @@
+@use 'sass:map';
+@use 'styles/mixins' as m;
 @use 'tailwindcss';
-// @import './styles/tailwind-theme.css';
+@include m.generate-theme-variables;
 
 $header-width: 1800px;
 
@@ -9,10 +11,26 @@ $header-width: 1800px;
   }
 }
 
-:root {
-  --bg-primary: rgb(251, 244, 245);
-}
+@mixin generate-theme-variables {
+  $light-map: map.get(t.$themes, light);
+  $dark-map: map.get(t.$themes, dark);
 
-.dark {
-  --bg-primary: rgb(3, 3, 89);
+  :root {
+    color-scheme: light;
+
+    --color-text-on-bg: #{map.get($light-map, on-surface)};
+
+    @each $name, $value in $light-map {
+      --color-#{$name}: #{$value};
+    }
+  }
+
+  :root.dark,
+  body.dark {
+    color-scheme: dark;
+
+    @each $name, $value in $dark-map {
+      --color-#{$name}: #{$value};
+    }
+  }
 }
