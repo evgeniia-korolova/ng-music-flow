@@ -10,15 +10,19 @@ import unicorn from 'eslint-plugin-unicorn';
 import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 export default defineConfig([
   {
-    settings: {
-      'better-tailwindcss': {
-        entryPoint: path.resolve(__dirname, 'src/styles/tailwind-theme.css'),
-      },
-    },
+    ignores: [
+      '.angular/**/*',
+      'dist/**/*',
+      '**/node_modules/**',
+      '**/*.scss',
+      '**/*.css',
+      'src/styles/**/*',
+      '**/_*.scss',
+    ],
   },
   {
     files: ['**/*.ts'],

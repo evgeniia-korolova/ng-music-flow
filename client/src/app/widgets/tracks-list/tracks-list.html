@@ -2,7 +2,7 @@
   <h1 class="mb-4 text-2xl font-bold">Newest Songs</h1>
 
   @if (store.isLoading()) {
-    <p class="animate-pulse text-accent">Loading tracks...</p>
+    <p class="text-accent animate-pulse">Loading tracks...</p>
   }
 
   @if (store.error()) {
@@ -17,7 +17,7 @@
         </li>
       } @placeholder (minimum 500ms) {
         <div
-          class="box-border h-12 w-full rounded-lg border border-slate-900 bg-accent px-4 py-3 shadow-md"
+          class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
         >
           Loading...
         </div>
