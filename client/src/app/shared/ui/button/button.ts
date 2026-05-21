@@ -1,11 +1,12 @@
 import { Component, computed, input } from '@angular/core';
+import { ɵEmptyOutletComponent } from '@angular/router';
 
-type ButtonVariant = 'default' | 'outline' | 'ghost' | 'danger' | 'info';
+type ButtonVariant = 'default' | 'outline' | 'ghost' | 'danger';
 type ButtonSize = 'md' | 'lg' | 'sm' | 'icon-cubic' | 'icon-rounded';
 
 @Component({
   selector: 'app-button',
-  imports: [],
+  imports: [ɵEmptyOutletComponent],
   templateUrl: './button.html',
   styleUrl: './button.scss',
 })
