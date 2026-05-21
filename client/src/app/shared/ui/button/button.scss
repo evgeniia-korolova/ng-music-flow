@@ -1,0 +1,70 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.sm {
+  font-size: 0.9rem;
+  border-radius: 0.4rem;
+  padding: 0.45rem 0.8rem;
+}
+
+.md {
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+}
+
+.lg {
+  font-size: 1.2rem;
+  border-radius: 0.7rem;
+  padding: 0.8rem 1.2rem;
+}
+
+[class*='icon-'] {
+  aspect-ratio: 1 / 1;
+  min-width: 0;
+  min-height: 0;
+
+  app-icon,
+  svg,
+  .icon,
+  img {
+    object-fit: contain;
+    flex-shrink: 0;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+[class*='icon-cubic'] {
+  border-radius: 0.5rem;
+}
+
+[class*='icon-rounded'] {
+  border-radius: 50%;
+}
+
+[class*='icon-'][class$='-sm'] {
+  width: 2rem;
+  height: 2rem;
+  padding: 0.4rem;
+}
+
+[class*='icon-'][class$='-md'] {
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0.5rem;
+}
+
+[class*='icon-'][class$='-lg'] {
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0.65rem;
+}
