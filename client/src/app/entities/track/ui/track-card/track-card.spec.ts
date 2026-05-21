@@ -9,12 +9,20 @@ describe('TrackCard', () => {
 
   const mockTrack: Track = {
     id: '1',
-    name: 'Test Track',
+    title: 'Test Track',
     duration: 180,
-    artistName: 'Test Artist',
-    albumName: 'Test Album',
-    image: 'test-image.jpg',
-    audio: 'test-audio.mp3',
+    artist: {
+      id: '555',
+      name: 'Test Name',
+    },
+    album: {
+      id: '122',
+      name: 'Test Album',
+    },
+    coverUrl: 'test-image.jpg',
+    audioUrl: 'test-audio.mp3',
+    playCount: 10,
+    rating: 50,
     waveform: [2, 5, 4],
   };
 

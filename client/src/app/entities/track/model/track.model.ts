@@ -6,9 +6,10 @@ export interface TrackDto {
   artist_name: string;
   album_name: string;
   album_id: string;
-  image: string;
+  album_image: string;
   audio: string;
   audiodownload: string;
+  waveform: string;
   stats: {
     rate_total: number;
     playcount_total: number;
@@ -17,12 +18,19 @@ export interface TrackDto {
 
 export interface Track {
   id: string;
-  name: string;
+  title: string;
   duration: number;
-  artistName: string;
-  albumName: string;
-  image: string;
-  audio: string;
-
+  artist: {
+    id: string;
+    name: string;
+  };
+  album: {
+    id: string;
+    name: string;
+  };
+  coverUrl: string;
+  audioUrl: string;
+  playCount: number;
+  rating: number;
   waveform: number[];
 }
