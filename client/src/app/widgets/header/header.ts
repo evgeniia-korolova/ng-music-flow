@@ -5,6 +5,7 @@ import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
 import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +16,7 @@ import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.
     RouterLink,
     DropdownCloseDirective,
     RouterLinkActive,
+    Button,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
