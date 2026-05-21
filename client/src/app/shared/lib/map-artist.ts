@@ -6,7 +6,7 @@ export function mapArtist(dto: ArtistDto): Artist {
     name: dto.name,
     website: dto.website,
     joinDate: dto.joindate,
-    image: dto.image || 'images/artist-placeholder.jpg',
+    image: dto.image || 'artist-placeholder.jpg',
     shortUrl: dto.shorturl,
     shareUrl: dto.shareurl,
   };
