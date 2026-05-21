@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import TracksList from './tracks-list';
+import Genres from './genres';
 
-describe('TracksList', () => {
-  let component: TracksList;
-  let fixture: ComponentFixture<TracksList>;
+describe('Genres', () => {
+  let component: Genres;
+  let fixture: ComponentFixture<Genres>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TracksList],
+      imports: [Genres],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TracksList);
+    fixture = TestBed.createComponent(Genres);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

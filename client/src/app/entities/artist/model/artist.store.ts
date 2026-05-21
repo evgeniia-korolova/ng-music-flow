@@ -33,6 +33,7 @@ export const ArtistStore = signalStore(
                 patchState(store, {
                   items: response.results.map(mapArtist),
                   isLoading: false,
+                  error: null,
                 });
               },
               error: (err) => {

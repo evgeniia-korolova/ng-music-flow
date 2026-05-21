@@ -8,6 +8,6 @@ import { TrackCard } from '../../entities/track/ui/track-card/track-card';
   templateUrl: './tracks-list.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TracksList {
+export default class TracksList {
   readonly store = inject(TracksStore);
 }

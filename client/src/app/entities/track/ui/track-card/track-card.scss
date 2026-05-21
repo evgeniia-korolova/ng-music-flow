@@ -1,3 +1,11 @@
 :host {
   display: block;
 }
+
+.card {
+  background: var(--color-surface);
+
+  &:hover {
+    background: var(--color-bg-accent);
+  }
+}

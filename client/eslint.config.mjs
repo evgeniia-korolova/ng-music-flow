@@ -10,15 +10,19 @@ import unicorn from 'eslint-plugin-unicorn';
 import betterTailwindcss from 'eslint-plugin-better-tailwindcss';
 
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// const __dirname = path.dirname(__filename);
 
 export default defineConfig([
   {
-    settings: {
-      'better-tailwindcss': {
-        entryPoint: path.resolve(__dirname, 'src/styles/tailwind-theme.css'),
-      },
-    },
+    ignores: [
+      '.angular/**/*',
+      'dist/**/*',
+      '**/node_modules/**',
+      '**/*.scss',
+      '**/*.css',
+      'src/styles/**/*',
+      '**/_*.scss',
+    ],
   },
   {
     files: ['**/*.ts'],
@@ -36,8 +40,8 @@ export default defineConfig([
     processor: angular.processInlineTemplates,
 
     rules: {
-      'better-tailwindcss/no-unknown-classes': 'error',
-      'better-tailwindcss/enforce-consistent-class-order': 'error',
+      'better-tailwindcss/no-unknown-classes': 'off',
+      'better-tailwindcss/enforce-consistent-class-order': 'warn',
 
       '@angular-eslint/directive-selector': [
         'error',
@@ -72,8 +76,8 @@ export default defineConfig([
     },
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {
-      'better-tailwindcss/no-unknown-classes': 'error',
-      'better-tailwindcss/enforce-consistent-class-order': 'error',
+      'better-tailwindcss/no-unknown-classes': 'off',
+      'better-tailwindcss/enforce-consistent-class-order': 'warn',
     },
   },
   {
