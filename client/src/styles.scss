@@ -1,5 +1,6 @@
-@use 'tailwindcss';
+@use 'sass:map';
 @use 'styles/mixins' as m;
+@use 'tailwindcss';
 @include m.generate-theme-variables;
 
 $header-width: 1800px;
@@ -10,38 +11,25 @@ $header-width: 1800px;
   }
 }
 
-// :root {
-//   --color-bg: #{colors.$light-bg};
-//   --color-on-bg: #{colors.$light-on-bg};
-
-//   --color-bg-accent: #{colors.$light-bg-accent};
-//   --color-on-bg-accent: #{colors.$light-on-bg-accent};
-
-//   --color-surface: #{colors.$light-surface};
-//   --color-on-surface: #{colors.$light-on-surface};
-// }
-
-// .dark {
-//   --color-bg: #{colors.$dark-bg};
-//   --color-on-bg: #{colors.$dark-on-bg};
-
-//   --color-bg-accent: #{colors.$dark-bg-accent};
-//   --color-on-bg-accent: #{colors.$dark-on-bg-accent};
-
-//   --color-surface: #{colors.$dark-surface};
-//   --color-on-surface: #{colors.$dark-on-surface};
-// }
-
 @mixin generate-theme-variables {
+  $light-map: map.get(t.$themes, light);
+  $dark-map: map.get(t.$themes, dark);
+
   :root {
-    @each $name, $value in map-get(c.$themes, light) {
+    color-scheme: light;
+
+    --color-text-on-bg: #{map.get($light-map, on-surface)};
+
+    @each $name, $value in $light-map {
       --color-#{$name}: #{$value};
     }
   }
 
   :root.dark,
   body.dark {
-    @each $name, $value in map-get(c.$themes, dark) {
+    color-scheme: dark;
+
+    @each $name, $value in $dark-map {
       --color-#{$name}: #{$value};
     }
   }

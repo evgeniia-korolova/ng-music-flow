@@ -23,7 +23,7 @@ export default defineConfig([
       'src/styles/**/*',
       '**/_*.scss',
     ],
-  },  
+  },
   {
     files: ['**/*.ts'],
     extends: [

@@ -1,4 +1,5 @@
 @use 'themes' as t;
+@use 'sass:map';
 
 @mixin generate-theme-variables {
   :root {

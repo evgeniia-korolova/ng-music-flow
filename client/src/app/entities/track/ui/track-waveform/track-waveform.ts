@@ -68,7 +68,8 @@ export class TrackWaveform implements OnDestroy {
     const height = canvas.height;
     const rootStyles = getComputedStyle(document.documentElement);
 
-    const colorOnSurface = rootStyles.getPropertyValue('--color-text-on-bg').trim() || '#4a4a4a';
+    const colorOnSurface = rootStyles.getPropertyValue('--color-text-on-bg').trim();
+    const colorAccent = rootStyles.getPropertyValue('--color-text-accent').trim();
 
     ctx.clearRect(0, 0, width, height);
 
@@ -89,7 +90,7 @@ export class TrackWaveform implements OnDestroy {
       const barHeight = peak * height;
       const y = (height - barHeight) / 2;
 
-      ctx.fillStyle = x <= currentProgressX ? '#ec4899' : colorOnSurface;
+      ctx.fillStyle = x <= currentProgressX ? colorAccent : colorOnSurface;
       ctx.fillRect(x, y, barWidth, barHeight);
     });
   }
