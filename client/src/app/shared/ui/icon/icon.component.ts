@@ -43,7 +43,6 @@ export class Icon {
           const trustedHtml = this.sanitizer.bypassSecurityTrustHtml(rawString);
 
           this.rawSvgContent.set(trustedHtml);
-          console.log(this.icon());
           return;
         } catch {
           console.error('failed to load icon');

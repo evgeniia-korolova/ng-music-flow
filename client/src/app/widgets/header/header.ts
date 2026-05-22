@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { LucideDynamicIcon } from '@lucide/angular';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
@@ -12,7 +11,6 @@ import { Icon } from '../../shared/ui/icon/icon.component';
 @Component({
   selector: 'app-header',
   imports: [
-    LucideDynamicIcon,
     Dropdown,
     ThemeToggler,
     RouterLink,
