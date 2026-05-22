@@ -15,6 +15,8 @@ type IconVariant = 'outline' | 'fill';
   `,
   styleUrl: './icon.component.scss',
   host: {
+    role: 'icon',
+    '[attr.aria-label]': 'icon()',
     '[style.--icon-primary]': 'primaryColor()',
     '[style.--icon-secondary]': 'secondaryColor()',
     '[style.--icon-fill]': 'fillColor()',

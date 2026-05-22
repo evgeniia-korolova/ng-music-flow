@@ -8,20 +8,19 @@ $themes: (
 
     //----Buttons-----
     //----Default-----
-    btn-default-bg: rgb(40, 150, 120),
-    btn-default-bg-hover: rgb(58, 185, 145),
-    btn-default-border: rgb(35, 130, 100),
-    btn-default-border-hover: rgb(45, 140, 110),
-    btn-default-text: rgb(225, 230, 230),
+    btn-default-bg: rgb(14, 83, 64),
+    btn-default-bg-hover: rgb(32, 145, 114),
+    btn-default-border: rgb(18, 90, 70),
+    btn-default-border-hover: rgb(24, 118, 92),
+    btn-default-text: rgb(255, 255, 255),
     //----Ghost-----
     btn-ghost-bg: rgb(230, 230, 230),
     btn-ghost-text: rgb(17, 68, 52),
     //----Danger----
-    btn-danger-bg: rgb(125, 20, 20),
-    btn-danger-bg-hover: rgb(135, 20, 20),
-    btn-danger-bg-active: rgb(145, 20, 20),
-    btn-danger-border: rgb(90, 15, 15),
-    btn-danger-border-hover: rgb(90, 25, 25),
+    btn-danger-bg: rgb(155, 28, 28),
+    btn-danger-bg-hover: rgb(210, 30, 30),
+    btn-danger-border: rgb(110, 15, 15),
+    btn-danger-border-hover: rgb(155, 28, 28),
   ),
   dark: (
     bg: #012024,
@@ -41,9 +40,9 @@ $themes: (
     btn-ghost-bg: rgba(255, 255, 255, 0.1),
     btn-ghost-text: rgb(70, 210, 175),
     //----Danger----
-    btn-danger-bg: rgb(95, 15, 15),
-    btn-danger-bg-hover: rgb(115, 18, 18),
-    btn-danger-border: rgb(145, 30, 30),
-    btn-danger-border-hover: rgb(175, 40, 40),
+    btn-danger-bg: rgb(135, 22, 22),
+    btn-danger-bg-hover: rgb(215, 35, 35),
+    btn-danger-border: rgb(165, 35, 35),
+    btn-danger-border-hover: rgb(240, 50, 50),
   ),
 );
