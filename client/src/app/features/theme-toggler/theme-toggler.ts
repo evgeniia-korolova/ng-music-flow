@@ -18,7 +18,6 @@ export class ThemeToggler {
   themes: ThemeMode[] = Object.keys(themeStates) as ThemeMode[];
 
   changeTheme(mode: ThemeMode) {
-    console.log('changing theme', mode);
     this.themeChanged.emit(mode);
   }
 
