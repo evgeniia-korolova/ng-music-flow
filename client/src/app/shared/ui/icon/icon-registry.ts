@@ -7,7 +7,7 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
   `),
   play: () =>
     Promise.resolve(
-      `<svg xmlns="w3.org" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)"=>
+      `<svg xmlns="w3.org" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)">
           <path d="M8 5v14l11-7z" />
         </svg>`,
     ),
@@ -42,20 +42,21 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
     ),
   moonStar: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor) "stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 5h4"/><path d="M20 3v4"/>
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" "stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 5h4"/>
+            <path d="M20 3v4"/>
             <path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>
         </svg>`,
     ),
   shirt: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor) stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>
         </svg>`,
     ),
   menu: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor) stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 5h16"/>
             <path d="M4 12h16"/>
             <path d="M4 19h16"/>
@@ -63,14 +64,14 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
     ),
   logIn: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor) stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m10 17 5-5-5-5"/><path d="M15 12H3"/>
             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
         </svg>`,
     ),
   logOut: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor) stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>
         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
       </svg>`,

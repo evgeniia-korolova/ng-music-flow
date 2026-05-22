@@ -1,0 +1,57 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  font-size: inherit;
+
+  --_primary: var(--icon-primary);
+  --_secondary: var(--icon-secondary);
+  --_fill: var(--icon-fill);
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: all 0.2s ease;
+  user-select: none;
+  box-sizing: border-box;
+
+  &.is-filled {
+    background-color: var(--_fill);
+    padding: 0.2rem;
+    border-radius: 50%;
+  }
+}
+
+.icon-embed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  ::ng-deep svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+
+    fill: var(--_primary);
+    stroke: var(--_primary);
+
+    &:not([stroke]) {
+      stroke: none;
+    }
+
+    [stroke*='secondary'] {
+      stroke: var(--_secondary) !important;
+    }
+    [fill*='secondary'] {
+      fill: var(--_secondary) !important;
+    }
+  }
+}

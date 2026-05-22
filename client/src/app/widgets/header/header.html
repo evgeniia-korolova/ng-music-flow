@@ -91,6 +91,16 @@
     <app-button variant="danger" size="icon-rounded-md"><svg lucideIcon="menu"></svg></app-button>
     <app-button variant="danger" size="icon-rounded-lg"><svg lucideIcon="menu"></svg></app-button>
   </div>
+  <div class="flex w-full justify-center gap-4 align-baseline">
+    @for (icon of icons; track $index) {
+      <app-icon [icon]="icon" primaryColor="red" />
+    }
+  </div>
+  <div class="flex w-full justify-center gap-4 align-baseline">
+    @for (icon of icons; track $index) {
+      <app-icon [icon]="icon" fillColor="red" variant="fill" />
+    }
+  </div>
 </div>
 
 <!-- Temporary Code for presentation -->
