@@ -1,80 +1,61 @@
-<article class="card bg-accent box-border flex w-full items-center gap-4 rounded-lg px-4 py-3">
-  <div class="group relative h-12 w-12 flex-none overflow-hidden rounded-md bg-blue-900 text-white">
-    <img
-      class="h-full w-full object-cover"
-      [src]="track().coverUrl"
-      [alt]="track().title"
-      class="h-16 w-16 flex-none rounded-md object-cover"
-    />
+<article class="track-card" [class.is-playing]="isPlayingTrack()">
+  <div class="track-card__cover-wrapper">
+    <img class="track-card__cover-img" [src]="track().coverUrl" [alt]="track().title" />
     <button
-      class="absolute inset-0 flex items-center justify-center bg-black/50 transition-opacity focus:outline-none"
-      [class.opacity-100]="isPlaying()"
-      [class.opacity-0]="!isPlaying()"
-      [class.group-hover:opacity-100]="!isPlaying()"
+      class="track-card__play-btn"
+      [class.is-playing-now]="isPlayingTrack()"
       [aria-label]="isPlaying() && isCurrentTrack() ? 'Pause' : 'Play'"
       (click)="play(track())"
     >
       @if (isPlaying() && isCurrentTrack()) {
-        <svg xmlns="w3.org" class="text-accent h-6 w-6 fill-current" viewBox="0 0 24 24">
+        <svg xmlns="w3.org" class="text-accent h-10 w-10 fill-current" viewBox="0 0 24 24">
           <path fill-rule="evenodd" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" clip-rule="evenodd" />
         </svg>
       } @else {
-        <svg xmlns="w3.org" class="ml-0.5 h-6 w-6 fill-current text-white" viewBox="0 0 24 24">
+        <svg xmlns="w3.org" class="ml-0.5 h-10 w-10 fill-current text-white" viewBox="0 0 24 24">
           <path d="M8 5v14l11-7z" />
         </svg>
       }
     </button>
   </div>
 
-  <div class="flex w-45 min-w-0 flex-none flex-col">
-    <h3 class="text-primary truncate font-bold">{{ track().title }}</h3>
-    <p class="truncate text-sm text-gray-400">{{ track().artist.name }}</p>
+  <div class="track-card__info">
+    <h3 class="track-card__title">
+      {{ track().title }}
+    </h3>
+    <a [routerLink]="['/artists', track().artist.id]" class="track-card__meta">
+      {{ track().artist.name }}
+    </a>
+    @if (track().album.name) {
+      <p class="track-card__meta">
+        <span class="track-card__divider">•</span>
+        <a [routerLink]="['/albums', track().album.id]" style="font-size: 0.75rem">
+          {{ track().album.name }}
+        </a>
+      </p>
+    }
   </div>
 
   <div class="flex h-8 min-w-0 flex-auto items-center rounded px-3">
-    <app-track-waveform [isActive]="isCurrentTrack()" [progress]="progress()" [peaks]="waveform()">
+    <app-track-waveform
+      [isActive]="isCurrentTrack()"
+      [progress]="isCurrentTrack() ? progress() : -1"
+      [peaks]="track().waveform"
+    >
     </app-track-waveform>
   </div>
 
-  <div class="flex flex-none items-center gap-3">
-    <span class="mr-2 font-mono text-xs text-gray-400">
-      {{ track().duration }}
+  <div class="flex flex-none items-center gap-4">
+    <span class="font-mono text-xs text-gray-500">
+      {{ track().playCount | compactNumberPipe }} plays
     </span>
 
-    <button
-      class="p-1 text-gray-400 transition-colors hover:text-red-500 focus:outline-none"
-      aria-label="Add to favorites"
-    >
-      <svg
-        xmlns="w3.org"
-        class="h-5 w-5 fill-none stroke-current"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-        />
-      </svg>
-    </button>
+    <span class="mr-2 font-mono text-xs text-gray-400">
+      {{ track().duration | duration }}
+    </span>
 
-    <button
-      class="hover:text-accent p-1 text-gray-400 transition-colors focus:outline-none"
-      aria-label="Download track"
-    >
-      <svg
-        xmlns="w3.org"
-        class="h-5 w-5 fill-none stroke-current"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-        />
-      </svg>
-    </button>
+    <div class="flex items-center gap-2">
+      <ng-content></ng-content>
+    </div>
   </div>
 </article>

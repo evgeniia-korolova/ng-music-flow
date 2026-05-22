@@ -12,7 +12,9 @@ export interface TrackDto {
   waveform: string;
   stats: {
     rate_total: number;
-    playcount_total: number;
+    rate_listened_total: number;
+    rate_downloads_total: number;
+    likes: number;
   };
 }
 
