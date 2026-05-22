@@ -36,6 +36,7 @@ export const TracksStore = signalStore(
             .get<TrackDto>('tracks', {
               order: params.order,
               limit: params.limit,
+              include: 'stats',
             })
             .pipe(
               tapResponse({
