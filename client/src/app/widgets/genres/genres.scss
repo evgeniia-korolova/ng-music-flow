@@ -1,0 +1,14 @@
+.genres {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 300px));
+  justify-content: center;
+  gap: 20px;
+  &__empty {
+    font-size: 2em;
+    font-weight: 700;
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+}

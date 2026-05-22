@@ -1,1 +1,9 @@
-<p>genres works!</p>
+<ul class="genres" aria-label="Genres">
+  @for (genreItem of genres(); track genreItem.id) {
+    <li>
+      <app-genre-card [genre]="genreItem"></app-genre-card>
+    </li>
+  } @empty {
+    <li class="genres__empty">Genres not found...</li>
+  }
+</ul>
