@@ -1,5 +1,5 @@
 <ul class="genres" aria-label="Genres">
-  @for (genreItem of genres(); track genreItem.id) {
+  @for (genreItem of genres; track genreItem.id) {
     <li>
       <app-genre-card [genre]="genreItem"></app-genre-card>
     </li>
