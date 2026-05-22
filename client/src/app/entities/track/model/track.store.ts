@@ -1,4 +1,4 @@
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Track, TrackDto } from './track.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
@@ -8,37 +8,54 @@ import { tapResponse } from '@ngrx/operators';
 import { mapTrack } from '../../../shared/lib/map-track';
 
 export interface TracksState {
-  items: Track[];
+  tracks: Track[];
   isLoading: boolean;
   error: string | null;
+  listTitle: string;
 }
 
 const initialState: TracksState = {
-  items: [],
+  tracks: [],
   isLoading: false,
   error: null,
+  listTitle: 'Popular',
 };
 
 export const TracksStore = signalStore(
-  { providedIn: 'root' },
   withState(initialState),
   withMethods((store, jamendoApi = inject(JamendoApiService)) => ({
-    loadTracks: rxMethod<void>(
+    setListTitle(title: string) {
+      patchState(store, { listTitle: title });
+    },
+    loadTracks: rxMethod<{ order: string; limit: number }>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
 
-        switchMap(() =>
+        switchMap((params) =>
           jamendoApi
             .get<TrackDto>('tracks', {
-              order: 'releasedate_desc',
-              limit: 20,
+              order: params.order,
+              limit: params.limit,
             })
             .pipe(
               tapResponse({
                 next: (response) => {
+                  const allMappedTracks = response.results.map(mapTrack);
+                  const richTracks = allMappedTracks.filter((track) => {
+                    if (!track.waveform || track.waveform.length === 0) return false;
+
+                    if (track.duration < 30) return false;
+
+                    const loudPeaks = track.waveform.filter((peak) => peak > 0.2).length;
+
+                    return loudPeaks >= 25;
+                  });
+                  const targetLimit = store.listTitle() === 'Popular Tracks' ? 15 : 10;
+                  const finalTracks = richTracks.slice(0, targetLimit);
                   patchState(store, {
-                    items: response.results.map(mapTrack),
+                    tracks: finalTracks,
                     isLoading: false,
+                    error: null,
                   });
                 },
                 error: (err) => {
@@ -54,9 +71,4 @@ export const TracksStore = signalStore(
       ),
     ),
   })),
-  withHooks({
-    onInit(store) {
-      store.loadTracks();
-    },
-  }),
 );

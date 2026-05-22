@@ -19,15 +19,15 @@ export const routes: Routes = [
           },
           {
             path: 'popular',
-            loadComponent: () => import('./widgets/tracks-list/tracks-list'),
-            data: { order: 'popularity_month' },
-            title: 'Popular tracks',
+            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
+            data: { order: 'popularity_total', pageTitle: 'Popular Tracks' },
+            title: 'Popular Tracks',
           },
           {
             path: 'new',
-            loadComponent: () => import('./widgets/tracks-list/tracks-list'),
-            data: { order: 'releasedate_desc' },
-            title: 'New releases',
+            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
+            data: { order: 'releasedate_desc', pageTitle: 'New Releases' },
+            title: 'New Releases',
           },
           {
             path: 'genres',

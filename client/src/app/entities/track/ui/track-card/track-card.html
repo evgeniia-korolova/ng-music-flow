@@ -2,8 +2,8 @@
   <div class="group relative h-12 w-12 flex-none overflow-hidden rounded-md bg-blue-900 text-white">
     <img
       class="h-full w-full object-cover"
-      [src]="track().image"
-      [alt]="track().name"
+      [src]="track().coverUrl"
+      [alt]="track().title"
       class="h-16 w-16 flex-none rounded-md object-cover"
     />
     <button
@@ -27,8 +27,8 @@
   </div>
 
   <div class="flex w-45 min-w-0 flex-none flex-col">
-    <h3 class="text-primary truncate font-bold">{{ track().name }}</h3>
-    <p class="truncate text-sm text-gray-400">{{ track().artistName }}</p>
+    <h3 class="text-primary truncate font-bold">{{ track().title }}</h3>
+    <p class="truncate text-sm text-gray-400">{{ track().artist.name }}</p>
   </div>
 
   <div class="flex h-8 min-w-0 flex-auto items-center rounded px-3">
