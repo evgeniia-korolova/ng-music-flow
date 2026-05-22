@@ -32,7 +32,7 @@ export function mapTrack(dto: TrackDto): Track {
     },
     coverUrl: dto.album_image || 'images/track-placeholder.jpg',
     audioUrl: dto.audio,
-    playCount: dto.stats?.playcount_total || 0,
+    playCount: dto.stats?.rate_listened_total || 0,
     rating: dto.stats?.rate_total || 0,
     waveform: realPeaks,
   };

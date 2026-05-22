@@ -5,6 +5,7 @@ import { NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { Track } from '../../entities/track/model/track.model';
 import { TRACK_DATA_PROVIDER, TrackDataProvider } from './model/track-provider.token';
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 
 describe('TracksList', () => {
   let component: TracksList;
@@ -42,7 +43,7 @@ describe('TracksList', () => {
 
     await TestBed.configureTestingModule({
       imports: [TracksList],
-      providers: [{ provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider }],
+      providers: [{ provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider }, provideRouter([])],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
