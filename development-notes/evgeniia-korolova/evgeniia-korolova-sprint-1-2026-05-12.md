@@ -21,6 +21,7 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 2. InjectionToken is used for TRACK_DATA_PROVIDER
 3. An instance of TracksStore is provided into Discover page
 4. TracksList gets data via TRACK_DATA_PROVIDER
+5. refactor track-card: implemented content according to the requirements, substituted fake wave by actual provided by jamendo
 
 **Problems**:
 -- **encountered difficulties with Vitest settings for ci/cd. Meanwile settled with the help of Gemini and repo of Rainer Hahnekamp**

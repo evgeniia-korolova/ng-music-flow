@@ -39,7 +39,7 @@
   <div class="flex h-8 min-w-0 flex-auto items-center rounded px-3">
     <app-track-waveform
       [isActive]="isCurrentTrack()"
-      [progress]="progress()"
+      [progress]="isCurrentTrack() ? progress() : -1"
       [peaks]="track().waveform"
     >
     </app-track-waveform>
