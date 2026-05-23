@@ -11,26 +11,4 @@ $header-width: 1800px;
   }
 }
 
-@mixin generate-theme-variables {
-  $light-map: map.get(t.$themes, light);
-  $dark-map: map.get(t.$themes, dark);
-
-  :root {
-    color-scheme: light;
-
-    --color-text-on-bg: #{map.get($light-map, on-surface)};
-
-    @each $name, $value in $light-map {
-      --color-#{$name}: #{$value};
-    }
-  }
-
-  :root.dark,
-  body.dark {
-    color-scheme: dark;
-
-    @each $name, $value in $dark-map {
-      --color-#{$name}: #{$value};
-    }
-  }
-}
+@include m.generate-theme-variables;

@@ -2,15 +2,22 @@
 @use 'sass:map';
 
 @mixin generate-theme-variables {
+  $light-map: map.get(t.$themes, light);
+  $dark-map: map.get(t.$themes, dark);
+
   :root {
-    @each $name, $value in map-get(t.$themes, light) {
+    color-scheme: light;
+
+    @each $name, $value in $light-map {
       --color-#{$name}: #{$value};
     }
   }
 
   :root.dark,
   body.dark {
-    @each $name, $value in map-get(t.$themes, dark) {
+    color-scheme: dark;
+
+    @each $name, $value in $dark-map {
       --color-#{$name}: #{$value};
     }
   }

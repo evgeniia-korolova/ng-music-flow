@@ -15,6 +15,14 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 - tacks data is transferred from the list to the card by means of input()
 - add layout for Discover page with tabs and routes
 
+- week two
+
+1. created DiscoverTabsSwitcher that renders inside tracks-lists depending on their data in the routes, WithComponentInputBinding is used
+2. InjectionToken is used for TRACK_DATA_PROVIDER
+3. An instance of TracksStore is provided into Discover page
+4. TracksList gets data via TRACK_DATA_PROVIDER
+5. refactor track-card: implemented content according to the requirements, substituted fake wave by actual provided by jamendo
+
 **Problems**:
 -- **encountered difficulties with Vitest settings for ci/cd. Meanwile settled with the help of Gemini and repo of Rainer Hahnekamp**
 -- **haven't completely understad how it should work with github and in browser**

@@ -2,11 +2,13 @@ import { Component, computed, inject, input } from '@angular/core';
 import { Track } from '../../model/track.model';
 import { TrackWaveform } from '../track-waveform/track-waveform';
 import { AudioPlayerService } from '../../../../shared/services/audio-player/audio-player-service';
-import { generateFakePeaks } from '../../../../shared/lib/waveform';
+import { RouterLink } from '@angular/router';
+import { CompactNumberPipe } from '../../../../shared/ui/pipes/compact-number-pipe';
+import { DurationPipe } from '../../../../shared/ui/pipes/duration-pipe';
 
 @Component({
   selector: 'app-track-card',
-  imports: [TrackWaveform],
+  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
 })
@@ -22,17 +24,11 @@ export class TrackCard {
     return this.playerService.progressPercent();
   });
 
-  readonly waveform = computed(() => {
-    const duration = this.track().duration;
-
-    const length = duration ? Math.floor(duration / 2) : 60;
-
-    return generateFakePeaks(length);
-  });
-
   readonly isCurrentTrack = computed(
     () => this.playerService.currentTrack()?.id === this.track().id,
   );
+
+  readonly isPlayingTrack = computed(() => this.isCurrentTrack() && this.playerService.isPlaying());
 
   play(track: Track): void {
     this.playerService.playTrack(track);

@@ -2,7 +2,13 @@
   class="grid grid-cols-[repeat(auto-fit,minmax(250px,300px))] justify-center gap-[1em] md:gap-[1.5em]"
   aria-label="Artists"
 >
-  @for (item of store.artists(); track item.id) {
+  @if (store.isLoading()) {
+    <p>Artists are loading...</p>
+  }
+  @if (store.error()) {
+    <p>{{ store.error() }}</p>
+  }
+  @for (item of store.items(); track item.id) {
     @defer (on viewport) {
       <li>
         <app-artist-card [artist]="item"></app-artist-card>

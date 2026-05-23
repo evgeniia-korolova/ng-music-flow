@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { TracksStore } from '../../entities/track/model/track.store';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
+import { TRACK_DATA_PROVIDER } from './model/track-provider.token';
 
 @Component({
   selector: 'app-tracks-list',
@@ -9,5 +9,5 @@ import { TrackCard } from '../../entities/track/ui/track-card/track-card';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class TracksList {
-  readonly store = inject(TracksStore);
+  protected readonly provider = inject(TRACK_DATA_PROVIDER);
 }
