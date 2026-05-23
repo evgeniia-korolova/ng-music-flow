@@ -5,10 +5,11 @@ import { AudioPlayerService } from '../../../../shared/services/audio-player/aud
 import { RouterLink } from '@angular/router';
 import { CompactNumberPipe } from '../../../../shared/ui/pipes/compact-number-pipe';
 import { DurationPipe } from '../../../../shared/ui/pipes/duration-pipe';
+import { Icon } from '../../../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-track-card',
-  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe],
+  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe, Icon],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
 })

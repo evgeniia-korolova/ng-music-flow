@@ -1,10 +1,11 @@
 export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
   pause: () =>
-    Promise.resolve(`
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)">
-      <path fill-rule="evenodd" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" clip-rule="evenodd" />
-    </svg>
-  `),
+    Promise.resolve(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)">
+        <path fill-rule="evenodd" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" clip-rule="evenodd" />
+      </svg>
+  `,
+    ),
   play: () =>
     Promise.resolve(
       `<svg xmlns="w3.org" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)">
