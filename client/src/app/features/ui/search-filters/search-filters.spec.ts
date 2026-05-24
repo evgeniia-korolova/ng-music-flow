@@ -2,14 +2,21 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SearchFilters } from './search-filters';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DurationPipe } from '../../../shared/ui/pipes/duration-pipe';
+import { SearchStore } from '../../../pages/search-page/model/search.store';
+import { Router } from '@angular/router';
 
 describe('SearchFilters', () => {
   let component: SearchFilters;
   let fixture: ComponentFixture<SearchFilters>;
+  let mockRouter: { navigate: import('vitest').Mock<() => Promise<boolean>> };
 
   beforeEach(async () => {
+    mockRouter = {
+      navigate: vi.fn().mockResolvedValue(true),
+    };
     await TestBed.configureTestingModule({
       imports: [SearchFilters, ReactiveFormsModule, DurationPipe],
+      providers: [SearchStore, { provide: Router, useValue: mockRouter }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SearchFilters);
@@ -42,8 +49,13 @@ describe('SearchFilters', () => {
   });
 
   it('should protect against slider overlap and align min under max if min > max', () => {
-    component.filterForm.patchValue({ durationMax: 200 });
-    component.filterForm.patchValue({ durationMin: 300 });
+    fixture.detectChanges();
+
+    component.filterForm.patchValue({
+      durationMin: 300,
+      durationMax: 200,
+    });
+
     fixture.detectChanges();
 
     expect(component.filterForm.value.durationMin).toBe(200);
