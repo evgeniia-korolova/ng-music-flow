@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+.genre-card__link {
+  display: block;
+  height: 100%;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #cecece;
+}
+.genre-card__title {
+  position: absolute;
+  font-weight: 700;
+  font-size: 1.6em;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+  color: #000;
+}
+.genre-card__image {
+  aspect-ratio: 16/9;
+  width: 100%;
+  position: relative;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease 0s;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  @media (any-hover: hover) {
+    &:hover {
+      img {
+        transform: scale(1.02);
+      }
+    }
+  }
+}
