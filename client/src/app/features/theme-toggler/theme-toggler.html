@@ -1,12 +1,18 @@
-<app-dropdown [alignment]="'right'">
-  <button #trigger trigger class="text-primary">
+<app-dropdown [alignment]="'right'" #themeDropdown>
+  <app-button #trigger trigger class="text-primary" variant="outline" size="icon-cubic-md">
     <app-icon [icon]="getIcon(currentTheme())" />
-  </button>
+  </app-button>
   @for (theme of themes; track theme) {
     <ng-template #item>
-      <button item class="text-primary" (click)="changeTheme(theme)" appDropdownClose>
+      <app-button
+        size="icon-cubic-sm"
+        item
+        class="text-primary"
+        (click)="changeTheme(theme)"
+        [appDropdownClose]="themeDropdown"
+      >
         <app-icon [icon]="getIcon(theme)" />
-      </button>
+      </app-button>
     </ng-template>
   }
 </app-dropdown>

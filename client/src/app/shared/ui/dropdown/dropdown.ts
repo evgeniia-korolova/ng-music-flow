@@ -20,6 +20,7 @@ import { Icon } from '../icon/icon.component';
   imports: [NgTemplateOutlet, Icon],
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.scss',
+  exportAs: 'dropdownRef',
 })
 export class Dropdown {
   isOpen = signal(false);
@@ -50,7 +51,7 @@ export class Dropdown {
     });
   }
 
-  triggerButton = contentChild<ElementRef<HTMLElement>>('trigger');
+  triggerButton = contentChild('trigger', { read: ElementRef });
   dropdownItems = contentChildren<TemplateRef<unknown>>('item');
 
   @HostListener('document:click', ['$event'])
@@ -58,9 +59,11 @@ export class Dropdown {
     const clickedElement = event.target as HTMLElement;
     const triggerEl = this.triggerButton()?.nativeElement;
 
+    const clickedTrigger =
+      triggerEl && (triggerEl === clickedElement || triggerEl.contains(clickedElement));
     const clickedInsideDropdown = this.el.nativeElement.contains(clickedElement);
 
-    if (triggerEl === clickedElement || triggerEl?.contains(clickedElement)) {
+    if (clickedTrigger) {
       this.isOpen.update((prev) => !prev);
       return;
     }
