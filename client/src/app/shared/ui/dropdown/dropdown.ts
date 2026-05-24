@@ -14,10 +14,11 @@ import {
   TemplateRef,
 } from '@angular/core';
 import { Icon } from '../icon/icon.component';
+import { Button } from '../button/button';
 
 @Component({
   selector: 'app-dropdown',
-  imports: [NgTemplateOutlet, Icon],
+  imports: [NgTemplateOutlet, Icon, Button],
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.scss',
   exportAs: 'dropdownRef',
