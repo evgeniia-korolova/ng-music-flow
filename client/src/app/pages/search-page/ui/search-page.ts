@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { SearchFilters } from '../../../features/ui/search-filters/search-filters';
 
 @Component({
@@ -6,5 +6,6 @@ import { SearchFilters } from '../../../features/ui/search-filters/search-filter
   imports: [SearchFilters],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class SearchPage {}

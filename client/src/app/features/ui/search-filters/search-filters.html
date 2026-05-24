@@ -1,3 +1,93 @@
 <aside class="search-filters">
-  <p>search-filters works!</p>
+  <form [formGroup]="filterForm" class="search-filters__form">
+    <fieldset class="search-filters__section" formGroupName="genres">
+      <legend class="search-filters__subtitle">Genres</legend>
+      <div class="search-filters__genres-grid">
+        @for (genre of genresList; track genre.id) {
+          <input
+            type="checkbox"
+            [id]="'genre-' + genre.id"
+            [formControlName]="genre.id"
+            class="search-filters__hidden-input visually-hidden"
+          />
+
+          <label [for]="'genre-' + genre.id" class="search-filters__genre-chip">
+            {{ genre.title }}
+          </label>
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="search-filters__section">
+      <legend class="search-filters__subtitle">Sorting</legend>
+
+      <div class="search-filters__sorting-list">
+        <div class="search-filters__radio-wrapper">
+          <input
+            type="radio"
+            id="sort-popularity"
+            value="popularity"
+            formControlName="sortBy"
+            class="search-filters__hidden-radio visually-hidden"
+          />
+          <label for="sort-popularity" class="search-filters__sort-option"> By Popularity </label>
+        </div>
+
+        <div class="search-filters__radio-wrapper">
+          <input
+            type="radio"
+            id="sort-date"
+            value="date"
+            formControlName="sortBy"
+            class="search-filters__hidden-radio visually-hidden"
+          />
+          <label for="sort-date" class="search-filters__sort-option"> By Date </label>
+        </div>
+
+        <div class="search-filters__radio-wrapper">
+          <input
+            type="radio"
+            id="sort-name"
+            value="name"
+            formControlName="sortBy"
+            class="search-filters__hidden-radio visually-hidden"
+          />
+          <label for="sort-name" class="search-filters__sort-option"> By Name </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset class="search-filters__section">
+      <div class="search-filters__duration-header">
+        <legend class="search-filters__subtitle">Duration</legend>
+
+        <span class="search-filters__duration-value">
+          {{ filterForm.value.durationMin | duration }} -
+          {{ filterForm.value.durationMax | duration }}
+        </span>
+      </div>
+
+      <div class="search-filters__slider-container">
+        <div class="search-filters__slider-track"></div>
+
+        <input
+          type="range"
+          min="0"
+          max="600"
+          step="5"
+          formControlName="durationMin"
+          class="search-filters__range-input"
+        />
+
+        <input
+          type="range"
+          min="0"
+          max="600"
+          step="5"
+          formControlName="durationMax"
+          class="search-filters__range-input"
+        />
+      </div>
+    </fieldset>
+  </form>
 </aside>

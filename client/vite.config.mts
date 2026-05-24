@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => ({
       '@angular/compiler',
       '@analogjs/vitest-angular/setup-snapshots',
       '@analogjs/vitest-angular/setup-testbed',
+      '@angular/forms',
     ],
   },
 }));

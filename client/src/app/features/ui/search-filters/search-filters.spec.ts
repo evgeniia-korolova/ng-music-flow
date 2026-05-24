@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { SearchFilters } from './search-filters';
+import { ReactiveFormsModule } from '@angular/forms';
+import { DurationPipe } from '../../../shared/ui/pipes/duration-pipe';
 
 describe('SearchFilters', () => {
   let component: SearchFilters;
@@ -8,7 +9,7 @@ describe('SearchFilters', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchFilters],
+      imports: [SearchFilters, ReactiveFormsModule, DurationPipe],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SearchFilters);
@@ -18,5 +19,34 @@ describe('SearchFilters', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should init form with default value', () => {
+    const formValue = component.filterForm.value;
+
+    expect(formValue.sortBy).toBe('popularity');
+    expect(formValue.durationMin).toBe(0);
+    expect(formValue.durationMax).toBe(600);
+    expect(formValue.genres?.['rock']).toBe(false);
+    expect(formValue.genres?.['pop']).toBe(false);
+  });
+
+  it('should update checkbox state when genre is changed', () => {
+    const rockControl = component.filterForm.get('genres.rock');
+    expect(rockControl?.value).toBe(false);
+
+    rockControl?.setValue(true);
+    fixture.detectChanges();
+
+    expect(component.filterForm.value.genres?.['rock']).toBe(true);
+  });
+
+  it('should protect against slider overlap and align min under max if min > max', () => {
+    component.filterForm.patchValue({ durationMax: 200 });
+    component.filterForm.patchValue({ durationMin: 300 });
+    fixture.detectChanges();
+
+    expect(component.filterForm.value.durationMin).toBe(200);
+    expect(component.filterForm.value.durationMax).toBe(200);
   });
 });
