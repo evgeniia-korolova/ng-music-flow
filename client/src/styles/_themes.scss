@@ -23,6 +23,9 @@ $themes: (
     btn-danger-bg-hover: rgb(210, 30, 30),
     btn-danger-border: rgb(110, 15, 15),
     btn-danger-border-hover: rgb(155, 28, 28),
+    //----Logo----
+    bg-logo: rgba(59, 99, 87, 0.1),
+    bg-logo-hover: rgba(59, 99, 87, 0.25),
   ),
   dark: (
     bg: #012024,
@@ -48,5 +51,7 @@ $themes: (
     btn-danger-bg-hover: rgb(215, 35, 35),
     btn-danger-border: rgb(165, 35, 35),
     btn-danger-border-hover: rgb(240, 50, 50),
+    //----Logo----
+    bg-logo-hover: rgba(255, 255, 255, 0.15),
   ),
 );

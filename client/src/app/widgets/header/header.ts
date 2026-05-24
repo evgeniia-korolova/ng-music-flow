@@ -4,21 +4,12 @@ import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
 import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
-import { Button } from '../../shared/ui/button/button';
 import { ICON_REGISTRY } from '../../shared/ui/icon/icon-registry';
 import { Icon } from '../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-header',
-  imports: [
-    Dropdown,
-    ThemeToggler,
-    RouterLink,
-    DropdownCloseDirective,
-    RouterLinkActive,
-    Button,
-    Icon,
-  ],
+  imports: [Dropdown, ThemeToggler, RouterLink, DropdownCloseDirective, RouterLinkActive, Icon],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
