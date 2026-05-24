@@ -1,0 +1,15 @@
+.search-page {
+  display: flex;
+  width: 100%;
+  min-height: var(--content-height);
+  gap: 2rem;
+  padding: 1.5rem;
+  box-sizing: border-box;
+
+  &__content {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

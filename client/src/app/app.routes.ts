@@ -43,6 +43,11 @@ export const routes: Routes = [
         data: { displayOnNavbar: true },
       },
       {
+        path: 'search',
+        loadChildren: () =>
+          import('./pages/search-page/search-page.routes').then((m) => m.SEARCH_ROUTES),
+      },
+      {
         path: '',
         redirectTo: 'discover',
         pathMatch: 'full',
