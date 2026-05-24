@@ -4,7 +4,7 @@
   >
     <app-dropdown>
       <button trigger #trigger>
-        <svg lucideIcon="menu"></svg>
+        <app-icon icon="menu" />
       </button>
       @for (item of navItems; track $index) {
         <ng-template #item>
@@ -26,7 +26,7 @@
       <app-dropdown>
         <button trigger #trigger class="flex justify-end gap-2 align-middle">
           Login
-          <svg lucideIcon="log-in"></svg>
+          <app-icon icon="logIn" variant="outline"></app-icon>
         </button>
       </app-dropdown>
       <app-theme-toggler

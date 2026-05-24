@@ -13,11 +13,11 @@ import {
   signal,
   TemplateRef,
 } from '@angular/core';
-import { LucideDynamicIcon } from '@lucide/angular';
+import { Icon } from '../icon/icon.component';
 
 @Component({
   selector: 'app-dropdown',
-  imports: [NgTemplateOutlet, LucideDynamicIcon],
+  imports: [NgTemplateOutlet, Icon],
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.scss',
 })

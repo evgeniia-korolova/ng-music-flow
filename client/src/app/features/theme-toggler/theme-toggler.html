@@ -1,11 +1,11 @@
 <app-dropdown [alignment]="'right'">
   <button #trigger trigger class="text-primary">
-    <svg [lucideIcon]="getIcon(currentTheme())"></svg>
+    <app-icon [icon]="getIcon(currentTheme())" />
   </button>
   @for (theme of themes; track theme) {
     <ng-template #item>
       <button item class="text-primary" (click)="changeTheme(theme)" appDropdownClose>
-        <svg [lucideIcon]="getIcon(theme)"></svg>
+        <app-icon [icon]="getIcon(theme)" />
       </button>
     </ng-template>
   }
