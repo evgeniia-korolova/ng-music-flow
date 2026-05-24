@@ -1,0 +1,9 @@
+@if (artistStore.isLoading()) {
+  <p class="artist-profile__loading">Profile is loading...</p>
+}
+@if (artistStore.error()) {
+  <p class="artist-profile__loading">{{ artistStore.error() }}</p>
+}
+@if (artistStore.currentArtist(); as artist) {
+  <app-artist-card [artist]="artist"></app-artist-card>
+}
