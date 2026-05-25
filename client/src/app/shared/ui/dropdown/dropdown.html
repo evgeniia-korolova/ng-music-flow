@@ -1,26 +1,20 @@
-<div class="relative inline-block md:block">
-  <ng-content select="[trigger]" active="isOpen()"></ng-content>
+<div class="dropdown-container" [class.expandable]="expandable()">
+  <ng-content select="[trigger]" active="isOpen()" />
 
   @if (isOpen()) {
-    <div
-      class="bg-accent fixed inset-0 z-100! p-6 shadow-md md:absolute md:top-full md:bg-transparent md:p-0 md:shadow-none"
-      [class]="alignment() === 'left' ? 'left-0 md:right-auto' : 'right-0 md:left-auto'"
-    >
-      <button
+    <div class="dropdown-panel" [class.align-right]="alignment() === 'right'">
+      <app-button
+        variant="ghost"
+        size="icon-rounded-sm"
         (click)="isOpen.set(false)"
-        class="absolute top-4 block rounded-lg p-2 text-shadow-orange-700! hover:bg-neutral-200/50 md:hidden"
-        [class]="alignment() === 'left' ? 'left-4' : 'right-4'"
+        class="close-btn"
       >
         <app-icon icon="x" />
-      </button>
+      </app-button>
 
-      <ul
-        class="bg-accent mt-12 flex flex-col gap-4 md:mt-0 md:w-fit md:gap-1 md:rounded-md md:border md:border-neutral-200 md:p-1 md:shadow-md"
-      >
+      <ul class="dropdown-list">
         @for (dropdownItem of dropdownItems(); track $index) {
-          <li
-            class="text-accent flex shrink-0 cursor-pointer justify-center bg-emerald-100 text-left align-middle hover:bg-emerald-200 md:justify-start"
-          >
+          <li class="dropdown-item">
             <ng-template *ngTemplateOutlet="dropdownItem" />
           </li>
         }

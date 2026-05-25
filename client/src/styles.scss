@@ -13,6 +13,14 @@ $header-width: 1800px;
 
 @include m.generate-theme-variables;
 
+main {
+  z-index: 0;
+}
+
+app-header {
+  z-index: 99;
+}
+
 :root {
   --header-height: 4, 6rem;
   --footer-height: 3.5rem;

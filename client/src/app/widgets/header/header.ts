@@ -4,9 +4,10 @@ import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
 import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
-import { Button } from '../../shared/ui/button/button';
 import { ICON_REGISTRY } from '../../shared/ui/icon/icon-registry';
 import { Icon } from '../../shared/ui/icon/icon.component';
+import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-header',
@@ -16,8 +17,9 @@ import { Icon } from '../../shared/ui/icon/icon.component';
     RouterLink,
     DropdownCloseDirective,
     RouterLinkActive,
-    Button,
     Icon,
+    NavigationBar,
+    Button,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',

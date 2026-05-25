@@ -1,4 +1,4 @@
-import { Directive, inject } from '@angular/core';
+import { Directive, input } from '@angular/core';
 import { Dropdown } from './dropdown';
 
 @Directive({
@@ -9,9 +9,9 @@ import { Dropdown } from './dropdown';
   },
 })
 export class DropdownCloseDirective {
-  private readonly parentDropdown = inject(Dropdown);
+  parentDropdown = input.required<Dropdown>({ alias: 'appDropdownClose' });
 
   closeDropdown() {
-    this.parentDropdown.isOpen.set(false);
+    this.parentDropdown().isOpen.set(false);
   }
 }

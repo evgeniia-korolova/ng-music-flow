@@ -1,38 +1,76 @@
-<header class="sticky z-50 flex h-16 w-full justify-center">
-  <div
-    class="text-primary relative flex w-full max-w-(--header-width) justify-between px-2 py-2 align-middle md:px-4"
-  >
-    <app-dropdown>
-      <button trigger #trigger>
-        <app-icon icon="menu" />
-      </button>
-      @for (item of navItems; track $index) {
-        <ng-template #item>
-          <a [routerLink]="[item.path]" routerLinkActive="bg-red-400!" appDropdownClose
-            >{{ item.title }}
-          </a>
-        </ng-template>
-      }
-    </app-dropdown>
-    <div
-      class="bg-primary/10 hover:bg-primary/30 absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer justify-center rounded-xl px-2 py-1 align-middle transition-all duration-300"
-    >
-      <picture class="flex h-full w-full justify-center align-middle">
-        <source media="(min-width: 768px)" srcset="logo-large.svg" />
-        <img src="logo.svg" alt="application logo" class="h-8" />
+<header>
+  <div class="header-container">
+    <a class="logo-container" routerLink="/discover/popular">
+      <picture>
+        <source media="(min-width: 1024px)" srcset="logo-large.svg" />
+        <img src="logo.svg" alt="application logo" />
       </picture>
-    </div>
-    <div class="flex justify-center gap-10 align-middle">
-      <app-dropdown>
-        <button trigger #trigger class="flex justify-end gap-2 align-middle">
-          Login
-          <app-icon icon="logIn" variant="outline"></app-icon>
-        </button>
-      </app-dropdown>
-      <app-theme-toggler
-        [currentTheme]="themeStore.theme()"
-        (themeChanged)="themeStore.setTheme($event)"
-      />
-    </div>
+    </a>
+    <app-navigation-bar [pathCollection]="navItems" />
+    <span class="spacer"></span>
+    <app-dropdown #userMenu alignment="right">
+      <app-button trigger #trigger class="flex justify-end gap-2 align-middle">
+        Login
+        <app-icon
+          icon="logIn"
+          variant="fill"
+          style="font-size: 1.5rem"
+          primaryColor="var(--color-btn-default-border)"
+          fillColor="white"
+        ></app-icon>
+      </app-button>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="user"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Profile
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="waveForm"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Your Library
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="keySquare"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Change Password
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="logOut"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Logout
+        </a>
+      </ng-template>
+    </app-dropdown>
+    <app-theme-toggler
+      [currentTheme]="themeStore.theme()"
+      (themeChanged)="themeStore.setTheme($event)"
+    />
   </div>
 </header>
