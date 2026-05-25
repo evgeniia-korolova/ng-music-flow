@@ -6,11 +6,13 @@ import { signal } from '@angular/core';
 import { ArtistStore } from '../../entities/artist/model/artist.store';
 
 describe('ArtistProfile', () => {
-  let mockArtistStore = {
+  const mockArtistStore = {
     isLoading: signal(false),
     error: signal(null),
     currentArtist: signal({ id: '2', name: 'Viktor' }),
-    loadArtistById: () => {},
+    loadArtistById: () => {
+      /*Test*/
+    },
   };
   let component: ArtistProfile;
   let fixture: ComponentFixture<ArtistProfile>;

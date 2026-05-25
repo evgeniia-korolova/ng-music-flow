@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ArtistStore } from '../../entities/artist/model/artist.store';
 import { ArtistCard } from '../../entities/artist/ui/artist-card/artist-card';
 
