@@ -1,4 +1,4 @@
-<a routerLink="." class="genre-card__link">
+<a [routerLink]="['/search']" [queryParams]="{ tags: genre().id }" class="genre-card__link">
   <h3 class="genre-card__title">{{ genre().title }}</h3>
   <div class="genre-card__image">
     <img [src]="genre().image" [alt]="genre().title" />

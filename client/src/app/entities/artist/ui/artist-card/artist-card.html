@@ -1,4 +1,7 @@
-<a class="bg-accent group block overflow-hidden rounded-lg shadow-lg" routerLink=".">
+<a
+  class="bg-accent group block overflow-hidden rounded-lg shadow-lg"
+  [routerLink]="['/artists', artist().id]"
+>
   <div class="flex aspect-video w-full items-center justify-center overflow-hidden bg-gray-400">
     <img
       class="h-full w-full object-cover transition duration-300 ease-in-out group-hover:scale-105"

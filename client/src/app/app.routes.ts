@@ -43,9 +43,19 @@ export const routes: Routes = [
         data: { displayOnNavbar: true },
       },
       {
+        path: 'search',
+        loadChildren: () =>
+          import('./pages/search-page/search-page.routes').then((m) => m.SEARCH_ROUTES),
+      },
+      {
         path: '',
         redirectTo: 'discover',
         pathMatch: 'full',
+      },
+      {
+        path: 'artists/:artistId',
+        loadComponent: () => import('./pages/artist-profile/artist-profile'),
+        title: 'ArtistProfile',
       },
     ],
   },
