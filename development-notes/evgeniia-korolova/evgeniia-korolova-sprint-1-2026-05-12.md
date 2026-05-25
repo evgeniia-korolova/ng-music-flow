@@ -13,25 +13,37 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 - created tracks-list and track-card with fake sound-wave
 - get tracks data in the service and store in the signalStore (sorry that it comes up so early)
 - tacks data is transferred from the list to the card by means of input()
+- add layout for Discover page with tabs and routes
+
+- week two
+
+1. created DiscoverTabsSwitcher that renders inside tracks-lists depending on their data in the routes, WithComponentInputBinding is used
+2. InjectionToken is used for TRACK_DATA_PROVIDER
+3. An instance of TracksStore is provided into Discover page
+4. TracksList gets data via TRACK_DATA_PROVIDER
+5. refactor track-card: implemented content according to the requirements, substituted fake wave by actual provided by jamendo
+6. created search-page component
+7. implemented sidebar with filters - Reactive form
+8. implemented SeachStore
 
 **Problems**:
 -- **encountered difficulties with Vitest settings for ci/cd. Meanwile settled with the help of Gemini and repo of Rainer Hahnekamp**
 -- **haven't completely understad how it should work with github and in browser**
 -- I believed that I can use the library wavesurfer.js, but understood that it'll be inaffective to preload all 20 track's mp3 so I dicided to create fake waves and later on substitute activeTrack wave for real
+-- SearchStore became a real nightmare, lost breakets are only cherries, browser address bar just replaced the tag from Discovery Page when cliking any other checkbox from the form
 
 **Solutions (or attempts):**
 -- created test-setup.ts & vite.config.mts (took sample from Rainer Hahnekam project)
 -- in test-setup.ts turned off browserMode (according to Gemini advise)
 -- then deleted this option at all
 -- not to spoil performance I dicided to create fake waves and later on substitute activeTrack wave for real one
+-- for proper updating browser address bar added flag isInitialized to the store
 
 - ...
 - **Thoughts / plans:** what's next?
-- **Time spent:** 3-6 hour per day - total about 30 hours
+- **Time spent:** 3-6 hour per day - total about 50 hours
 
 ## Plan for Sprint 2
 
 - Deploy the application to **Netlify** with environment variable injection.
 - Coordinate the integration of team-developed features into the main layout.
-- configure lazy route for track details
-- try to implement real sound wave

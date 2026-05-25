@@ -1,27 +1,33 @@
 <div class="p-4">
-  <h1 class="mb-4 text-2xl font-bold">Newest Songs</h1>
+  <h1 class="mb-4 text-2xl font-bold">{{ provider.listTitle() }}</h1>
 
-  @if (store.isLoading()) {
-    <p class="animate-pulse text-accent">Loading tracks...</p>
+  @if (provider.isLoading()) {
+    <p class="text-accent animate-pulse">Loading tracks...</p>
   }
 
-  @if (store.error()) {
-    <p class="text-red-500">{{ store.error() }}</p>
+  @if (provider.error()) {
+    <p class="text-red-500">{{ provider.error() }}</p>
   }
 
   <ul class="m-0 flex list-none flex-col gap-3 p-0">
-    @for (track of store.items(); track track.id) {
+    @for (track of provider.tracks(); track track.id) {
       @defer (on viewport) {
         <li class="block w-full">
           <app-track-card [track]="track" />
         </li>
       } @placeholder (minimum 500ms) {
         <div
-          class="box-border h-12 w-full rounded-lg border border-slate-900 bg-accent px-4 py-3 shadow-md"
+          class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
         >
           Loading...
         </div>
       }
+    } @empty {
+      <div
+        class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
+      >
+        No tracks found...
+      </div>
     }
   </ul>
 </div>

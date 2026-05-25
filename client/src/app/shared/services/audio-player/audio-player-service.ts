@@ -75,7 +75,7 @@ export class AudioPlayerService {
 
     this.currentTrack.set(track);
 
-    this.audio.src = track.audio;
+    this.audio.src = track.audioUrl;
     this.audio.load();
 
     void this.audio.play();

@@ -13,21 +13,25 @@ import {
   signal,
   TemplateRef,
 } from '@angular/core';
-import { LucideDynamicIcon } from '@lucide/angular';
+import { Icon } from '../icon/icon.component';
+import { Button } from '../button/button';
 
 @Component({
   selector: 'app-dropdown',
-  imports: [NgTemplateOutlet, LucideDynamicIcon],
+  imports: [NgTemplateOutlet, Icon, Button],
   templateUrl: './dropdown.html',
   styleUrl: './dropdown.scss',
+  exportAs: 'dropdownRef',
 })
 export class Dropdown {
-  isOpen = signal(false);
   private readonly el = inject(ElementRef);
-  alignment = input<'left' | 'right'>('left');
-
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
+
+  expandable = input(true);
+  alignment = input<'left' | 'right'>('left');
+
+  isOpen = signal(false);
 
   constructor() {
     effect((onCleanup) => {
@@ -50,7 +54,7 @@ export class Dropdown {
     });
   }
 
-  triggerButton = contentChild<ElementRef<HTMLElement>>('trigger');
+  triggerButton = contentChild('trigger', { read: ElementRef });
   dropdownItems = contentChildren<TemplateRef<unknown>>('item');
 
   @HostListener('document:click', ['$event'])
@@ -58,9 +62,11 @@ export class Dropdown {
     const clickedElement = event.target as HTMLElement;
     const triggerEl = this.triggerButton()?.nativeElement;
 
+    const clickedTrigger =
+      triggerEl && (triggerEl === clickedElement || triggerEl.contains(clickedElement));
     const clickedInsideDropdown = this.el.nativeElement.contains(clickedElement);
 
-    if (triggerEl === clickedElement || triggerEl?.contains(clickedElement)) {
+    if (clickedTrigger) {
       this.isOpen.update((prev) => !prev);
       return;
     }

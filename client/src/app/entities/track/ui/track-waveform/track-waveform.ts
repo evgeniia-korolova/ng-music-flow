@@ -7,7 +7,9 @@ import {
   signal,
   viewChild,
   OnDestroy,
+  inject,
 } from '@angular/core';
+import { ThemeStore } from '../../../../features/theme-toggler/theme.store';
 
 @Component({
   selector: 'app-track-waveform',
@@ -17,6 +19,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackWaveform implements OnDestroy {
+  private themeStore = inject(ThemeStore);
   readonly peaks = input.required<number[]>();
   readonly progress = input(0);
 
@@ -27,6 +30,7 @@ export class TrackWaveform implements OnDestroy {
 
   constructor() {
     effect(() => {
+      this.themeStore.theme();
       const canvasEl = this.canvasRef()?.nativeElement;
       if (!canvasEl) return;
 
@@ -62,6 +66,10 @@ export class TrackWaveform implements OnDestroy {
   ): void {
     const width = canvas.width;
     const height = canvas.height;
+    const rootStyles = getComputedStyle(document.documentElement);
+
+    const colorOnSurface = rootStyles.getPropertyValue('--color-text-on-bg').trim();
+    const colorAccent = rootStyles.getPropertyValue('--color-text-accent').trim();
 
     ctx.clearRect(0, 0, width, height);
 
@@ -82,7 +90,7 @@ export class TrackWaveform implements OnDestroy {
       const barHeight = peak * height;
       const y = (height - barHeight) / 2;
 
-      ctx.fillStyle = x <= currentProgressX ? '#ec4899' : '#4a4a4a';
+      ctx.fillStyle = x <= currentProgressX ? colorAccent : colorOnSurface;
       ctx.fillRect(x, y, barWidth, barHeight);
     });
   }

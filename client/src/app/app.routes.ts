@@ -7,10 +7,56 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       {
-        path: '',
-        loadComponent: () => import('./pages/home/home'),
+        path: 'discover',
+        loadComponent: () => import('./pages/discover/discover'),
+        title: 'Discover',
+        data: { displayOnNavbar: true },
+        children: [
+          {
+            path: '',
+            redirectTo: 'popular',
+            pathMatch: 'full',
+          },
+          {
+            path: 'popular',
+            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
+            data: { order: 'popularity_total', pageTitle: 'Popular Tracks' },
+            title: 'Popular Tracks',
+          },
+          {
+            path: 'new',
+            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
+            data: { order: 'releasedate_desc', pageTitle: 'New Releases' },
+            title: 'New Releases',
+          },
+          {
+            path: 'genres',
+            loadComponent: () => import('./widgets/genres/genres'),
+            title: 'Genres',
+          },
+        ],
       },
-      { path: 'artists', loadComponent: () => import('./pages/artists/artists') },
+      {
+        path: 'artists',
+        loadComponent: () => import('./pages/artists/artists'),
+        title: 'Artists',
+        data: { displayOnNavbar: true },
+      },
+      {
+        path: 'search',
+        loadChildren: () =>
+          import('./pages/search-page/search-page.routes').then((m) => m.SEARCH_ROUTES),
+      },
+      {
+        path: '',
+        redirectTo: 'discover',
+        pathMatch: 'full',
+      },
+      {
+        path: 'artists/:artistId',
+        loadComponent: () => import('./pages/artist-profile/artist-profile'),
+        title: 'ArtistProfile',
+      },
     ],
   },
 ];

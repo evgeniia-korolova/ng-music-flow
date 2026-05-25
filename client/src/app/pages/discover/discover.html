@@ -1,0 +1,36 @@
+<section class="explore">
+  <nav class="explore_nav" aria-label="Music tabs">
+    <ul class="explore_list">
+      <li class="explore_list__item">
+        <a
+          routerLink="popular"
+          routerLinkActive="active-tab"
+          class="explore__link"
+          ariaCurrentWhenActive="page"
+          >Popular Tracks</a
+        >
+      </li>
+      <li class="explore_list__item">
+        <a
+          routerLink="new"
+          routerLinkActive="active-tab"
+          class="explore__link"
+          ariaCurrentWhenActive="page"
+          >New Releases</a
+        >
+      </li>
+      <li class="explore_list__item">
+        <a
+          routerLink="genres"
+          routerLinkActive="active-tab"
+          class="explore__link"
+          ariaCurrentWhenActive="page"
+          >Genres</a
+        >
+      </li>
+    </ul>
+  </nav>
+  <div class="explore__tabs-wrapper">
+    <router-outlet />
+  </div>
+</section>
