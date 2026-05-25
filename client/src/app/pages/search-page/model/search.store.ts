@@ -119,7 +119,7 @@ export const SearchStore = signalStore(
             patchState(store, { isLoading: true, error: null });
 
             const apiParams: Record<string, string | number | boolean> = {
-              limit: 20,
+              limit: 40,
               include: 'stats',
             };
 
@@ -128,10 +128,10 @@ export const SearchStore = signalStore(
             }
 
             if (filters.genres && filters.genres.length > 0) {
-              apiParams['tags'] = filters.genres.join('+');
+              apiParams['fuzzytags'] = filters.genres.join('+');
             }
 
-            apiParams['duration_between'] = `${filters.durationMin}:${filters.durationMax}`;
+            apiParams['duration_between'] = `${filters.durationMin}_${filters.durationMax}`;
 
             if (filters.sortBy === 'popularity') apiParams['order'] = 'popularity_total';
             if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
@@ -142,7 +142,18 @@ export const SearchStore = signalStore(
                 next: (response) => {
                   const allMappedTracks = response.results.map(mapTrack);
 
-                  const richTracks = allMappedTracks.filter(isValidRichTrack);
+                  const richTracks = allMappedTracks.filter((track) => {
+                    if (!isValidRichTrack(track)) return false;
+
+                    if (
+                      track.duration < filters.durationMin ||
+                      track.duration > filters.durationMax
+                    ) {
+                      return false;
+                    }
+
+                    return true;
+                  });
 
                   searchCache.set(cacheKey, richTracks);
 
