@@ -79,6 +79,7 @@
   gap: 0.25rem;
   list-style: none;
   width: max-content;
+  padding: 2px;
 
   .dropdown-container.expandable & {
     @media (max-width: 767.9px) {
