@@ -6,6 +6,23 @@ $themes: (
     bg-surface: #f5f5f5,
     text-accent: #f42a31,
     text-muted: #666666,
+    brand-active: #5c5cd6,
+
+    //----Buttons-----
+    //----Default-----
+    btn-default-bg: rgb(14, 83, 64),
+    btn-default-bg-hover: rgb(32, 145, 114),
+    btn-default-border: rgb(18, 90, 70),
+    btn-default-border-hover: rgb(24, 118, 92),
+    btn-default-text: rgb(255, 255, 255),
+    //----Ghost-----
+    btn-ghost-bg: rgb(230, 230, 230),
+    btn-ghost-text: rgb(17, 68, 52),
+    //----Danger----
+    btn-danger-bg: rgb(155, 28, 28),
+    btn-danger-bg-hover: rgb(210, 30, 30),
+    btn-danger-border: rgb(110, 15, 15),
+    btn-danger-border-hover: rgb(155, 28, 28),
     brand-active: #6366f1,
   ),
   dark: (
@@ -16,5 +33,21 @@ $themes: (
     text-accent: #f42a31,
     text-muted: #8b9fa1,
     brand-active: #04d7b1,
+
+    //----Buttons-----
+    //----Default-----
+    btn-default-bg: rgb(22, 90, 75),
+    btn-default-bg-hover: rgb(30, 120, 100),
+    btn-default-border: rgb(40, 150, 120),
+    btn-default-border-hover: rgb(58, 185, 145),
+    btn-default-text: rgb(240, 245, 245),
+    //----Ghost-----
+    btn-ghost-bg: rgba(255, 255, 255, 0.1),
+    btn-ghost-text: rgb(70, 210, 175),
+    //----Danger----
+    btn-danger-bg: rgb(135, 22, 22),
+    btn-danger-bg-hover: rgb(215, 35, 35),
+    btn-danger-border: rgb(165, 35, 35),
+    btn-danger-border-hover: rgb(240, 50, 50),
   ),
 );

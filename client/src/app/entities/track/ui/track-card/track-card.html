@@ -7,15 +7,11 @@
       [aria-label]="isPlaying() && isCurrentTrack() ? 'Pause' : 'Play'"
       (click)="play(track())"
     >
-      @if (isPlaying() && isCurrentTrack()) {
-        <svg xmlns="w3.org" class="text-accent h-10 w-10 fill-current" viewBox="0 0 24 24">
-          <path fill-rule="evenodd" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" clip-rule="evenodd" />
-        </svg>
-      } @else {
-        <svg xmlns="w3.org" class="ml-0.5 h-10 w-10 fill-current text-white" viewBox="0 0 24 24">
-          <path d="M8 5v14l11-7z" />
-        </svg>
-      }
+      <app-icon
+        [icon]="isPlaying() && isCurrentTrack() ? 'pause' : 'play'"
+        class="text-white"
+        style="font-size: 2.5rem"
+      />
     </button>
   </div>
 
