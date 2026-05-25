@@ -15,7 +15,7 @@ import {
 } from './search.model';
 import { Track, TrackDto } from '../../../entities/track/model/track.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { combineLatest, debounceTime, finalize, map, pipe, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
 import { computed, inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { tapResponse } from '@ngrx/operators';
@@ -62,6 +62,13 @@ export const SearchStore = signalStore(
   withMethods((store) => {
     const jamendoApi = inject(JamendoApiService);
     const router = inject(Router);
+    const searchCache = new Map<string, Track[]>();
+
+    const createCacheKey = (query: string, filters: SearchFiltersState): string => {
+      const genresKey = filters.genres ? [...filters.genres].sort().join(',') : '';
+      return `q:${query.trim().toLowerCase()}|sort:${filters.sortBy}|genres:${genresKey}|dur:${filters.durationMin}-${filters.durationMax}`;
+    };
+
     return {
       updateSearchQuery(query: string): void {
         patchState(store, { query });
@@ -95,6 +102,22 @@ export const SearchStore = signalStore(
           debounceTime(400),
           tap(() => patchState(store, { isLoading: true, error: null })),
           switchMap(({ query, filters }) => {
+            const cacheKey = createCacheKey(query, filters);
+
+            if (searchCache.has(cacheKey)) {
+              const cachedTracks = searchCache.get(cacheKey) || [];
+
+              patchState(store, {
+                tracks: cachedTracks,
+                isLoading: false,
+                error: null,
+              });
+
+              return of(null);
+            }
+
+            patchState(store, { isLoading: true, error: null });
+
             const apiParams: Record<string, string | number | boolean> = {
               limit: 20,
               include: 'stats',
@@ -120,6 +143,8 @@ export const SearchStore = signalStore(
                   const allMappedTracks = response.results.map(mapTrack);
 
                   const richTracks = allMappedTracks.filter(isValidRichTrack);
+
+                  searchCache.set(cacheKey, richTracks);
 
                   patchState(store, {
                     tracks: richTracks,
