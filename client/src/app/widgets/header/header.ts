@@ -6,10 +6,21 @@ import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
 import { ICON_REGISTRY } from '../../shared/ui/icon/icon-registry';
 import { Icon } from '../../shared/ui/icon/icon.component';
+import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-header',
-  imports: [Dropdown, ThemeToggler, RouterLink, DropdownCloseDirective, RouterLinkActive, Icon],
+  imports: [
+    Dropdown,
+    ThemeToggler,
+    RouterLink,
+    DropdownCloseDirective,
+    RouterLinkActive,
+    Icon,
+    NavigationBar,
+    Button,
+  ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

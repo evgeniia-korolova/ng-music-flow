@@ -1,0 +1,17 @@
+<app-dropdown #navigationBar>
+  <app-button variant="outline" size="icon-cubic-md" trigger #trigger>
+    <app-icon icon="menu" />
+  </app-button>
+  @for (item of pathCollection(); track $index) {
+    <ng-template #item>
+      <a
+        [routerLink]="[item.path]"
+        class="router-link"
+        routerLinkActive="router-link-active"
+        [appDropdownClose]="navigationBar"
+      >
+        {{ item.title }}
+      </a>
+    </ng-template>
+  }
+</app-dropdown>

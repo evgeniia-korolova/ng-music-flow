@@ -12,3 +12,10 @@ $header-width: 1800px;
 }
 
 @include m.generate-theme-variables;
+
+main {
+  z-index: 0;
+}
+app-header {
+  z-index: 99;
+}

@@ -26,6 +26,9 @@ $themes: (
     //----Logo----
     bg-logo: rgba(59, 99, 87, 0.1),
     bg-logo-hover: rgba(59, 99, 87, 0.25),
+    //----dropdown----
+    bg-dropdown-item-hover: rgba(20, 20, 20, 0.2),
+    bg-dropdown-item-active: rgba(20, 20, 20, 0.35),
   ),
   dark: (
     bg: #012024,
@@ -53,5 +56,8 @@ $themes: (
     btn-danger-border-hover: rgb(240, 50, 50),
     //----Logo----
     bg-logo-hover: rgba(255, 255, 255, 0.15),
+    //----dropdown----
+    bg-dropdown-item-hover: rgba(240, 240, 240, 0.2),
+    bg-dropdown-item-active: rgba(240, 240, 240, 0.35),
   ),
 );

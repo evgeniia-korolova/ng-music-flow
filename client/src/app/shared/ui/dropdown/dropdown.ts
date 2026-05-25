@@ -24,12 +24,14 @@ import { Button } from '../button/button';
   exportAs: 'dropdownRef',
 })
 export class Dropdown {
-  isOpen = signal(false);
   private readonly el = inject(ElementRef);
-  alignment = input<'left' | 'right'>('left');
-
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
+
+  expandable = input(true);
+  alignment = input<'left' | 'right'>('left');
+
+  isOpen = signal(false);
 
   constructor() {
     effect((onCleanup) => {

@@ -1,5 +1,5 @@
-<app-dropdown [alignment]="'right'" #themeDropdown>
-  <app-button #trigger trigger class="text-primary" variant="outline" size="icon-cubic-md">
+<app-dropdown [alignment]="'right'" #themeDropdown [expandable]="false">
+  <app-button #trigger trigger class="text-primary" variant="outline" size="icon-cubic-sm">
     <app-icon [icon]="getIcon(currentTheme())" />
   </app-button>
   @for (theme of themes; track theme) {
