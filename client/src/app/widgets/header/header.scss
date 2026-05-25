@@ -70,8 +70,9 @@ header {
 
 .user-menu-item {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 1rem;
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
+  width: 240px;
 }

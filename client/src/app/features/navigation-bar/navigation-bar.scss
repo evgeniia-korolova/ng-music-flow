@@ -1,13 +1,130 @@
 :host {
-  width: fit-content;
+  display: block;
+  height: 100%;
+
+  --color-brand-active: #6d36a0;
+  --color-bg-accent: #27272a;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-links-desktop {
+  display: none;
+  align-items: center;
+  height: 100%;
+
+  @media (min-width: 800px) {
+    display: flex;
+  }
+}
+
+.link-wrapper {
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
-.router-link {
+.nav-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 1.25rem;
+  text-decoration: none;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  min-width: 140px;
+
+  &:hover {
+    background-color: $surface-hover;
+    color: var(--color-text-on-bg);
+  }
+
+  &.active {
+    color: var(--color-text-on-bg);
+    background-color: rgba($purple-brand, 0.12);
+    box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.4);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 12px;
+      right: 12px;
+      height: 14px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--color-brand-active) 0px,
+        var(--color-brand-active) 3px,
+        transparent 3px,
+        transparent 6px
+      );
+      clip-path: polygon(
+        0% 100%,
+        10% 5%,
+        20% 80%,
+        30% 10%,
+        40% 65%,
+        50% 15%,
+        60% 75%,
+        70% 25%,
+        80% 85%,
+        90% 30%,
+        100% 100%
+      );
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-active);
+    outline-offset: -2px;
+  }
 }
 
-.router-link-active {
+.link-text {
+  padding-bottom: 4px;
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+}
+
+.nav-menu-mobile {
+  display: flex;
+  align-items: center;
+
+  @media (min-width: 800px) {
+    display: none;
+  }
+}
+
+.dropdown-link {
+  display: block;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease;
+  width: 60vw;
+  justify-content: start;
+  text-align: start;
+
+  &:hover {
+    background-color: $surface-hover;
+    color: var(--color-text-on-bg);
+  }
+
+  &.active {
+    color: var(--color-text-on-bg);
+    box-shadow: inset 4px 0 0 0 var(--color-brand-active);
+    background-color: rgba(var(--color-brand-active), 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-active);
+  }
 }

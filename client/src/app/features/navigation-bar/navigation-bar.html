@@ -1,17 +1,32 @@
-<app-dropdown #navigationBar>
-  <app-button variant="outline" size="icon-cubic-md" trigger #trigger>
-    <app-icon icon="menu" />
-  </app-button>
-  @for (item of pathCollection(); track $index) {
-    <ng-template #item>
-      <a
-        [routerLink]="[item.path]"
-        class="router-link"
-        routerLinkActive="router-link-active"
-        [appDropdownClose]="navigationBar"
-      >
-        {{ item.title }}
-      </a>
-    </ng-template>
-  }
-</app-dropdown>
+<nav class="nav-container">
+  <div class="nav-links-desktop">
+    @for (route of pathCollection(); track route.path) {
+      <div class="link-wrapper">
+        <a [routerLink]="['/', route.path]" class="nav-link" routerLinkActive="active">
+          <span class="link-text">{{ route.title }}</span>
+        </a>
+      </div>
+    }
+  </div>
+
+  <div class="nav-menu-mobile">
+    <app-dropdown #navigationBar>
+      <app-button variant="outline" size="icon-cubic-md" trigger #trigger>
+        <app-icon icon="menu" />
+      </app-button>
+
+      @for (route of pathCollection(); track route.path) {
+        <ng-template #item>
+          <a
+            [routerLink]="[route.path]"
+            class="dropdown-link"
+            routerLinkActive="active"
+            [appDropdownClose]="navigationBar"
+          >
+            {{ route.title }}
+          </a>
+        </ng-template>
+      }
+    </app-dropdown>
+  </div>
+</nav>
