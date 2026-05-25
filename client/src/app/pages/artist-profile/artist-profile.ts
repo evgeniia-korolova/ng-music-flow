@@ -9,8 +9,8 @@ import { ArtistCard } from '../../entities/artist/ui/artist-card/artist-card';
   styleUrl: './artist-profile.scss',
 })
 export default class ArtistProfile {
-  public artistStore = inject(ArtistStore);
-  public artistId = input.required<string>();
+  protected readonly artistStore = inject(ArtistStore);
+  protected readonly artistId = input.required<string>();
 
   constructor() {
     this.artistStore.loadArtistById(this.artistId);
