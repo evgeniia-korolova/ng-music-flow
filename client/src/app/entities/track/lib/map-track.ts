@@ -1,4 +1,4 @@
-import { Track, TrackDto } from '../../entities/track/model/track.model';
+import { Track, TrackDto } from '../model/track.model';
 
 export function mapTrack(dto: TrackDto): Track {
   let realPeaks: number[] = [];

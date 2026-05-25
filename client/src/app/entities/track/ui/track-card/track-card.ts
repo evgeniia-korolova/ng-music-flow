@@ -6,10 +6,11 @@ import { RouterLink } from '@angular/router';
 import { CompactNumberPipe } from '../../../../shared/ui/pipes/compact-number-pipe';
 import { DurationPipe } from '../../../../shared/ui/pipes/duration-pipe';
 import { Icon } from '../../../../shared/ui/icon/icon.component';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-track-card',
-  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe, Icon],
+  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
 })

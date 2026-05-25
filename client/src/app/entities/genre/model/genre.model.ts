@@ -30,12 +30,12 @@ export const GENRES_DATA: readonly Genre[] = [
     image: '/genres/jazz.webp',
   },
   {
-    id: 'classical',
+    id: 'classic',
     title: 'Classical',
     image: '/genres/classical.webp',
   },
   {
-    id: 'lounge',
+    id: 'chillout',
     title: 'Lounge',
     image: '/genres/lounge.webp',
   },
