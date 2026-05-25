@@ -11,12 +11,14 @@ export interface ArtistState {
   items: Artist[];
   isLoading: boolean;
   error: string | null;
+  currentArtist: Artist | null;
 }
 
 const initialState: ArtistState = {
   items: [],
   isLoading: false,
   error: null,
+  currentArtist: null,
 };
 
 export const ArtistStore = signalStore(
@@ -42,6 +44,36 @@ export const ArtistStore = signalStore(
                   isLoading: false,
                   error: 'Failed to load artists. Try to reload page.',
                 });
+              },
+            }),
+          ),
+        ),
+      ),
+    ),
+    loadArtistById: rxMethod<string>(
+      pipe(
+        tap(() => patchState(store, { isLoading: true, error: null })),
+        switchMap((id) =>
+          jamendoApi.get<ArtistDto>('artists', { id: id }).pipe(
+            tapResponse({
+              next: (response) => {
+                if (response.results && response.results.length > 0) {
+                  patchState(store, {
+                    isLoading: false,
+                    error: null,
+                    currentArtist: mapArtist(response.results[0]),
+                  });
+                } else {
+                  patchState(store, {
+                    isLoading: false,
+                    error: "Artist don't find",
+                    currentArtist: null,
+                  });
+                }
+              },
+              error: (err) => {
+                console.log(err);
+                patchState(store, { isLoading: false, error: 'Error' });
               },
             }),
           ),

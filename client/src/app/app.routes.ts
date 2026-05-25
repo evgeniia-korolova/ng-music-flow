@@ -52,6 +52,11 @@ export const routes: Routes = [
         redirectTo: 'discover',
         pathMatch: 'full',
       },
+      {
+        path: 'artists/:artistId',
+        loadComponent: () => import('./pages/artist-profile/artist-profile'),
+        title: 'ArtistProfile',
+      },
     ],
   },
 ];
