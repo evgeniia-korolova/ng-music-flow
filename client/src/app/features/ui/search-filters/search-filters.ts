@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { GENRES_DATA } from '../../../entities/genre/model/genre.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -12,9 +19,10 @@ import { SearchStore } from '../../../pages/search-page/model/search.store';
   styleUrl: './search-filters.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchFilters {
+export class SearchFilters implements OnInit {
   private readonly fb = inject(FormBuilder);
   protected readonly store = inject(SearchStore);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly genresList = GENRES_DATA;
 
@@ -55,15 +63,35 @@ export class SearchFilters {
       );
     });
 
-    this.filterForm.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
-      const currentFormValue = this.filterForm.getRawValue();
-      const min = currentFormValue.durationMin ?? 0;
-      const max = currentFormValue.durationMax ?? 600;
-      if (min > max) {
-        this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
-        return;
-      }
-      this.store.updateFiltersFromForm(value);
-    });
+    // this.filterForm.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
+    //   const currentFormValue = this.filterForm.getRawValue();
+    //   const min = currentFormValue.durationMin ?? 0;
+    //   const max = currentFormValue.durationMax ?? 600;
+    //   if (min > max) {
+    //     this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
+    //     return;
+    //   }
+    //   this.store.updateFiltersFromForm(value);
+    // });
+  }
+
+  ngOnInit(): void {
+    this.filterForm.valueChanges
+      .pipe(
+        // Передаем destroyRef, так как мы находимся в ngOnInit, а не в конструкторе
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((value) => {
+        const currentFormValue = this.filterForm.getRawValue();
+        const min = currentFormValue.durationMin ?? 0;
+        const max = currentFormValue.durationMax ?? 600;
+
+        if (min > max) {
+          this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
+          return;
+        }
+
+        this.store.updateFiltersFromForm(value);
+      });
   }
 }

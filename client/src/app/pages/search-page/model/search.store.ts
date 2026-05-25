@@ -1,14 +1,28 @@
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { GenreId, RawFormValue, SearchFiltersState, SearchState } from './search.model';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+import {
+  GenreId,
+  RawFormValue,
+  SearchFiltersState,
+  SearchSortOrder,
+  SearchState,
+} from './search.model';
 import { Track, TrackDto } from '../../../entities/track/model/track.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { combineLatest, debounceTime, finalize, map, pipe, switchMap, tap } from 'rxjs';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { tapResponse } from '@ngrx/operators';
-import { mapTrack } from '../../../shared/lib/map-track';
+import { mapTrack } from '../../../entities/track/lib/map-track';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { isValidRichTrack } from '../../../entities/track/model/track.validator';
 
 const initialState: SearchState = {
   query: '',
@@ -34,6 +48,17 @@ const extendedInitialState: ExtendedSearchState = {
 
 export const SearchStore = signalStore(
   withState(extendedInitialState),
+  withComputed((store) => ({
+    listTitle: computed(() => {
+      if (store.query()) {
+        return `Results of search "${store.query()}"`;
+      }
+      if (store.filters.genres().length > 0) {
+        return `Results of search: ${store.filters.genres().join(', ')}`;
+      }
+      return 'All results';
+    }),
+  })),
   withMethods((store) => {
     const jamendoApi = inject(JamendoApiService);
     const router = inject(Router);
@@ -42,13 +67,25 @@ export const SearchStore = signalStore(
         patchState(store, { query });
       },
 
-      setInitialTagFromUrl(tagId: GenreId): void {
+      setFiltersFromUrl(params: {
+        tags?: string;
+        sortBy?: string;
+        min?: number;
+        max?: number;
+      }): void {
         if (store.isInitialized()) return;
+
+        const activeGenres = params.tags ? (params.tags.split(',') as GenreId[]) : [];
+
         patchState(store, (state) => ({
           ...state,
+          isInitialized: true,
           filters: {
             ...state.filters,
-            genres: [tagId],
+            genres: activeGenres,
+            sortBy: (params.sortBy as SearchSortOrder) ?? store.filters.sortBy(),
+            durationMin: params.min !== undefined ? +params.min : store.filters.durationMin(),
+            durationMax: params.max !== undefined ? +params.max : store.filters.durationMax(),
           },
         }));
       },
@@ -68,7 +105,7 @@ export const SearchStore = signalStore(
             }
 
             if (filters.genres && filters.genres.length > 0) {
-              apiParams['tags'] = filters.genres.join(',');
+              apiParams['tags'] = filters.genres.join('+');
             }
 
             apiParams['duration_between'] = `${filters.durationMin}:${filters.durationMax}`;
@@ -82,13 +119,7 @@ export const SearchStore = signalStore(
                 next: (response) => {
                   const allMappedTracks = response.results.map(mapTrack);
 
-                  const richTracks = allMappedTracks.filter((track) => {
-                    if (!track.waveform || track.waveform.length === 0) return false;
-                    if (track.duration < 30) return false;
-
-                    const loudPeaks = track.waveform.filter((peak) => peak > 0.2).length;
-                    return loudPeaks >= 25;
-                  });
+                  const richTracks = allMappedTracks.filter(isValidRichTrack);
 
                   patchState(store, {
                     tracks: richTracks,

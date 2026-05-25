@@ -5,7 +5,8 @@ import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
-import { mapTrack } from '../../../shared/lib/map-track';
+import { mapTrack } from '../lib/map-track';
+import { isValidRichTrack } from './track.validator';
 
 export interface TracksState {
   tracks: Track[];
@@ -42,15 +43,10 @@ export const TracksStore = signalStore(
               tapResponse({
                 next: (response) => {
                   const allMappedTracks = response.results.map(mapTrack);
-                  const richTracks = allMappedTracks.filter((track) => {
-                    if (!track.waveform || track.waveform.length === 0) return false;
+                  const richTracks = allMappedTracks.filter(isValidRichTrack);
 
-                    if (track.duration < 30) return false;
+                  // searchCache.set(cacheKey, richTracks);
 
-                    const loudPeaks = track.waveform.filter((peak) => peak > 0.2).length;
-
-                    return loudPeaks >= 25;
-                  });
                   const targetLimit = store.listTitle() === 'Popular Tracks' ? 15 : 10;
                   const finalTracks = richTracks.slice(0, targetLimit);
                   patchState(store, {

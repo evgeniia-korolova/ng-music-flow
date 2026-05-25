@@ -47,5 +47,3 @@ During this sprint, I focused on setting up a project foundation and ensuring te
 
 - Deploy the application to **Netlify** with environment variable injection.
 - Coordinate the integration of team-developed features into the main layout.
-- configure lazy route for track details
-- try to implement real sound wave
