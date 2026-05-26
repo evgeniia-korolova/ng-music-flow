@@ -6,8 +6,10 @@ declare global {
 
 export default async (request: Request) => {
   const url = new URL(request.url);
-  const pathParts = url.pathname.split('/').filter(Boolean);
-  const endpoint = pathParts[pathParts.indexOf('api') + 1] || 'tracks';
+  // const pathParts = url.pathname.split('/').filter(Boolean);
+  const pathParts = url.pathname.split('/').filter(p => p && p !== 'api');
+  // const endpoint = pathParts[pathParts.indexOf('api') + 1] || 'tracks';
+  const endpoint = pathParts[0] || 'tracks';
 
   const searchParams = url.searchParams.toString();
   const jamendoId = process.env['JAMENDO_CLIENT_ID'];
