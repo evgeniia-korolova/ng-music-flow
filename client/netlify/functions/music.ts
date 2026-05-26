@@ -6,17 +6,14 @@ declare global {
 
 export default async (request: Request) => {
   const url = new URL(request.url);
-  const originalPath = request.headers.get('x-nf-original-path') || url.pathname;
-  // const pathParts = originalPath.split('/').filter(Boolean);
-  // const endpoint = pathParts[pathParts.length - 1] || 'tracks';
-  const endpoint = originalPath.replace(/^\/api\//, ''); 
+  const originalPath = request.headers.get('x-nf-original-path') || url.pathname; 
+  const endpoint = originalPath.replace(/^\/api\//, '');
 
   const searchParams = url.searchParams.toString();
   const jamendoId = process.env['JAMENDO_CLIENT_ID'];
 
-  if (!jamendoId) {
-    console.log('No key is found');
-    
+  if (!jamendoId) {    
+
     return new Response(JSON.stringify({ error: 'Jamendo Client ID is missing on server' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
@@ -27,10 +24,7 @@ export default async (request: Request) => {
 
   try {
     const response = await fetch(jamendoUrl);
-    const data = await response.json();
-    console.log('endpoint', endpoint);
-    console.log('params', searchParams);
-    console.log('jamendoUrl', jamendoUrl);
+    const data = await response.json();   
 
     return new Response(JSON.stringify(data), {
       status: 200,
