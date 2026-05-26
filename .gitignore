@@ -20,5 +20,5 @@ Thumbs.db
 .angular
 .config
 
-#environment.development.ts
+environment.development.ts
 #environment.ts

@@ -6,8 +6,10 @@ declare global {
 
 export default async (request: Request) => {
   const url = new URL(request.url);
-  const searchParams = url.searchParams.toString();
+  const pathParts = url.pathname.split('/').filter(Boolean);
+  const endpoint = pathParts[pathParts.indexOf('api') + 1] || 'tracks';
 
+  const searchParams = url.searchParams.toString();
   const jamendoId = process.env['JAMENDO_CLIENT_ID'];
 
   if (!jamendoId) {
@@ -17,7 +19,7 @@ export default async (request: Request) => {
     });
   }
 
-  const jamendoUrl = `https://jamendo.com{jamendoId}&${searchParams}`;
+  const jamendoUrl = `https://jamendo.com${endpoint}/?client_id=${jamendoId}&${searchParams}`;
 
   try {
     const response = await fetch(jamendoUrl);
@@ -37,5 +39,5 @@ export default async (request: Request) => {
 };
 
 export const config = {
-  path: '/api/music',
+  path: '/api/*',
 };
