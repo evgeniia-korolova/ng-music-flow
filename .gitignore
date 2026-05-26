@@ -21,3 +21,4 @@ Thumbs.db
 .config
 
 environment.development.ts
+environment.ts
