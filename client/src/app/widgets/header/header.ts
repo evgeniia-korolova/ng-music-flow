@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/cor
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
-import { Route, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Route, Router, RouterLink } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
 import { ICON_REGISTRY } from '../../shared/ui/icon/icon-registry';
 import { Icon } from '../../shared/ui/icon/icon.component';
@@ -16,7 +16,6 @@ import { Button } from '../../shared/ui/button/button';
     ThemeToggler,
     RouterLink,
     DropdownCloseDirective,
-    RouterLinkActive,
     Icon,
     NavigationBar,
     Button,
