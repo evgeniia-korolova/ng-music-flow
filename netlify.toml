@@ -1,7 +1,7 @@
 [build]
   base = "client"
   command = "npm run build"
-  publish = "dist/client/browser"
+  publish = "dist/ng-music-flow/browser"
 
 [functions] 
   directory = "netlify/functions"
