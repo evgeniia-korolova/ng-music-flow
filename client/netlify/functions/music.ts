@@ -23,7 +23,7 @@ export default async (request: Request) => {
     });
   }
 
-  const jamendoUrl = `https://jamendo.com${endpoint}/?client_id=${jamendoId}&${searchParams}`;
+  const jamendoUrl = `https://jamendo.com/${endpoint}/?client_id=${jamendoId}&${searchParams}`;
 
   try {
     const response = await fetch(jamendoUrl);
