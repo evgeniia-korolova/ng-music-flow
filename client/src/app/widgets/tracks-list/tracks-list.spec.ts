@@ -39,6 +39,7 @@ describe('TracksList', () => {
 
   const mockIsLarge = signal(true);
   const mockIsMedium = signal(false);
+  const mockIsMdTailwind = signal(false);
 
   beforeEach(async () => {
     tracksSignal.set([]);
@@ -57,6 +58,7 @@ describe('TracksList', () => {
           useValue: {
             isLarge: mockIsLarge,
             isMedium: mockIsMedium,
+            isMdTailwind: mockIsMdTailwind,
             isSmall: signal(false),
           },
         },
@@ -117,35 +119,32 @@ describe('TracksList', () => {
   });
 
   describe('Adaptive showWave logic (linkedSignal)', () => {
-    it('should show wave on Large and Medium screens in tabs mode', () => {
-      fixture.componentRef.setInput('viewMode', 'tabs');
+    ['tabs', 'search'].forEach((mode) => {
+      it(`should show wave on Large and MdTailwind screens in ${mode} mode`, () => {
+        fixture.componentRef.setInput('viewMode', mode as 'tabs' | 'search');
 
-      mockIsLarge.set(true);
-      mockIsMedium.set(false);
-      fixture.detectChanges();
-      expect(component.showWave()).toBe(true);
+        mockIsLarge.set(true);
+        mockIsMdTailwind.set(false);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(true);
 
-      mockIsLarge.set(false);
-      mockIsMedium.set(true);
-      fixture.detectChanges();
-      expect(component.showWave()).toBe(true);
+        mockIsLarge.set(false);
+        mockIsMdTailwind.set(true);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(true);
 
-      mockIsLarge.set(false);
-      mockIsMedium.set(false);
-      fixture.detectChanges();
-      expect(component.showWave()).toBe(false);
+        mockIsLarge.set(false);
+        mockIsMdTailwind.set(false);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(false);
+      });
     });
 
-    it('should show wave ONLY on Large screens in search mode', () => {
-      fixture.componentRef.setInput('viewMode', 'search');
+    it('should NEVER show wave in slider mode', () => {
+      fixture.componentRef.setInput('viewMode', 'slider');
 
       mockIsLarge.set(true);
-      mockIsMedium.set(false);
-      fixture.detectChanges();
-      expect(component.showWave()).toBe(true);
-
-      mockIsLarge.set(false);
-      mockIsMedium.set(true);
+      mockIsMdTailwind.set(true);
       fixture.detectChanges();
       expect(component.showWave()).toBe(false);
     });

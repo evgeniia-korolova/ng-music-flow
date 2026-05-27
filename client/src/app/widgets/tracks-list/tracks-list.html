@@ -1,4 +1,4 @@
-<div class="p-4">
+<div class="py-4 md:px-4">
   <h1 class="mb-4 text-2xl font-bold">{{ provider.listTitle() }}</h1>
 
   @if (provider.isLoading()) {
@@ -9,7 +9,7 @@
     <p class="text-red-500">{{ provider.error() }}</p>
   }
 
-  <ul class="m-0 flex list-none flex-col gap-3 p-0">
+  <ul class="m-0 flex list-none flex-col justify-center gap-3 p-0">
     @for (track of provider.tracks(); track track.id) {
       @defer (on viewport) {
         <li class="block w-full">

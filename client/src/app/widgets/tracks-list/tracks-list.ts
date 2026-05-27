@@ -17,16 +17,18 @@ export default class TracksList {
     source: () => ({
       mode: this.viewMode(),
       isLarge: this.screen.isLarge(),
-      isMedium: this.screen.isMedium(),
+      isMdTailwind: this.screen.isMdTailwind(),
     }),
 
     computation: (source) => {
-      if (source.mode === 'tabs') {
-        return source.isLarge || source.isMedium;
+      if (source.mode === 'slider') {
+        return false;
       }
-      if (source.mode === 'search') {
-        return source.isLarge;
+
+      if (source.mode === 'tabs' || source.mode === 'search') {
+        return source.isLarge || source.isMdTailwind;
       }
+
       return false;
     },
   });
