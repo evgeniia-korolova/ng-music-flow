@@ -10,7 +10,7 @@ import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-track-card',
-  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe],
+  imports: [RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe, TrackWaveform],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
 })
@@ -18,6 +18,7 @@ export class TrackCard {
   protected playerService = inject(AudioPlayerService);
   readonly track = input.required<Track>();
   readonly isPlaying = this.playerService.isPlaying;
+  readonly showWave = input.required<boolean>();
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {

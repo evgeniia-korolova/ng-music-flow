@@ -13,7 +13,7 @@
     @for (track of provider.tracks(); track track.id) {
       @defer (on viewport) {
         <li class="block w-full">
-          <app-track-card [track]="track" />
+          <app-track-card [track]="track" [showWave]="showWave()" />
         </li>
       } @placeholder (minimum 500ms) {
         <div

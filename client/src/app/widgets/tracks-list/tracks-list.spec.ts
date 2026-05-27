@@ -6,6 +6,7 @@ import { Track } from '../../entities/track/model/track.model';
 import { TRACK_DATA_PROVIDER, TrackDataProvider } from './model/track-provider.token';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
 
 describe('TracksList', () => {
   let component: TracksList;
@@ -36,19 +37,36 @@ describe('TracksList', () => {
     waveform: [2, 5, 4],
   };
 
+  const mockIsLarge = signal(true);
+  const mockIsMedium = signal(false);
+
   beforeEach(async () => {
     tracksSignal.set([]);
     isLoadingSignal.set(false);
     errorSignal.set(null);
+    mockIsLarge.set(true);
+    mockIsMedium.set(false);
 
     await TestBed.configureTestingModule({
       imports: [TracksList],
-      providers: [{ provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider }, provideRouter([])],
+      providers: [
+        { provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider },
+        provideRouter([]),
+        {
+          provide: ResponsiveService,
+          useValue: {
+            isLarge: mockIsLarge,
+            isMedium: mockIsMedium,
+            isSmall: signal(false),
+          },
+        },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TracksList);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('viewMode', 'tabs');
     await fixture.whenStable();
   });
 
@@ -96,5 +114,40 @@ describe('TracksList', () => {
 
     const itemEl = fixture.debugElement.query(By.css('li'));
     expect(itemEl).toBeTruthy();
+  });
+
+  describe('Adaptive showWave logic (linkedSignal)', () => {
+    it('should show wave on Large and Medium screens in tabs mode', () => {
+      fixture.componentRef.setInput('viewMode', 'tabs');
+
+      mockIsLarge.set(true);
+      mockIsMedium.set(false);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(true);
+
+      mockIsLarge.set(false);
+      mockIsMedium.set(true);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(true);
+
+      mockIsLarge.set(false);
+      mockIsMedium.set(false);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(false);
+    });
+
+    it('should show wave ONLY on Large screens in search mode', () => {
+      fixture.componentRef.setInput('viewMode', 'search');
+
+      mockIsLarge.set(true);
+      mockIsMedium.set(false);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(true);
+
+      mockIsLarge.set(false);
+      mockIsMedium.set(true);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(false);
+    });
   });
 });
