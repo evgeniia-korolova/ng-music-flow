@@ -15,6 +15,8 @@ register();
 export class AlbumsList {
   protected readonly store = inject(AlbumStore);
   public readonly artistId = input.required<string>();
+  public isPagination = input<boolean>(true);
+
   constructor() {
     effect(() => {
       this.store.loadAlbums(this.artistId());

@@ -4,4 +4,15 @@
 swiper-container {
   display: block;
   width: 100%;
+  --swiper-pagination-bottom: 0px;
+  // padding-bottom: 40px;
+}
+
+swiper-slide {
+  // margin-bottom: 40px;
+  height: auto;
+}
+swiper-container::part(pagination) {
+  position: relative;
+  margin-top: 15px;
 }

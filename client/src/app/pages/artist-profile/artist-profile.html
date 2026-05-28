@@ -7,7 +7,7 @@
       <p class="artist-profile__loading">{{ artistStore.error() }}</p>
     }
     @if (artistStore.currentArtist(); as artist) {
-      <app-artist-card [artist]="artist"></app-artist-card>
+      <app-artist-card [artist]="artist" [isLink]="false"></app-artist-card>
     }
     <app-albums-list [artistId]="artistId()"></app-albums-list>
   </div>

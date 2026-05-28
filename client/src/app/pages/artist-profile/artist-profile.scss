@@ -4,8 +4,9 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 40px;
-  // max-width: 400px;
-  // margin: 0 auto;
+  @media (width < 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 .artist-profile__info {
   display: flex;

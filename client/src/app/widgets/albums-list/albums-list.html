@@ -1,4 +1,8 @@
-<swiper-container slides-per-view="3" space-between="16">
+<swiper-container
+  [breakpoints]="{ '320': { slidesPerView: 2 }, '1024': { slidesPerView: 3 } }"
+  space-between="16"
+  [pagination]="isPagination() ? { clickable: true } : false"
+>
   @if (store.isLoading()) {
     <p>Albums are loading...</p>
   }
