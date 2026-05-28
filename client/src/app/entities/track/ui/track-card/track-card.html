@@ -32,26 +32,29 @@
     }
   </div>
 
-  <div class="flex h-8 min-w-0 flex-auto items-center rounded px-3">
-    <app-track-waveform
-      [isActive]="isCurrentTrack()"
-      [progress]="isCurrentTrack() ? progress() : -1"
-      [peaks]="track().waveform"
+  @if (showWave()) {
+    <div
+      data-testid="waveform-container"
+      class="flex h-8 min-w-0 flex-auto items-center rounded px-3"
     >
-    </app-track-waveform>
-  </div>
+      <app-track-waveform
+        [isActive]="isCurrentTrack()"
+        [progress]="isCurrentTrack() ? progress() : -1"
+        [peaks]="track().waveform"
+      >
+      </app-track-waveform>
+    </div>
+  }
 
-  <div class="flex flex-none items-center gap-4">
-    <span class="font-mono text-xs text-gray-500">
-      {{ track().playCount | compactNumberPipe }} plays
-    </span>
+  <div class="flex flex-none flex-col items-center gap-4 md:flex-row">
+    <span class="font-mono text-xs"> {{ track().playCount | compactNumberPipe }} plays </span>
 
-    <span class="mr-2 font-mono text-xs text-gray-400">
+    <span class="mr-2 font-mono text-xs">
       {{ track().duration | duration }}
     </span>
 
     <div class="flex items-center gap-2">
-      <ng-content></ng-content>
+      <ng-content select="[slot-actions]" />
     </div>
   </div>
 </article>
