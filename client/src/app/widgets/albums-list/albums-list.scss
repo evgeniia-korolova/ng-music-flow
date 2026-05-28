@@ -10,9 +10,10 @@ swiper-container {
 
 swiper-slide {
   // margin-bottom: 40px;
+  padding-bottom: 8px;
   height: auto;
 }
 swiper-container::part(pagination) {
   position: relative;
-  margin-top: 15px;
+  margin-top: 10px;
 }
