@@ -1,10 +1,11 @@
 import { Component, inject, input } from '@angular/core';
 import { ArtistStore } from '../../entities/artist/model/artist.store';
 import { ArtistCard } from '../../entities/artist/ui/artist-card/artist-card';
+import { AlbumsList } from '../../widgets/albums-list/albums-list';
 
 @Component({
   selector: 'app-artist-profile',
-  imports: [ArtistCard],
+  imports: [ArtistCard, AlbumsList],
   templateUrl: './artist-profile.html',
   styleUrl: './artist-profile.scss',
 })
