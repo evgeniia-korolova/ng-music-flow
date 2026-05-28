@@ -1,19 +1,19 @@
-<ul class="albums__list">
+<swiper-container slides-per-view="3" space-between="16">
   @if (store.isLoading()) {
-    <li>Albums are loading...</li>
+    <p>Albums are loading...</p>
   }
   @if (store.error()) {
-    {{ store.error() }}
+    <p>{{ store.error() }}</p>
   }
   @for (item of store.items(); track item.id) {
     @defer (on viewport) {
-      <li>
+      <swiper-slide>
         <app-album-card [album]="item"></app-album-card>
-      </li>
+      </swiper-slide>
     } @placeholder (minimum 500ms) {
-      <li
+      <swiper-slide
         class="bg-accent block h-80 w-full animate-pulse overflow-hidden rounded-lg shadow-lg"
-      ></li>
+      ></swiper-slide>
     }
   }
-</ul>
+</swiper-container>
