@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecondaryLayout } from './secondary-layout';
+import { SecondaryLayout } from './auth-layout';
 
 describe('SecondaryLayout', () => {
   let component: SecondaryLayout;

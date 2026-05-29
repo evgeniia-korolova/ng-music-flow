@@ -3,9 +3,9 @@ import { RouterOutlet } from '@angular/router';
 import { Header } from '../../widgets/header/header';
 
 @Component({
-  selector: 'app-secondary-layout',
+  selector: 'app-auth-layout',
   imports: [RouterOutlet, Header],
-  templateUrl: './secondary-layout.html',
-  styleUrl: './secondary-layout.scss',
+  templateUrl: './auth-layout.html',
+  styleUrl: './auth-layout.scss',
 })
 export class SecondaryLayout {}

@@ -1,0 +1,30 @@
+<div class="input-container">
+  @if (label()) {
+    <label class="input-label" [htmlFor]="inputId">{{ label() }}</label>
+  }
+
+  @if (inputType() === 'textbox') {
+    <textarea
+      [formField]="field()"
+      [readOnly]="state.readonly()"
+      class="input textarea"
+      [id]="inputId"
+    >
+    </textarea>
+  } @else {
+    <input
+      [type]="currentType()"
+      [formField]="field()"
+      [readOnly]="state.readonly()"
+      class="input"
+      [id]="inputId"
+    />
+    <span class="input-icon">PE</span>
+  }
+
+  @if (state.touched() && state.invalid() && error()) {
+    <span class="error-msg">
+      {{ error() }}
+    </span>
+  }
+</div>
