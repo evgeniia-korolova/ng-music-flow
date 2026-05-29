@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { SecondaryLayout } from './layouts/secondary-layout/secondary-layout';
 
 export const routes: Routes = [
   {
@@ -56,6 +57,24 @@ export const routes: Routes = [
         path: 'artists/:artistId',
         loadComponent: () => import('./pages/artist-profile/artist-profile'),
         title: 'ArtistProfile',
+      },
+    ],
+  },
+  {
+    path: '',
+    component: SecondaryLayout,
+    children: [
+      {
+        path: 'auth',
+        loadComponent: () => import('./pages/auth/auth'),
+        children: [
+          { path: '', redirectTo: 'login', pathMatch: 'full' },
+          { path: 'Sign In', loadComponent: () => import('./features/auth/login-form/login-form') },
+          {
+            path: 'Sign Up',
+            loadComponent: () => import('./features/auth/register-form/register-form'),
+          },
+        ],
       },
     ],
   },
