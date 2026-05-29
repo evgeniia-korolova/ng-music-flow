@@ -35,7 +35,7 @@ export const AlbumStore = signalStore(
                   error: null,
                 });
               },
-              error: (err: any) => {
+              error: (err) => {
                 console.log(err);
                 patchState(store, { isLoading: false, error: 'Error' });
               },
