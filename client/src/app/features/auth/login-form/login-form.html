@@ -1,1 +1,15 @@
-<p>login-form works!</p>
+<form class="auth-form" id="loginFormId">
+  <app-input
+    [field]="loginForm.email"
+    label="Email Address"
+    inputType="text"
+    placeHolder="name@example.com"
+  />
+
+  <app-input
+    [field]="loginForm.password"
+    label="Password"
+    inputType="password"
+    placeHolder="••••••••"
+  />
+</form>

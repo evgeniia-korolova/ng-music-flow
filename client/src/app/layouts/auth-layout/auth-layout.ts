@@ -8,4 +8,4 @@ import { Header } from '../../widgets/header/header';
   templateUrl: './auth-layout.html',
   styleUrl: './auth-layout.scss',
 })
-export class SecondaryLayout {}
+export class AuthLayout {}
