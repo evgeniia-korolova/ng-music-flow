@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
-import { SecondaryLayout } from './layouts/auth-layout/auth-layout';
+import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 export const routes: Routes = [
   {
@@ -62,16 +62,20 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: SecondaryLayout,
+    component: AuthLayout,
     children: [
       {
         path: 'auth',
         loadComponent: () => import('./pages/auth/auth'),
         children: [
-          { path: '', redirectTo: 'login', pathMatch: 'full' },
-          { path: 'Sign In', loadComponent: () => import('./features/auth/login-form/login-form') },
           {
-            path: 'Sign Up',
+            path: 'login',
+            title: 'Sign In',
+            loadComponent: () => import('./features/auth/login-form/login-form'),
+          },
+          {
+            path: 'register',
+            title: 'Sign Up',
             loadComponent: () => import('./features/auth/register-form/register-form'),
           },
         ],
