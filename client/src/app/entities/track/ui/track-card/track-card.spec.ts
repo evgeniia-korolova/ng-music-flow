@@ -37,6 +37,8 @@ describe('TrackCard', () => {
     fixture = TestBed.createComponent(TrackCard);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('track', mockTrack);
+    fixture.componentRef.setInput('showWave', true);
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
@@ -62,5 +64,28 @@ describe('TrackCard', () => {
 
     const albumLinkInstance = linkElements[1].injector.get(RouterLink);
     expect(albumLinkInstance.urlTree?.toString()).toBe('/albums/122');
+  });
+
+  it('should render waveform container when showWave is true', () => {
+    fixture.componentRef.setInput('showWave', true);
+    fixture.detectChanges();
+
+    const waveformContainer = fixture.debugElement.query(
+      By.css('[data-testid="waveform-container"]'),
+    );
+    expect(waveformContainer).toBeTruthy();
+  });
+
+  it('should NOT render waveform container when showWave is false', async () => {
+    fixture.componentRef.setInput('showWave', false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const waveformContainer = fixture.debugElement.query(
+      By.css('[data-testid="waveform-container"]'),
+    );
+
+    expect(waveformContainer).toBeNull();
   });
 });

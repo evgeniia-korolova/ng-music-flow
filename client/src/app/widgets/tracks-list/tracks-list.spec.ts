@@ -6,6 +6,7 @@ import { Track } from '../../entities/track/model/track.model';
 import { TRACK_DATA_PROVIDER, TrackDataProvider } from './model/track-provider.token';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
+import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
 
 describe('TracksList', () => {
   let component: TracksList;
@@ -36,19 +37,38 @@ describe('TracksList', () => {
     waveform: [2, 5, 4],
   };
 
+  const mockIsLarge = signal(true);
+  const mockIsMedium = signal(false);
+  const mockIsMdTailwind = signal(false);
+
   beforeEach(async () => {
     tracksSignal.set([]);
     isLoadingSignal.set(false);
     errorSignal.set(null);
+    mockIsLarge.set(true);
+    mockIsMedium.set(false);
 
     await TestBed.configureTestingModule({
       imports: [TracksList],
-      providers: [{ provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider }, provideRouter([])],
+      providers: [
+        { provide: TRACK_DATA_PROVIDER, useValue: mockDataProvider },
+        provideRouter([]),
+        {
+          provide: ResponsiveService,
+          useValue: {
+            isLarge: mockIsLarge,
+            isMedium: mockIsMedium,
+            isMdTailwind: mockIsMdTailwind,
+            isSmall: signal(false),
+          },
+        },
+      ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TracksList);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('viewMode', 'tabs');
     await fixture.whenStable();
   });
 
@@ -96,5 +116,37 @@ describe('TracksList', () => {
 
     const itemEl = fixture.debugElement.query(By.css('li'));
     expect(itemEl).toBeTruthy();
+  });
+
+  describe('Adaptive showWave logic (linkedSignal)', () => {
+    ['tabs', 'search'].forEach((mode) => {
+      it(`should show wave on Large and MdTailwind screens in ${mode} mode`, () => {
+        fixture.componentRef.setInput('viewMode', mode as 'tabs' | 'search');
+
+        mockIsLarge.set(true);
+        mockIsMdTailwind.set(false);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(true);
+
+        mockIsLarge.set(false);
+        mockIsMdTailwind.set(true);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(true);
+
+        mockIsLarge.set(false);
+        mockIsMdTailwind.set(false);
+        fixture.detectChanges();
+        expect(component.showWave()).toBe(false);
+      });
+    });
+
+    it('should NEVER show wave in slider mode', () => {
+      fixture.componentRef.setInput('viewMode', 'slider');
+
+      mockIsLarge.set(true);
+      mockIsMdTailwind.set(true);
+      fixture.detectChanges();
+      expect(component.showWave()).toBe(false);
+    });
   });
 });
