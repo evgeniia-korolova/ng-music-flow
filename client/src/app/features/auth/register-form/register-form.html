@@ -1,1 +1,29 @@
-<p>register-form works!</p>
+<form class="auth-form" id="registerFormId">
+  <app-input
+    [field]="registerForm.username"
+    label="Username"
+    inputType="text"
+    placeHolder="Enter your username"
+  />
+
+  <app-input
+    [field]="registerForm.email"
+    label="Email Address"
+    inputType="text"
+    placeHolder="name@example.com"
+  />
+
+  <app-input
+    [field]="registerForm.password"
+    label="Password"
+    inputType="password"
+    placeHolder="••••••••"
+  />
+
+  <app-input
+    [field]="registerForm.confirmPassword"
+    label="Confirm Password"
+    inputType="password"
+    placeHolder="••••••••"
+  />
+</form>
