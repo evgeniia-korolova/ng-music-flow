@@ -1,12 +1,12 @@
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { Artist, ArtistDto } from './artist.model';
+import { Artist, ArtistDto, ArtistTracksResponseDTO } from './artist.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { forkJoin, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { mapArtist } from '../../../shared/lib/map-artist';
-import { Album } from '../../album/model/album.model';
+import { Album, ArtistAlbumsResponseDTO } from '../../album/model/album.model';
 import { Track } from '../../track/model/track.model';
 import { mapTrack } from '../../track/lib/map-track';
 
@@ -65,8 +65,8 @@ export const ArtistStore = signalStore(
         switchMap((id) =>
           forkJoin({
             artistReq: jamendoApi.get<ArtistDto>('artists', { id: id }),
-            albumsReq: jamendoApi.get<any>('artists/albums', { id: id }),
-            tracksReq: jamendoApi.get<any>('artists/tracks', { id: id }),
+            albumsReq: jamendoApi.get<ArtistAlbumsResponseDTO>('artists/albums', { id: id }),
+            tracksReq: jamendoApi.get<ArtistTracksResponseDTO>('artists/tracks', { id: id }),
           }).pipe(
             tapResponse({
               next: (response) => {

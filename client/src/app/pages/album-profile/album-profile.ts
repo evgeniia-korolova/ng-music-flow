@@ -9,7 +9,7 @@ import { TrackCard } from '../../entities/track/ui/track-card/track-card';
   templateUrl: './album-profile.html',
   styleUrl: './album-profile.scss',
 })
-export default class AlbumProfile {
+export class AlbumProfile {
   protected readonly albumStore = inject(AlbumStore);
   protected readonly albumId = input.required<string>();
   readonly album = this.albumStore.currentAlbum;
