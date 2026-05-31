@@ -9,7 +9,11 @@
     @if (artistStore.currentArtist(); as artist) {
       <app-artist-card [artist]="artist" [isLink]="false"></app-artist-card>
     }
-    <app-albums-list [artistId]="artistId()"></app-albums-list>
+    <app-albums-list [albums]="artistStore.albums()"></app-albums-list>
   </div>
-  <div class="artist-profile__track">There will be tracks</div>
+  <div class="artist-profile__track">
+    @for (item of artistStore.tracks(); track $index) {
+      <app-track-card [track]="item" [showWave]="false"></app-track-card>
+    }
+  </div>
 </div>

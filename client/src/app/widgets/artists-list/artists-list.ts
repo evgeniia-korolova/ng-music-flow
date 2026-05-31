@@ -10,4 +10,8 @@ import { ArtistStore } from '../../entities/artist/model/artist.store';
 })
 export class ArtistsList {
   store = inject(ArtistStore);
+
+  constructor() {
+    this.store.loadArtists();
+  }
 }

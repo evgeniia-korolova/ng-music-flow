@@ -57,6 +57,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/artist-profile/artist-profile'),
         title: 'ArtistProfile',
       },
+      {
+        path: 'albums/:albumId',
+        loadComponent: () => import('./pages/album-profile/album-profile'),
+      },
     ],
   },
 ];

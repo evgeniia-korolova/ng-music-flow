@@ -3,15 +3,20 @@ import { Artist, ArtistDto } from './artist.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { forkJoin, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { mapArtist } from '../../../shared/lib/map-artist';
+import { Album } from '../../album/model/album.model';
+import { Track } from '../../track/model/track.model';
+import { mapTrack } from '../../track/lib/map-track';
 
 export interface ArtistState {
   items: Artist[];
   isLoading: boolean;
   error: string | null;
   currentArtist: Artist | null;
+  albums: Album[];
+  tracks: Track[];
 }
 
 const initialState: ArtistState = {
@@ -19,6 +24,8 @@ const initialState: ArtistState = {
   isLoading: false,
   error: null,
   currentArtist: null,
+  albums: [],
+  tracks: [],
 };
 
 export const ArtistStore = signalStore(
@@ -50,26 +57,29 @@ export const ArtistStore = signalStore(
         ),
       ),
     ),
-    loadArtistById: rxMethod<string>(
+
+    loadArtistProfile: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),
+
         switchMap((id) =>
-          jamendoApi.get<ArtistDto>('artists', { id: id }).pipe(
+          forkJoin({
+            artistReq: jamendoApi.get<ArtistDto>('artists', { id: id }),
+            albumsReq: jamendoApi.get<any>('artists/albums', { id: id }),
+            tracksReq: jamendoApi.get<any>('artists/tracks', { id: id }),
+          }).pipe(
             tapResponse({
               next: (response) => {
-                if (response.results && response.results.length > 0) {
-                  patchState(store, {
-                    isLoading: false,
-                    error: null,
-                    currentArtist: mapArtist(response.results[0]),
-                  });
-                } else {
-                  patchState(store, {
-                    isLoading: false,
-                    error: "Artist don't find",
-                    currentArtist: null,
-                  });
-                }
+                console.log(response);
+                patchState(store, {
+                  currentArtist: mapArtist(response.artistReq.results[0]),
+                  albums: response.albumsReq.results[0]?.albums || [],
+                  tracks: (response.tracksReq.results[0]?.tracks || []).map((track: any) =>
+                    mapTrack(track),
+                  ),
+                  isLoading: false,
+                  error: null,
+                });
               },
               error: (err) => {
                 console.log(err);
@@ -81,9 +91,4 @@ export const ArtistStore = signalStore(
       ),
     ),
   })),
-  withHooks({
-    onInit(store) {
-      store.loadArtists();
-    },
-  }),
 );
