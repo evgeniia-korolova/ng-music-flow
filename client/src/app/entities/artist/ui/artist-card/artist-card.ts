@@ -10,4 +10,5 @@ import { RouterLink } from '@angular/router';
 })
 export class ArtistCard {
   public readonly artist = input.required<Artist>();
+  public isLink = input<boolean>(true);
 }

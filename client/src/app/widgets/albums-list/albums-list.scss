@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+swiper-container {
+  display: block;
+  width: 100%;
+  --swiper-pagination-bottom: 0px;
+  // padding-bottom: 40px;
+}
+
+swiper-slide {
+  // margin-bottom: 40px;
+  padding-bottom: 8px;
+  height: auto;
+}
+swiper-container::part(pagination) {
+  position: relative;
+  margin-top: 10px;
+}
