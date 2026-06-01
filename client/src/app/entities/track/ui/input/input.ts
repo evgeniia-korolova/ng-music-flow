@@ -1,26 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
-import { Field, FieldState, FormField } from '@angular/forms/signals';
+import { Field, FormField } from '@angular/forms/signals';
+import { Button } from '../../../../shared/ui/button/button';
+import { Icon } from '../../../../shared/ui/icon/icon.component';
 
 type InputType = 'text' | 'password' | 'number' | 'textbox';
 
 @Component({
   selector: 'app-input',
-  imports: [CommonModule, FormField],
+  imports: [CommonModule, FormField, Button, Icon],
   templateUrl: './input.html',
   styleUrl: './input.scss',
 })
 export class Input<T extends string | number = string> {
   field = input.required<Field<string, T>>();
+
   label = input<string>('');
   placeHolder = input<string>('');
   inputType = input<InputType>('text');
+  hideUntilTouched = input(true);
 
   protected inputId = crypto.randomUUID();
+  protected showPassword = signal(false);
 
-  showPassword = signal(false);
-
-  currentType = computed<InputType>(() => {
+  protected currentType = computed<InputType>(() => {
     if (this.inputType() === 'password') {
       return this.showPassword() ? 'text' : 'password';
     }
@@ -28,14 +31,22 @@ export class Input<T extends string | number = string> {
     return this.inputType();
   });
 
-  protected get state(): FieldState<string, T> {
-    return this.field()();
-  }
+  protected state = computed(() => this.field()());
 
-  error = computed<string | null>(() => {
-    const errors = this.state.errors();
+  protected error = computed<string | null>(() => {
+    const currentState = this.state();
+    const errors = currentState.errors();
     if (!errors || errors.length === 0) return null;
 
     return errors[0].message ?? 'Something went wrong';
   });
+
+  protected displayError = computed(
+    () =>
+      (!this.hideUntilTouched() || this.state().touched()) &&
+      this.state().invalid() &&
+      this.error(),
+  );
+
+  protected togglePassword = () => this.showPassword.update((current) => !current);
 }

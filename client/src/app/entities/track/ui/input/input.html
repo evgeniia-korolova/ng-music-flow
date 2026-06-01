@@ -3,26 +3,42 @@
     <label class="input-label" [htmlFor]="inputId">{{ label() }}</label>
   }
 
-  @if (inputType() === 'textbox') {
-    <textarea
-      [formField]="field()"
-      [readOnly]="state.readonly()"
-      class="input textarea"
-      [id]="inputId"
-    >
-    </textarea>
-  } @else {
-    <input
-      [type]="currentType()"
-      [formField]="field()"
-      [readOnly]="state.readonly()"
-      class="input"
-      [id]="inputId"
-    />
-    <span class="input-icon">PE</span>
-  }
+  <div class="input-wrapper" [class.error]="displayError()">
+    @if (inputType() === 'textbox') {
+      <textarea
+        [formField]="field()"
+        [readOnly]="state().readonly()"
+        class="input textarea"
+        [id]="inputId"
+        [placeholder]="placeHolder()"
+      >
+      </textarea>
+    } @else {
+      <input
+        [type]="currentType()"
+        [formField]="field()"
+        [readOnly]="state().readonly()"
+        class="input"
+        [id]="inputId"
+        [placeholder]="placeHolder()"
+      />
+      @if (inputType() === 'password') {
+        <app-button
+          variant="ghost"
+          size="icon-rounded-sm"
+          (click)="togglePassword()"
+          class="input-icon"
+        >
+          <app-icon
+            [icon]="showPassword() ? 'sun' : 'moonStar'"
+            [primaryColor]="displayError() ? 'var(--color-text-danger)' : 'currentColor'"
+          />
+        </app-button>
+      }
+    }
+  </div>
 
-  @if (state.touched() && state.invalid() && error()) {
+  @if (displayError()) {
     <span class="error-msg">
       {{ error() }}
     </span>
