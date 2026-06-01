@@ -145,20 +145,27 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
     ),
   eye: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path fill="none" d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/>
         <circle cx="12" cy="12" r="3"/>
       </svg>`,
     ),
   eyeClosed: () =>
     Promise.resolve(
-      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path fill="none" d="m15 18-.722-3.25"/>
         <path fill="none" d="M2 8a10.645 10.645 0 0 0 20 0"/>
         <path d="m20 15-1.726-2.05"/>
         <path d="m4 15 1.726-2.05"/>
         <path d="m9 18 .722-3.25"/>
       </svg>`,
+    ),
+  'arrow-up': () =>
+    Promise.resolve(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"></line>
+      <polyline points="5 12 12 5 19 12"></polyline>
+    </svg>`,
     ),
 };
 

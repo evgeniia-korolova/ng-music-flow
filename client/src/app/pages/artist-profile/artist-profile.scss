@@ -1,6 +1,18 @@
 .artist-profile__wrapper {
-  padding-top: 50px;
-  padding-bottom: 50px;
-  max-width: 400px;
+  max-width: 1440px;
   margin: 0 auto;
+  padding: 50px 15px;
+  // max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  @media (width < 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+.artist-profile__info {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  min-width: 0;
 }

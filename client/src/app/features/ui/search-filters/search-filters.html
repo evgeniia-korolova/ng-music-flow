@@ -28,6 +28,7 @@
             id="sort-popularity"
             value="popularity"
             formControlName="sortBy"
+            (click)="handleRadioClick('popularity')"
             class="search-filters__hidden-radio visually-hidden"
           />
           <label for="sort-popularity" class="search-filters__sort-option"> By Popularity </label>
@@ -39,6 +40,7 @@
             id="sort-date"
             value="date"
             formControlName="sortBy"
+            (click)="handleRadioClick('date')"
             class="search-filters__hidden-radio visually-hidden"
           />
           <label for="sort-date" class="search-filters__sort-option"> By Date </label>
@@ -47,12 +49,42 @@
         <div class="search-filters__radio-wrapper">
           <input
             type="radio"
-            id="sort-name"
-            value="name"
+            id="sort-title"
+            value="title"
             formControlName="sortBy"
+            (click)="handleRadioClick('title')"
             class="search-filters__hidden-radio visually-hidden"
           />
-          <label for="sort-name" class="search-filters__sort-option"> By Name </label>
+          <label for="sort-title" class="search-filters__sort-option">
+            By Track Title
+            @if (store.filters.sortBy() === 'title') {
+              <app-icon
+                icon="arrow-up"
+                class="search-filters__icon"
+                [class.search-filters__icon--desc]="!store.filters.isAsc()"
+              />
+            }
+          </label>
+        </div>
+        <div class="search-filters__radio-wrapper">
+          <input
+            type="radio"
+            id="sort-artist"
+            value="artist"
+            formControlName="sortBy"
+            (click)="handleRadioClick('artist')"
+            class="search-filters__hidden-radio visually-hidden"
+          />
+          <label for="sort-artist" class="search-filters__sort-option">
+            By Artist Name
+            @if (store.filters.sortBy() === 'artist') {
+              <app-icon
+                icon="arrow-up"
+                class="search-filters__icon"
+                [class.search-filters__icon--desc]="!store.filters.isAsc()"
+              />
+            }
+          </label>
         </div>
       </div>
     </fieldset>

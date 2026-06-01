@@ -1,0 +1,23 @@
+<swiper-container
+  [breakpoints]="{ '320': { slidesPerView: 2 }, '1024': { slidesPerView: 3 } }"
+  space-between="16"
+  [pagination]="isPagination() ? { clickable: true } : false"
+>
+  @if (store.isLoading()) {
+    <p>Albums are loading...</p>
+  }
+  @if (store.error()) {
+    <p>{{ store.error() }}</p>
+  }
+  @for (item of store.items(); track item.id) {
+    @defer (on viewport) {
+      <swiper-slide>
+        <app-album-card [album]="item"></app-album-card>
+      </swiper-slide>
+    } @placeholder (minimum 500ms) {
+      <swiper-slide
+        class="bg-accent block h-80 w-full animate-pulse overflow-hidden rounded-lg shadow-lg"
+      ></swiper-slide>
+    }
+  }
+</swiper-container>
