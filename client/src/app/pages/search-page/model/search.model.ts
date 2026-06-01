@@ -2,7 +2,7 @@ import { GENRES_DATA } from '../../../entities/genre/model/genre.model';
 
 export type GenreId = (typeof GENRES_DATA)[number]['id'];
 
-export type SearchSortOrder = 'popularity' | 'date' | 'name';
+export type SearchSortOrder = 'popularity' | 'date' | 'title' | 'artist';
 
 export interface RawFormValue {
   readonly sortBy?: SearchSortOrder | string | null;
@@ -16,6 +16,7 @@ export interface SearchFiltersState {
   readonly genres: readonly GenreId[];
   readonly durationMin: number;
   readonly durationMax: number;
+  isAsc: boolean;
 }
 
 export interface SearchState {
@@ -24,4 +25,5 @@ export interface SearchState {
   readonly isLoading: boolean;
   readonly error: string | null;
   isInitialized: boolean;
+  offset: number;
 }

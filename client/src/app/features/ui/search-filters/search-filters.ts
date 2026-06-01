@@ -11,10 +11,11 @@ import { GENRES_DATA } from '../../../entities/genre/model/genre.model';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DurationPipe } from '../../../shared/ui/pipes/duration-pipe';
 import { SearchStore } from '../../../pages/search-page/model/search.store';
+import { Icon } from '../../../shared/ui/icon/icon.component';
 
 @Component({
   selector: 'app-search-filters',
-  imports: [ReactiveFormsModule, DurationPipe],
+  imports: [ReactiveFormsModule, DurationPipe, Icon],
   templateUrl: './search-filters.html',
   styleUrl: './search-filters.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -62,17 +63,6 @@ export class SearchFilters implements OnInit {
         { emitEvent: false },
       );
     });
-
-    // this.filterForm.valueChanges.pipe(takeUntilDestroyed()).subscribe((value) => {
-    //   const currentFormValue = this.filterForm.getRawValue();
-    //   const min = currentFormValue.durationMin ?? 0;
-    //   const max = currentFormValue.durationMax ?? 600;
-    //   if (min > max) {
-    //     this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
-    //     return;
-    //   }
-    //   this.store.updateFiltersFromForm(value);
-    // });
   }
 
   ngOnInit(): void {
@@ -93,5 +83,11 @@ export class SearchFilters implements OnInit {
 
         this.store.updateFiltersFromForm(value);
       });
+  }
+
+  protected handleRadioClick(targetSort: string): void {
+    if (this.store.filters.sortBy() === targetSort) {
+      this.store.toggleSortDirection();
+    }
   }
 }
