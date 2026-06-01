@@ -16,6 +16,7 @@ export interface TrackDto {
     rate_downloads_total: number;
     likes: number;
   };
+  releasedate: string;
 }
 
 export interface Track {
@@ -35,4 +36,5 @@ export interface Track {
   playCount: number;
   rating: number;
   waveform: number[];
+  releasedate: string;
 }
