@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, ElementRef, input, signal, viewChild } from '@angular/core';
 import { Field, FormField } from '@angular/forms/signals';
 import { Button } from '../../../../shared/ui/button/button';
 import { Icon } from '../../../../shared/ui/icon/icon.component';
@@ -14,7 +14,9 @@ type InputType = 'text' | 'password' | 'number' | 'textbox';
 })
 export class Input<T extends string | number = string> {
   field = input.required<Field<string, T>>();
-
+  public inputElement = viewChild('inputElement', {
+    read: ElementRef<HTMLInputElement | HTMLTextAreaElement>,
+  });
   label = input<string>('');
   placeHolder = input<string>('');
   inputType = input<InputType>('text');

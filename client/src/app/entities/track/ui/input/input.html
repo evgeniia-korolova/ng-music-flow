@@ -11,6 +11,7 @@
         class="input textarea"
         [id]="inputId"
         [placeholder]="placeHolder()"
+        #inputElement
       >
       </textarea>
     } @else {
@@ -21,6 +22,8 @@
         class="input"
         [id]="inputId"
         [placeholder]="placeHolder()"
+        autocomplete="off"
+        #inputElement
       />
       @if (inputType() === 'password') {
         <app-button

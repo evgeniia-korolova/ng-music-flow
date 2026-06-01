@@ -7,6 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { AuthStore } from '../../../entities/user/user.state';
 import { IconName } from '../../../shared/ui/icon/icon-registry';
+import { AutofocusDirective } from '../../../shared/directives/autofocus.directive';
 
 export interface LoginData {
   email: string;
@@ -15,7 +16,7 @@ export interface LoginData {
 
 @Component({
   selector: 'app-login-form',
-  imports: [Input, Button, CommonModule, RouterLink, Icon],
+  imports: [Input, Button, CommonModule, RouterLink, Icon, AutofocusDirective],
   templateUrl: './login-form.html',
   styleUrl: './login-form.scss',
 })
@@ -35,7 +36,7 @@ export default class LoginForm {
     required(schema.password, { message: 'Password is required' });
   });
 
-  generalError = signal('Oh no! something went wrong on server-side');
+  generalError = signal('');
   generalMessage = computed<{ icon: IconName; message: string }>(() => {
     if (this.generalError()) {
       return { icon: 'warning', message: this.generalError() };
