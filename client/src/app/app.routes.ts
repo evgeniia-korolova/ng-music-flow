@@ -31,7 +31,7 @@ export const routes: Routes = [
           },
           {
             path: 'genres',
-            loadComponent: () => import('./widgets/genres/genres'),
+            loadComponent: () => import('./widgets/genres/genres').then((m) => m.Genres),
             title: 'Genres',
           },
         ],
@@ -54,12 +54,14 @@ export const routes: Routes = [
       },
       {
         path: 'artists/:artistId',
-        loadComponent: () => import('./pages/artist-profile/artist-profile'),
+        loadComponent: () =>
+          import('./pages/artist-profile/artist-profile').then((m) => m.ArtistProfile),
         title: 'ArtistProfile',
       },
       {
         path: 'albums/:albumId',
-        loadComponent: () => import('./pages/album-profile/album-profile'),
+        loadComponent: () =>
+          import('./pages/album-profile/album-profile').then((m) => m.AlbumProfile),
       },
     ],
   },
