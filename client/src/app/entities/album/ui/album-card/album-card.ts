@@ -9,6 +9,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './album-card.scss',
 })
 export class AlbumCard {
-  public readonly album = input.required<Album>();
+  public album = input.required<Album>();
   public isLink = input<boolean>(true);
 }

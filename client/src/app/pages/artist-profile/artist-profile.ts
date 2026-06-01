@@ -10,9 +10,9 @@ import { TrackCard } from '../../entities/track/ui/track-card/track-card';
   templateUrl: './artist-profile.html',
   styleUrl: './artist-profile.scss',
 })
-export default class ArtistProfile {
-  protected readonly artistStore = inject(ArtistStore);
-  protected readonly artistId = input.required<string>();
+export class ArtistProfile {
+  protected artistStore = inject(ArtistStore);
+  protected artistId = input.required<string>();
 
   constructor() {
     this.artistStore.loadArtistProfile(this.artistId);

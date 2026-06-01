@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import ArtistProfile from './artist-profile';
+import { ArtistProfile } from './artist-profile';
 import { provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
 import { ArtistStore } from '../../entities/artist/model/artist.store';
@@ -10,7 +10,9 @@ describe('ArtistProfile', () => {
     isLoading: signal(false),
     error: signal(null),
     currentArtist: signal({ id: '2', name: 'Viktor' }),
-    loadArtistById: () => {
+    albums: signal([]),
+    tracks: signal([]),
+    loadArtistProfile: () => {
       /*Test*/
     },
   };
@@ -25,7 +27,7 @@ describe('ArtistProfile', () => {
 
     fixture = TestBed.createComponent(ArtistProfile);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('artistId', { id: '1' });
+    fixture.componentRef.setInput('artistId', '1');
     fixture.detectChanges();
   });
 

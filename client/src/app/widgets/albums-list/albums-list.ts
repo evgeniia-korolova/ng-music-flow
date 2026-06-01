@@ -14,6 +14,6 @@ register();
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AlbumsList {
-  public readonly albums = input.required<Album[]>();
+  public albums = input.required<Album[]>();
   public isPagination = input<boolean>(true);
 }

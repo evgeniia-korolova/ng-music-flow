@@ -13,6 +13,7 @@ describe('AlbumProfile', () => {
 
     fixture = TestBed.createComponent(AlbumProfile);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('albumId', '1');
     fixture.detectChanges();
   });
 
