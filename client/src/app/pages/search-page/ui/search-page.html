@@ -1,5 +1,37 @@
 <section class="search-page">
-  <app-search-filters />
+  <div class="search-page__sidebar">
+    @if (responsiveService.isLarge()) {
+      <app-search-filters />
+    } @else {
+      <button
+        class="floating-filter-btn"
+        [class.floating-filter-btn--active]="isSidebarOpen()"
+        (click)="toggleSidebar()"
+        aria-label="Toggle filters"
+      >
+        <app-icon
+          [icon]="isSidebarOpen() ? 'chevrons-left' : 'chevrons-right'"
+          class="floating-filter-btn__icon"
+        />
+        <span class="floating-filter-btn__text">Filters</span>
+      </button>
+
+      @if (isSidebarOpen()) {
+        <div class="drawer-content" role="dialog" aria-modal="true" aria-label="Search Filters">
+          <div class="drawer-backdrop"></div>
+
+          <div
+            class="drawer-body"
+            (click)="toggleSidebar()"
+            tabindex="0"
+            (keydown.escape)="toggleSidebar()"
+          >
+            <app-search-filters class="mobile-filters" />
+          </div>
+        </div>
+      }
+    }
+  </div>
 
   <article class="search-page__content">
     <h1 class="visually-hidden">Search Page</h1>

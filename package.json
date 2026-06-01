@@ -26,7 +26,7 @@
     "test-all": "npm run test --prefix client && npm run test --prefix api"
   },
   "lint-staged": {
-    "client/src/**/*.{ts,html,scss}": [
+    "client/src/**/*.{ts,html}": [
       "npm run lint:fix --prefix client",
       "npm run format --prefix client"
     ],

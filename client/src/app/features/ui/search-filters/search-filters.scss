@@ -1,11 +1,15 @@
 .search-filters {
-  width: 18rem;
+  width: 100%;
   flex: none;
   padding: 1.5rem;
   border-radius: 0.75rem;
   background-color: var(--color-bg-accent);
   color: var(--color-text-on-bg);
   box-sizing: border-box;
+
+  @media (min-width: 1024px) { 
+    width: 18rem; 
+  }
 
   &__form {
     display: flex;
@@ -34,6 +38,10 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.5rem;
+
+    @media (min-width: 640px) and (max-width: 1023px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
   }
 
   &__checkbox-wrapper {
@@ -76,9 +84,13 @@
   }
 
   &__sorting-list {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));    
     gap: 0.5rem;
+
+    @media (min-width: 640px) and (max-width: 1023px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
   }
 
   &__radio-wrapper {
