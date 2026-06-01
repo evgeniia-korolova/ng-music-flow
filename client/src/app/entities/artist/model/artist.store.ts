@@ -1,4 +1,4 @@
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Artist, ArtistDto, ArtistTracksResponseDTO } from './artist.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
@@ -7,7 +7,7 @@ import { forkJoin, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { mapArtist } from '../../../shared/lib/map-artist';
 import { Album, ArtistAlbumsResponseDTO } from '../../album/model/album.model';
-import { Track } from '../../track/model/track.model';
+import { Track, TrackDto } from '../../track/model/track.model';
 import { mapTrack } from '../../track/lib/map-track';
 
 export interface ArtistState {
@@ -74,7 +74,7 @@ export const ArtistStore = signalStore(
                 patchState(store, {
                   currentArtist: mapArtist(response.artistReq.results[0]),
                   albums: response.albumsReq.results[0]?.albums || [],
-                  tracks: (response.tracksReq.results[0]?.tracks || []).map((track: any) =>
+                  tracks: (response.tracksReq.results[0]?.tracks || []).map((track: TrackDto) =>
                     mapTrack(track),
                   ),
                   isLoading: false,
