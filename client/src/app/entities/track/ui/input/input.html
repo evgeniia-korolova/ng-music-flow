@@ -39,8 +39,9 @@
   </div>
 
   @if (displayError()) {
-    <span class="error-msg">
-      {{ error() }}
-    </span>
+    <div class="error-msg">
+      <app-icon icon="warning" />
+      <p>{{ error() }}</p>
+    </div>
   }
 </div>

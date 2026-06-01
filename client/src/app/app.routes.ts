@@ -72,11 +72,18 @@ export const routes: Routes = [
             path: 'login',
             title: 'Sign In',
             loadComponent: () => import('./features/auth/login-form/login-form'),
+            data: { mode: 'login' },
           },
           {
             path: 'register',
             title: 'Sign Up',
             loadComponent: () => import('./features/auth/register-form/register-form'),
+            data: { mode: 'register' },
+          },
+          {
+            path: '',
+            redirectTo: 'login',
+            pathMatch: 'full',
           },
         ],
       },

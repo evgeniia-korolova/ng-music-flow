@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SecondaryLayout } from './auth-layout';
+import { AuthLayout } from './auth-layout';
 
 describe('SecondaryLayout', () => {
-  let component: SecondaryLayout;
-  let fixture: ComponentFixture<SecondaryLayout>;
+  let component: AuthLayout;
+  let fixture: ComponentFixture<AuthLayout>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SecondaryLayout],
+      imports: [AuthLayout],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SecondaryLayout);
+    fixture = TestBed.createComponent(AuthLayout);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

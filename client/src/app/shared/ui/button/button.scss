@@ -1,4 +1,21 @@
+:host {
+  display: inline-block;
+
+  &:not([data-size*='icon-']) {
+    width: inherit;
+    min-width: inherit;
+    max-width: inherit;
+  }
+
+  &[data-size*='icon-'] {
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+}
+
 .btn {
+  width: 100%;
+  height: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -103,6 +120,7 @@
   aspect-ratio: 1 / 1;
   min-width: 0;
   min-height: 0;
+  line-height: 1;
 
   app-icon,
   svg,

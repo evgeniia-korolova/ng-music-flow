@@ -17,10 +17,15 @@ type ButtonSize =
   imports: [],
   templateUrl: './button.html',
   styleUrl: './button.scss',
+  host: {
+    '[attr.data-variant]': 'variant()',
+    '[attr.data-size]': 'size()',
+  },
 })
 export class Button {
   variant = input<ButtonVariant>('default');
   size = input<ButtonSize>('md');
+  disabled = input(false);
 
   protected buttonClasses = computed(() => `btn btn-${this.variant()} ${this.size()}`);
 }

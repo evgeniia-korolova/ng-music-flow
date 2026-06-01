@@ -76,13 +76,24 @@
 }
 
 .error-msg {
-  display: block;
+  display: flex;
+  justify-content: start;
+  align-items: top;
+  gap: 0.5rem;
   font-size: 0.85em;
   color: var(--color-text-danger);
   position: absolute;
   left: 0.5rem;
   top: 100%;
   margin-top: 0.4rem;
-  word-break: break-word;
-  overflow-wrap: anywhere;
+
+  p {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  app-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
 }
