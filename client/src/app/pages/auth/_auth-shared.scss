@@ -65,4 +65,21 @@
 
 .submit-btn {
   min-width: 120px;
+
+  &.loading {
+    pointer-events: none;
+    opacity: 0.8;
+    app-icon {
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
