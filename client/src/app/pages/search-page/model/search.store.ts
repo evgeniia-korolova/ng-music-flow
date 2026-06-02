@@ -137,9 +137,9 @@ export const SearchStore = signalStore(
             apiParams['include'] = 'stats';
             if (query) apiParams['search'] = query;
             /*
- Popularity ratings are based on community data: reviews, add-to-favorite, like, dislike, 
- add-to-playlist, downloads and listens, they all contribute with a different weight to shape rating
- */
+              Popularity ratings are based on community data: reviews, add-to-favorite, like, dislike, 
+              add-to-playlist, downloads and listens, they all contribute with a different weight to shape rating
+            */
 
             //if (filters.sortBy === 'popularity') apiParams['order'] = 'popularity_total';
             if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
