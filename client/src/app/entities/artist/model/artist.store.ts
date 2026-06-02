@@ -1,5 +1,5 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { Artist, ArtistDto, ArtistTracksResponseDTO } from './artist.model';
+import { Artist, ArtistDto } from './artist.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
