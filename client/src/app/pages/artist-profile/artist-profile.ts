@@ -3,10 +3,11 @@ import { ArtistStore } from '../../entities/artist/model/artist.store';
 import { ArtistCard } from '../../entities/artist/ui/artist-card/artist-card';
 import { AlbumsList } from '../../widgets/albums-list/albums-list';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-artist-profile',
-  imports: [ArtistCard, AlbumsList, TrackCard],
+  imports: [ArtistCard, AlbumsList, TrackCard, Button],
   templateUrl: './artist-profile.html',
   styleUrl: './artist-profile.scss',
 })
@@ -16,5 +17,9 @@ export class ArtistProfile {
 
   constructor() {
     this.artistStore.loadArtistProfile(this.artistId);
+  }
+
+  onLoadMore() {
+    this.artistStore.loadMoreTracks();
   }
 }

@@ -3,7 +3,7 @@ import { Artist, ArtistDto, ArtistTracksResponseDTO } from './artist.model';
 import { inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { forkJoin, pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, forkJoin, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { mapArtist } from '../../../shared/lib/map-artist';
 import { Album, ArtistAlbumsResponseDTO } from '../../album/model/album.model';
@@ -17,6 +17,7 @@ export interface ArtistState {
   currentArtist: Artist | null;
   albums: Album[];
   tracks: Track[];
+  tracksOffset: number;
 }
 
 const initialState: ArtistState = {
@@ -26,6 +27,7 @@ const initialState: ArtistState = {
   currentArtist: null,
   albums: [],
   tracks: [],
+  tracksOffset: 0,
 };
 
 export const ArtistStore = signalStore(
@@ -66,7 +68,10 @@ export const ArtistStore = signalStore(
           forkJoin({
             artistReq: jamendoApi.get<ArtistDto>('artists', { id: id }),
             albumsReq: jamendoApi.get<ArtistAlbumsResponseDTO>('artists/albums', { id: id }),
-            tracksReq: jamendoApi.get<ArtistTracksResponseDTO>('artists/tracks', { id: id }),
+            tracksReq: jamendoApi.get<TrackDto>('tracks', {
+              artist_id: id,
+              limit: 6,
+            }),
           }).pipe(
             tapResponse({
               next: (response) => {
@@ -74,9 +79,10 @@ export const ArtistStore = signalStore(
                 patchState(store, {
                   currentArtist: mapArtist(response.artistReq.results[0]),
                   albums: response.albumsReq.results[0]?.albums || [],
-                  tracks: (response.tracksReq.results[0]?.tracks || []).map((track: TrackDto) =>
+                  tracks: (response.tracksReq.results || []).map((track: TrackDto) =>
                     mapTrack(track),
                   ),
+                  tracksOffset: 6,
                   isLoading: false,
                   error: null,
                 });
@@ -88,6 +94,37 @@ export const ArtistStore = signalStore(
             }),
           ),
         ),
+      ),
+    ),
+    loadMoreTracks: rxMethod<void>(
+      pipe(
+        switchMap(() => {
+          const artistId = store.currentArtist()?.id;
+          if (!artistId) return EMPTY;
+          return jamendoApi
+            .get<TrackDto>('tracks', {
+              artist_id: artistId,
+              limit: 6,
+              offset: store.tracksOffset(),
+            })
+            .pipe(
+              tapResponse({
+                next: (response) => {
+                  const newTracks = (response.results || []).map((track: TrackDto) =>
+                    mapTrack(track),
+                  );
+                  patchState(store, {
+                    tracks: [...store.tracks(), ...newTracks],
+                    tracksOffset: store.tracksOffset() + 6,
+                  });
+                },
+                error: (err) => {
+                  console.log(err);
+                  patchState(store, { isLoading: false, error: 'Error' });
+                },
+              }),
+            );
+        }),
       ),
     ),
   })),

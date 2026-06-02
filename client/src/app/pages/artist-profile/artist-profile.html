@@ -15,5 +15,8 @@
     @for (item of artistStore.tracks(); track $index) {
       <app-track-card [track]="item" [showWave]="false"></app-track-card>
     }
+    <div class="artist-profile__action">
+      <app-button (click)="onLoadMore()">Load more</app-button>
+    </div>
   </div>
 </div>
