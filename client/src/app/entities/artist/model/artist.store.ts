@@ -18,6 +18,7 @@ export interface ArtistState {
   albums: Album[];
   tracks: Track[];
   tracksOffset: number;
+  hasMoreTracks: boolean;
 }
 
 const initialState: ArtistState = {
@@ -28,6 +29,7 @@ const initialState: ArtistState = {
   albums: [],
   tracks: [],
   tracksOffset: 0,
+  hasMoreTracks: true,
 };
 
 export const ArtistStore = signalStore(
@@ -76,15 +78,17 @@ export const ArtistStore = signalStore(
             tapResponse({
               next: (response) => {
                 console.log(response);
+                const initialTracks = (response.tracksReq.results || []).map((track: TrackDto) =>
+                  mapTrack(track),
+                );
                 patchState(store, {
                   currentArtist: mapArtist(response.artistReq.results[0]),
                   albums: response.albumsReq.results[0]?.albums || [],
-                  tracks: (response.tracksReq.results || []).map((track: TrackDto) =>
-                    mapTrack(track),
-                  ),
+                  tracks: initialTracks,
                   tracksOffset: 6,
                   isLoading: false,
                   error: null,
+                  hasMoreTracks: initialTracks.length === 6,
                 });
               },
               error: (err) => {
@@ -116,6 +120,7 @@ export const ArtistStore = signalStore(
                   patchState(store, {
                     tracks: [...store.tracks(), ...newTracks],
                     tracksOffset: store.tracksOffset() + 6,
+                    hasMoreTracks: newTracks.length === 6,
                   });
                 },
                 error: (err) => {
