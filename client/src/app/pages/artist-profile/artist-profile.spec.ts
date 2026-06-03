@@ -12,9 +12,12 @@ describe('ArtistProfile', () => {
     currentArtist: signal({ id: '2', name: 'Viktor' }),
     albums: signal([]),
     tracks: signal([]),
+    loadMoreTracks: () => {},
     loadArtistProfile: () => {
       /*Test*/
     },
+
+    hasMoreTracks: signal(true),
   };
   let component: ArtistProfile;
   let fixture: ComponentFixture<ArtistProfile>;
