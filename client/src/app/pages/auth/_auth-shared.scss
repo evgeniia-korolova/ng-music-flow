@@ -1,5 +1,6 @@
 .auth-form {
   display: flex;
+
   flex-direction: column;
 
   > div {
@@ -14,7 +15,9 @@
 .auth-page-header {
   h3 {
     font-size: 1.5rem;
+
     font-weight: 600;
+
     margin: 0;
   }
 
@@ -23,9 +26,13 @@
 
 .auth-page-main {
   display: grid;
+
   justify-content: center;
-  grid-template-columns: 1fr 1fr;
+
+  grid-template-columns: 1fr;
+
   gap: 1rem;
+
   background-color: var(--color-bg);
 
   .general-message {
@@ -39,15 +46,19 @@
     font-size: 0.9em;
     font-weight: 500;
     color: var(--color-text-muted);
-    grid-column: span 2;
+    grid-column: span 1;
 
     &.error {
       color: var(--color-text-danger);
     }
   }
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+
+    .general-message {
+      grid-column: span 2;
+    }
   }
 
   app-input {
@@ -56,9 +67,14 @@
 }
 
 .auth-page-footer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
   gap: 1rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: 1fr 1fr;
+  }
 
   background-color: var(--color-bg-accent);
 }
@@ -68,7 +84,9 @@
 
   &.loading {
     pointer-events: none;
+
     opacity: 0.8;
+
     app-icon {
       animation: spin 1s linear infinite;
     }
@@ -79,6 +97,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

@@ -71,6 +71,9 @@ export default class RegisterForm {
     pattern(schema.username, /^[\w-]+$/, {
       message: 'Can only include letters, numbers, underscore and hyphen',
     });
+    pattern(schema.username, /^[a-zA-Z]/, {
+      message: 'Username must start with a letter',
+    });
 
     required(schema.password, { message: 'Password is required' });
     minLength(schema.password, 8, { message: 'Must be at least 8 letters' });

@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
-import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 export const routes: Routes = [
   {
@@ -58,12 +57,6 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/artist-profile/artist-profile'),
         title: 'ArtistProfile',
       },
-    ],
-  },
-  {
-    path: '',
-    component: AuthLayout,
-    children: [
       {
         path: 'auth',
         loadComponent: () => import('./pages/auth/auth'),

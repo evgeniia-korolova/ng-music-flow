@@ -10,7 +10,8 @@ type ButtonSize =
   | 'icon-cubic-md'
   | 'icon-rounded-md'
   | 'icon-cubic-lg'
-  | 'icon-rounded-lg';
+  | 'icon-rounded-lg'
+  | 'avatar';
 
 @Component({
   selector: 'app-button',

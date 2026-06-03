@@ -5,6 +5,22 @@ export interface UserProfile {
   email: string;
   username: string;
   jamendoActive: boolean;
+  userInformation?: UserInformation;
+}
+
+export interface UserInformation {
+  avatar?: string;
+  name: string;
+  lastName: string;
+  dateOfBirth: Date;
+  showEmail: boolean;
+  socials?: UserSocials;
+}
+
+export interface UserSocials {
+  instagram?: string;
+  soundcloud?: string;
+  twitter?: string;
 }
 
 export interface UserDto {

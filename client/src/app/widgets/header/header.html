@@ -9,20 +9,14 @@
     <app-navigation-bar [pathCollection]="navItems" />
     <span class="spacer"></span>
 
-    @if (!authStore.user()) {
-      <app-button routerLink="/auth/register" [style.width]="'fit-content'" class="register-button">
-        Sign Up
-        <app-icon
-          icon="logIn"
-          variant="fill"
-          style="font-size: 1.5rem"
-          primaryColor="var(--color-btn-default-border)"
-          fillColor="white"
-        ></app-icon>
-      </app-button>
-    } @else {
-      <app-dropdown #userMenu alignment="right" class="register-button">
-        <app-button trigger #trigger class="register-button">
+    <app-dropdown #userMenu alignment="right" class="register-button">
+      <app-button
+        trigger
+        #trigger
+        [size]="!user() ? 'md' : 'avatar'"
+        (click)="handleAuthButtonClick($event)"
+      >
+        @if (!user()) {
           Sign Up
           <app-icon
             icon="logIn"
@@ -30,58 +24,74 @@
             style="font-size: 1.5rem"
             primaryColor="var(--color-btn-default-border)"
             fillColor="white"
-          ></app-icon>
-        </app-button>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="user"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Profile
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="waveForm"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Your Library
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="keySquare"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Change Password
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="logOut"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Logout
-          </a>
-        </ng-template>
-      </app-dropdown>
-    }
+          />
+        } @else {
+          @if (user()?.userInformation?.avatar) {
+            <img [src]="user()?.userInformation?.avatar" alt="avatar" class="avatar" />
+          } @else {
+            <div
+              class="avatar-placeholder"
+              role="img"
+              alt="avatar"
+              viewBox="0 0 10 10"
+              aria-label="avatar placeholder"
+            >
+              <span class="avatar-text">
+                {{ user()?.username?.[0] }}
+              </span>
+            </div>
+          }
+        }
+      </app-button>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="user"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Profile
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="waveForm"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Your Library
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <a class="user-menu-item" [appDropdownClose]="userMenu">
+          <app-icon
+            icon="keySquare"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Change Password
+        </a>
+      </ng-template>
+      <ng-template #item>
+        <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
+          <app-icon
+            icon="logOut"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          />
+          Logout
+        </button>
+      </ng-template>
+    </app-dropdown>
     <app-theme-toggler
       [currentTheme]="themeStore.theme()"
       (themeChanged)="themeStore.setTheme($event)"

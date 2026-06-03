@@ -14,7 +14,12 @@ export interface AuthState {
 }
 
 const initialState: AuthState = {
-  user: null,
+  user: {
+    id: '',
+    email: '',
+    username: 'W',
+    jamendoActive: false,
+  },
   token: null,
   loading: false,
   initialCheck: false,
