@@ -66,6 +66,7 @@ header {
 .spacer {
   flex-grow: 1;
   width: 100%;
+  height: 0;
 }
 
 .user-menu-item {
@@ -75,4 +76,8 @@ header {
   gap: 1rem;
   padding: 0.5rem 1rem;
   width: 240px;
+}
+
+.register-button {
+  flex-shrink: 0;
 }

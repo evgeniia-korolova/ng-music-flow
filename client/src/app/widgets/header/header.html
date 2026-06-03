@@ -9,52 +9,79 @@
     <app-navigation-bar [pathCollection]="navItems" />
     <span class="spacer"></span>
 
-    <app-button routerLink="/auth" [style.width]="'fit-content'">
-      Login
-      <app-icon
-        icon="logIn"
-        variant="fill"
-        style="font-size: 1.5rem"
-        primaryColor="var(--color-btn-default-border)"
-        fillColor="white"
-      ></app-icon>
-    </app-button>
-
-    <!-- <app-dropdown #userMenu alignment="right">
-      <app-button trigger #trigger class="flex justify-end gap-2 align-middle">
-        Login
-        <app-icon icon="logIn" variant="fill" style="font-size: 1.5rem" primaryColor="var(--color-btn-default-border)"
-          fillColor="white"></app-icon>
+    @if (!authStore.user()) {
+      <app-button routerLink="/auth/register" [style.width]="'fit-content'" class="register-button">
+        Sign Up
+        <app-icon
+          icon="logIn"
+          variant="fill"
+          style="font-size: 1.5rem"
+          primaryColor="var(--color-btn-default-border)"
+          fillColor="white"
+        ></app-icon>
       </app-button>
-      <ng-template #item>
-        <a class="user-menu-item" [appDropdownClose]="userMenu">
-          <app-icon icon="user" variant="fill" style="font-size: 1.5rem" primaryColor="var(--color-btn-default-border)"
-            fillColor="white" />
-          Profile
-        </a>
-      </ng-template>
-      <ng-template #item>
-        <a class="user-menu-item" [appDropdownClose]="userMenu">
-          <app-icon icon="waveForm" variant="fill" style="font-size: 1.5rem"
-            primaryColor="var(--color-btn-default-border)" fillColor="white" />
-          Your Library
-        </a>
-      </ng-template>
-      <ng-template #item>
-        <a class="user-menu-item" [appDropdownClose]="userMenu">
-          <app-icon icon="keySquare" variant="fill" style="font-size: 1.5rem"
-            primaryColor="var(--color-btn-default-border)" fillColor="white" />
-          Change Password
-        </a>
-      </ng-template>
-      <ng-template #item>
-        <a class="user-menu-item" [appDropdownClose]="userMenu">
-          <app-icon icon="logOut" variant="fill" style="font-size: 1.5rem"
-            primaryColor="var(--color-btn-default-border)" fillColor="white" />
-          Logout
-        </a>
-      </ng-template>
-    </app-dropdown> -->
+    } @else {
+      <app-dropdown #userMenu alignment="right" class="register-button">
+        <app-button trigger #trigger class="register-button">
+          Sign Up
+          <app-icon
+            icon="logIn"
+            variant="fill"
+            style="font-size: 1.5rem"
+            primaryColor="var(--color-btn-default-border)"
+            fillColor="white"
+          ></app-icon>
+        </app-button>
+        <ng-template #item>
+          <a class="user-menu-item" [appDropdownClose]="userMenu">
+            <app-icon
+              icon="user"
+              variant="fill"
+              style="font-size: 1.5rem"
+              primaryColor="var(--color-btn-default-border)"
+              fillColor="white"
+            />
+            Profile
+          </a>
+        </ng-template>
+        <ng-template #item>
+          <a class="user-menu-item" [appDropdownClose]="userMenu">
+            <app-icon
+              icon="waveForm"
+              variant="fill"
+              style="font-size: 1.5rem"
+              primaryColor="var(--color-btn-default-border)"
+              fillColor="white"
+            />
+            Your Library
+          </a>
+        </ng-template>
+        <ng-template #item>
+          <a class="user-menu-item" [appDropdownClose]="userMenu">
+            <app-icon
+              icon="keySquare"
+              variant="fill"
+              style="font-size: 1.5rem"
+              primaryColor="var(--color-btn-default-border)"
+              fillColor="white"
+            />
+            Change Password
+          </a>
+        </ng-template>
+        <ng-template #item>
+          <a class="user-menu-item" [appDropdownClose]="userMenu">
+            <app-icon
+              icon="logOut"
+              variant="fill"
+              style="font-size: 1.5rem"
+              primaryColor="var(--color-btn-default-border)"
+              fillColor="white"
+            />
+            Logout
+          </a>
+        </ng-template>
+      </app-dropdown>
+    }
     <app-theme-toggler
       [currentTheme]="themeStore.theme()"
       (themeChanged)="themeStore.setTheme($event)"

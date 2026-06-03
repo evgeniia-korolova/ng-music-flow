@@ -1,21 +1,21 @@
 :host {
   display: inline-block;
+  align-self: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+
+  height: fit-content;
 
   &:not([data-size*='icon-']) {
     width: inherit;
     min-width: inherit;
     max-width: inherit;
   }
-
-  &[data-size*='icon-'] {
-    flex-shrink: 0;
-    vertical-align: middle;
-  }
 }
 
 .btn {
   width: 100%;
-  height: 100%;
+  height: fit-content;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,6 +29,7 @@
   user-select: none;
   outline: none;
   transition: all 0.2s ease;
+  flex-shrink: 0 !important;
 
   &:focus-visible {
     outline: 2px dashed var(--_outline-color, var(--_border-color));

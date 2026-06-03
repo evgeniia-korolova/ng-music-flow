@@ -1,6 +1,5 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { email, form, required } from '@angular/forms/signals';
-import { Input } from '../../../entities/track/ui/input/input';
 import { Button } from '../../../shared/ui/button/button';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -8,6 +7,7 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
 import { AuthStore } from '../../../entities/user/user.state';
 import { IconName } from '../../../shared/ui/icon/icon-registry';
 import { AutofocusDirective } from '../../../shared/directives/autofocus.directive';
+import { Input } from '../../../shared/forms/input/input';
 
 export interface LoginData {
   email: string;

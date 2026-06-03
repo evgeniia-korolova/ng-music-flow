@@ -8,13 +8,13 @@ import {
   required,
   validate,
 } from '@angular/forms/signals';
-import { Input } from '../../../entities/track/ui/input/input';
 import { Button } from '../../../shared/ui/button/button';
 import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '../../../entities/user/user.state';
 import { IconName } from '../../../shared/ui/icon/icon-registry';
 import { AutofocusDirective } from '../../../shared/directives/autofocus.directive';
 import { Icon } from '../../../shared/ui/icon/icon.component';
+import { Input } from '../../../shared/forms/input/input';
 
 export interface RegisterData {
   username: string;

@@ -1,5 +1,5 @@
 import { afterNextRender, Directive, inject } from '@angular/core';
-import { Input } from '../../entities/track/ui/input/input';
+import { Input } from '../forms/input/input';
 
 @Directive({
   selector: '[appAutofocus]',

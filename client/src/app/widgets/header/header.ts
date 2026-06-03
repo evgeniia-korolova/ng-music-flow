@@ -8,6 +8,7 @@ import { ICON_REGISTRY } from '../../shared/ui/icon/icon-registry';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
 import { Button } from '../../shared/ui/button/button';
+import { AuthStore } from '../../entities/user/user.state';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,7 @@ import { Button } from '../../shared/ui/button/button';
 })
 export class Header implements OnInit {
   themeStore = inject(ThemeStore);
+  authStore = inject(AuthStore);
   private readonly router = inject(Router);
 
   protected navItems: Route[] = [];
