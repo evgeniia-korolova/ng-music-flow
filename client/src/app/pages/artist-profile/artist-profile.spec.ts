@@ -12,7 +12,6 @@ describe('ArtistProfile', () => {
     currentArtist: signal({ id: '2', name: 'Viktor' }),
     albums: signal([]),
     tracks: signal([]),
-    loadMoreTracks: () => {},
     loadArtistProfile: () => {
       /*Test*/
     },
