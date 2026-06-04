@@ -38,5 +38,10 @@
     <div>
       <app-tracks-list viewMode="search" />
     </div>
+    @if (store.hasMore()) {
+      <app-button class="load-more-btn" (click)="store.loadMore()" [disabled]="store.isLoading()"
+        >Load More</app-button
+      >
+    }
   </article>
 </section>

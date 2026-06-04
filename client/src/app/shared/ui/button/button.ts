@@ -21,6 +21,7 @@ type ButtonSize =
 export class Button {
   variant = input<ButtonVariant>('default');
   size = input<ButtonSize>('md');
+  readonly disabled = input(false);
 
   protected buttonClasses = computed(() => `btn btn-${this.variant()} ${this.size()}`);
 }

@@ -115,7 +115,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;  
+  width: 100%;
+}
+
+.load-more-btn {
+  margin-inline: auto;
 }
 
 @keyframes slideInLeft {
