@@ -9,6 +9,20 @@
     <app-navigation-bar [pathCollection]="navItems" />
     <span class="spacer"></span>
 
+    <app-button
+      variant="ghost"
+      size="icon-cubic-md"
+      (click)="toggleSearchBar()"
+      [active]="showSearchBar()"
+    >
+      <app-icon
+        icon="search"
+        [variant]="showSearchBar() ? 'fill' : 'outline'"
+        fillColor="var(--purple-gradient-bg)"
+        [primaryColor]="showSearchBar() ? 'var(--purple-mask)' : 'var(--color-text-muted)'"
+      />
+    </app-button>
+
     <app-dropdown #userMenu alignment="right" class="register-button">
       <app-button
         trigger

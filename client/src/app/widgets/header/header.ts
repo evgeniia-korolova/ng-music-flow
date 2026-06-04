@@ -5,6 +5,7 @@ import {
   computed,
   inject,
   OnInit,
+  signal,
 } from '@angular/core';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
@@ -32,10 +33,12 @@ import { AuthStore } from '../../entities/user/user.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header implements OnInit {
-  themeStore = inject(ThemeStore);
+  readonly themeStore = inject(ThemeStore);
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+
+  readonly showSearchBar = signal(false);
 
   user = computed(() => this.authStore.user());
 
@@ -61,6 +64,10 @@ export class Header implements OnInit {
 
     this.navItems = routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
   }
+
+  toggleSearchBar = () => {
+    this.showSearchBar.update((val) => !val);
+  };
 
   ngOnInit(): void {
     this.setNavItems();

@@ -167,6 +167,13 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
       <polyline points="5 12 12 5 19 12"></polyline>
     </svg>`,
     ),
+  search: () =>
+    Promise.resolve(
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color, currentColor)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21 21-4.34-4.34"/>
+        <circle cx="11" cy="11" r="8" fill="none" />
+      </svg>`,
+    ),
 };
 
 export type IconName = keyof typeof ICON_REGISTRY;

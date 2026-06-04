@@ -27,6 +27,9 @@ export class Button {
   variant = input<ButtonVariant>('default');
   size = input<ButtonSize>('md');
   disabled = input(false);
+  active = input(false);
 
-  protected buttonClasses = computed(() => `btn btn-${this.variant()} ${this.size()}`);
+  protected buttonClasses = computed(
+    () => `btn ${this.active() ? 'active' : ''} btn-${this.variant()} ${this.size()}`,
+  );
 }

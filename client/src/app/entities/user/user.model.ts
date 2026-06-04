@@ -12,7 +12,7 @@ export interface UserInformation {
   avatar?: string;
   name: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth?: Date;
   showEmail: boolean;
   socials?: UserSocials;
 }

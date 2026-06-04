@@ -26,6 +26,11 @@ header {
   padding: 0.5rem;
   gap: 0.5rem;
 
+  --gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgba(0, 0, 0, 0.2) 65%);
+  --purple-gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgb(169, 116, 204) 65%);
+  --purple-mask: rgb(117, 63, 153);
+  --purple-accent: rgb(169, 116, 204);
+
   @media (min-width: 768px) {
     padding: 0.5rem 1rem;
     gap: 1.5rem;
@@ -96,7 +101,7 @@ header {
   width: 100%;
   height: 100%;
   background-color: rgb(117, 63, 153);
-  background-image: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgba(0, 0, 0, 0.2) 65%);
+  background-image: var(--gradient-bg);
   display: flex;
   align-items: center;
   justify-content: center;
