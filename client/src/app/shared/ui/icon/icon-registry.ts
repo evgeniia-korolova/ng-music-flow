@@ -174,6 +174,20 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
         <circle cx="11" cy="11" r="8" fill="none" />
       </svg>`,
     ),
+
+  'chevrons-left': () =>
+    Promise.resolve(`
+    <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--primary-color, currentColor)">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m18.75 4.5-7.5 7.5 7.5 7.5m-6-15L5.25 12l7.5 7.5" />
+    </svg>
+  `),
+
+  'chevrons-right': () =>
+    Promise.resolve(`
+    <svg xmlns="http://w3.org" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="var(--primary-color, currentColor)">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
+    </svg>
+  `),
 };
 
 export type IconName = keyof typeof ICON_REGISTRY;

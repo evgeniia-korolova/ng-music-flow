@@ -24,10 +24,10 @@ type ButtonSize =
   },
 })
 export class Button {
-  variant = input<ButtonVariant>('default');
-  size = input<ButtonSize>('md');
-  disabled = input(false);
-  active = input(false);
+  readonly variant = input<ButtonVariant>('default');
+  readonly size = input<ButtonSize>('md');
+  readonly active = input(false);
+  readonly disabled = input(false);
 
   protected buttonClasses = computed(
     () => `btn ${this.active() ? 'active' : ''} btn-${this.variant()} ${this.size()}`,

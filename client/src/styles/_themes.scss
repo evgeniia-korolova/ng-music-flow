@@ -31,6 +31,9 @@ $themes: (
     //----dropdown----
     bg-dropdown-item-hover: rgba(20, 20, 20, 0.2),
     bg-dropdown-item-active: rgba(20, 20, 20, 0.35),
+    //---shadows---
+    shadow-btn: 4px 0 15px rgba(0, 0, 0, 0.3),
+    shadow-drawer: 10px 0 30px rgba(0, 0, 0, 0.15),
   ),
   dark: (
     bg: #012024,
@@ -63,5 +66,8 @@ $themes: (
     //----dropdown----
     bg-dropdown-item-hover: rgba(240, 240, 240, 0.2),
     bg-dropdown-item-active: rgba(240, 240, 240, 0.35),
+    //---shadows---
+    shadow-btn: 4px 0 20px rgba(243, 228, 228, 0.7),
+    shadow-drawer: 15px 0 40px rgba(0, 0, 0, 0.8),
   ),
 );

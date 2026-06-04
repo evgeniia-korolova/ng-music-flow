@@ -38,3 +38,7 @@ app-header {
   white-space: nowrap;
   border: 0;
 }
+
+.no-scroll {
+  overflow: hidden !important;
+}

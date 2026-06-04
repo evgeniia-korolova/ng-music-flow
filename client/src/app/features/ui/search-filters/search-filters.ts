@@ -12,6 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DurationPipe } from '../../../shared/ui/pipes/duration-pipe';
 import { SearchStore } from '../../../pages/search-page/model/search.store';
 import { Icon } from '../../../shared/ui/icon/icon.component';
+import { SearchSortOrder } from '../../../pages/search-page/model/search.model';
 
 @Component({
   selector: 'app-search-filters',
@@ -28,7 +29,7 @@ export class SearchFilters implements OnInit {
   protected readonly genresList = GENRES_DATA;
 
   readonly filterForm = this.fb.group({
-    sortBy: this.fb.control<string>('popularity'),
+    sortBy: this.fb.control<SearchSortOrder>('popularity'),
 
     genres: this.fb.group(
       this.genresList.reduce(
