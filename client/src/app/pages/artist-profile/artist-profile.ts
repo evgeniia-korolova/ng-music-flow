@@ -16,7 +16,7 @@ export class ArtistProfile {
   protected artistStore = inject(ArtistStore);
   protected artistId = input.required<string>();
 
-  isScrollButtonVisible = signal(false);
+  protected isScrollButtonVisible = signal(false);
 
   constructor() {
     this.artistStore.loadArtistProfile(this.artistId);
