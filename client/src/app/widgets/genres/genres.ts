@@ -9,8 +9,8 @@ import { GenreCard } from '../../entities/genre/ui/genre-card/genre-card';
   styleUrl: './genres.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class Genres {
-  genreService = inject(GenreService);
+export class Genres {
+  protected genreService = inject(GenreService);
 
-  genres = this.genreService.genres;
+  protected genres = this.genreService.genres;
 }

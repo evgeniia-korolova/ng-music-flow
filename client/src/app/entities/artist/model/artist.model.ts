@@ -1,3 +1,5 @@
+import { TrackDto } from '../../track/model/track.model';
+
 export interface ArtistDto {
   id: string;
   name: string;
@@ -16,4 +18,9 @@ export interface Artist {
   image: string;
   shortUrl: string;
   shareUrl: string;
+}
+export interface ArtistTracksResponseDTO {
+  id: string;
+  name: string;
+  tracks: TrackDto[];
 }

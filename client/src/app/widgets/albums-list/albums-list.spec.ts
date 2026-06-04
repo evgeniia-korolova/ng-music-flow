@@ -22,7 +22,7 @@ describe('AlbumsList', () => {
 
     fixture = TestBed.createComponent(AlbumsList);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('artistId', '123');
+    fixture.componentRef.setInput('albums', []);
     fixture.detectChanges();
   });
 

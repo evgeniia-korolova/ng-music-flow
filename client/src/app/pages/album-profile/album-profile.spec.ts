@@ -1,20 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Genres } from './genres';
-import { provideRouter } from '@angular/router';
+import { AlbumProfile } from './album-profile';
 
-describe('Genres', () => {
-  let component: Genres;
-  let fixture: ComponentFixture<Genres>;
+describe('AlbumProfile', () => {
+  let component: AlbumProfile;
+  let fixture: ComponentFixture<AlbumProfile>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Genres],
-      providers: [provideRouter([])],
+      imports: [AlbumProfile],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Genres);
+    fixture = TestBed.createComponent(AlbumProfile);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('albumId', '1');
     fixture.detectChanges();
   });
 

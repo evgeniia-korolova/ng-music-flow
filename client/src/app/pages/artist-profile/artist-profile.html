@@ -9,7 +9,23 @@
     @if (artistStore.currentArtist(); as artist) {
       <app-artist-card [artist]="artist" [isLink]="false"></app-artist-card>
     }
-    <app-albums-list [artistId]="artistId()"></app-albums-list>
+    <app-albums-list [albums]="artistStore.albums()"></app-albums-list>
   </div>
-  <div class="artist-profile__track">There will be tracks</div>
+  <div class="artist-profile__track">
+    @for (item of artistStore.tracks(); track $index) {
+      <app-track-card [track]="item" [showWave]="false"></app-track-card>
+    }
+    @if (artistStore.hasMoreTracks()) {
+      <div class="artist-profile__action">
+        <app-button (click)="onLoadMore()">Load more</app-button>
+      </div>
+    }
+  </div>
 </div>
+@if (isScrollButtonVisible()) {
+  <div class="scroll-to-top-wrapper">
+    <app-button size="icon-rounded-sm" (click)="scrollToTop()">
+      <app-icon icon="arrow-up"></app-icon>
+    </app-button>
+  </div>
+}

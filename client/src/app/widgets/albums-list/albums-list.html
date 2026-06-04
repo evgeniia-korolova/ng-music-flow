@@ -3,13 +3,7 @@
   space-between="16"
   [pagination]="isPagination() ? { clickable: true } : false"
 >
-  @if (store.isLoading()) {
-    <p>Albums are loading...</p>
-  }
-  @if (store.error()) {
-    <p>{{ store.error() }}</p>
-  }
-  @for (item of store.items(); track item.id) {
+  @for (item of albums(); track item.id) {
     @defer (on viewport) {
       <swiper-slide>
         <app-album-card [album]="item"></app-album-card>
