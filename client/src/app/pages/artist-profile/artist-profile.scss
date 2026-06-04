@@ -25,3 +25,9 @@
   margin-top: 10px;
   text-align: center;
 }
+.scroll-to-top-wrapper {
+  position: fixed;
+  bottom: 6rem;
+  right: 2rem;
+  z-index: 50;
+}

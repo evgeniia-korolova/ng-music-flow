@@ -22,3 +22,10 @@
     }
   </div>
 </div>
+@if (isScrollButtonVisible()) {
+  <div class="scroll-to-top-wrapper">
+    <app-button size="icon-rounded-sm" (click)="scrollToTop()">
+      <app-icon icon="arrow-up"></app-icon>
+    </app-button>
+  </div>
+}
