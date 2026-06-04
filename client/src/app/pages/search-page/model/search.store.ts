@@ -113,6 +113,7 @@ export const SearchStore = signalStore(
       },
 
       setFiltersFromUrl(params: {
+        query?: string;
         tags?: string;
         sortBy?: string;
         min?: number;
@@ -122,9 +123,12 @@ export const SearchStore = signalStore(
         if (store.isInitialized()) return;
         const activeGenres = params.tags ? (params.tags.split(',') as GenreId[]) : [];
 
+        const targetQuery = params.query ?? '';
+
         patchState(store, (state) => ({
           ...state,
           isInitialized: true,
+          query: targetQuery,
           filters: {
             ...state.filters,
             genres: activeGenres,
@@ -247,6 +251,7 @@ export const SearchStore = signalStore(
 
         router.navigate(['/search'], {
           queryParams: {
+            query: store.query() || null,
             offset: 0,
             tags: activeGenres.length > 0 ? activeGenres.join(',') : null,
             sortBy: targetSortBy === 'popularity' ? null : targetSortBy,

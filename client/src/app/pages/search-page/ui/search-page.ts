@@ -40,14 +40,18 @@ export default class SearchPage implements OnDestroy {
   readonly min = input<string | undefined>();
   readonly max = input<string | undefined>();
 
+  readonly query = input<string | undefined>();
+
   constructor() {
     effect(() => {
       const tagsValue = this.tags();
       const sortByValue = this.sortBy();
       const minValue = this.min();
       const maxValue = this.max();
+      const queryValue = this.query();
 
       this.store.setFiltersFromUrl({
+        query: queryValue || undefined,
         tags: tagsValue,
         sortBy: sortByValue,
         min: minValue ? +minValue : undefined,
