@@ -32,7 +32,7 @@ describe('SearchFilters', () => {
     const formValue = component.filterForm.value;
 
     expect(formValue.sortBy).toBe('popularity');
-    expect(formValue.durationMin).toBe(0);
+    expect(formValue.durationMin).toBe(30);
     expect(formValue.durationMax).toBe(600);
     expect(formValue.genres?.['rock']).toBe(false);
     expect(formValue.genres?.['pop']).toBe(false);

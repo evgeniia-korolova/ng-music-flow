@@ -1,0 +1,38 @@
+<form class="auth-form" id="loginFormId" (submit)="$event.preventDefault(); onSubmit()" novalidate>
+  <div class="auth-page-header">
+    <h3>Sign in</h3>
+  </div>
+
+  <div class="auth-page-main">
+    <div class="general-message" [class.error]="generalError()">
+      <app-icon [icon]="generalMessage().icon" [style.font-size]="'1.2rem'" />
+      <p>{{ generalMessage().message }}</p>
+    </div>
+    <app-input
+      [field]="loginForm.email"
+      label="Email Address"
+      inputType="text"
+      placeHolder="name@example.com"
+      appAutofocus
+    />
+
+    <app-input [field]="loginForm.password" label="Password" inputType="password" />
+  </div>
+
+  <div class="auth-page-footer">
+    <app-button type="button" variant="outline" routerLink="/auth/register">
+      Create new account instead
+    </app-button>
+    <app-button
+      type="submit"
+      class="submit-btn"
+      [disabled]="!loginForm().valid()"
+      [class.loading]="store.loading()"
+    >
+      <app-icon [icon]="submitButton().icon"></app-icon>
+      <span>
+        {{ submitButton().message }}
+      </span>
+    </app-button>
+  </div>
+</form>

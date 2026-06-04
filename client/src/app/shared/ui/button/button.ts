@@ -10,17 +10,26 @@ type ButtonSize =
   | 'icon-cubic-md'
   | 'icon-rounded-md'
   | 'icon-cubic-lg'
-  | 'icon-rounded-lg';
+  | 'icon-rounded-lg'
+  | 'avatar';
 
 @Component({
   selector: 'app-button',
   imports: [],
   templateUrl: './button.html',
   styleUrl: './button.scss',
+  host: {
+    '[attr.data-variant]': 'variant()',
+    '[attr.data-size]': 'size()',
+  },
 })
 export class Button {
-  variant = input<ButtonVariant>('default');
-  size = input<ButtonSize>('md');
+  readonly variant = input<ButtonVariant>('default');
+  readonly size = input<ButtonSize>('md');
+  readonly active = input(false);
+  readonly disabled = input(false);
 
-  protected buttonClasses = computed(() => `btn btn-${this.variant()} ${this.size()}`);
+  protected buttonClasses = computed(
+    () => `btn ${this.active() ? 'active' : ''} btn-${this.variant()} ${this.size()}`,
+  );
 }

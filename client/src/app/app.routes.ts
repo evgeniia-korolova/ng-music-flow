@@ -63,6 +63,29 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/album-profile/album-profile').then((m) => m.AlbumProfile),
       },
+      {
+        path: 'auth',
+        loadComponent: () => import('./pages/auth/auth'),
+        children: [
+          {
+            path: 'login',
+            title: 'Sign In',
+            loadComponent: () => import('./features/auth/login-form/login-form'),
+            data: { mode: 'login' },
+          },
+          {
+            path: 'register',
+            title: 'Sign Up',
+            loadComponent: () => import('./features/auth/register-form/register-form'),
+            data: { mode: 'register' },
+          },
+          {
+            path: '',
+            redirectTo: 'login',
+            pathMatch: 'full',
+          },
+        ],
+      },
     ],
   },
 ];

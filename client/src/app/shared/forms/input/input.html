@@ -1,0 +1,49 @@
+<div class="input-container">
+  @if (label()) {
+    <label class="input-label" [htmlFor]="inputId">{{ label() }}</label>
+  }
+
+  <div class="input-wrapper" [class.error]="displayError()">
+    @if (inputType() === 'textbox') {
+      <textarea
+        [formField]="field()"
+        [readOnly]="state().readonly()"
+        class="input textarea"
+        [id]="inputId"
+        [placeholder]="placeHolder()"
+        #inputElement
+      >
+      </textarea>
+    } @else {
+      <input
+        [type]="currentType()"
+        [formField]="field()"
+        [readOnly]="state().readonly()"
+        class="input"
+        [id]="inputId"
+        [placeholder]="placeHolder()"
+        #inputElement
+      />
+      @if (inputType() === 'password') {
+        <app-button
+          variant="ghost"
+          size="icon-rounded-sm"
+          (click)="togglePassword()"
+          class="input-icon"
+        >
+          <app-icon
+            [icon]="showPassword() ? 'eye' : 'eyeClosed'"
+            [primaryColor]="displayError() ? 'var(--color-text-danger)' : 'currentColor'"
+          />
+        </app-button>
+      }
+    }
+  </div>
+
+  @if (displayError()) {
+    <div class="error-msg">
+      <app-icon icon="warning" />
+      <p>{{ error() }}</p>
+    </div>
+  }
+</div>
