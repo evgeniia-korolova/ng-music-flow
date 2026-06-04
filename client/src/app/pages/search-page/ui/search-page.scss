@@ -118,6 +118,10 @@
   width: 100%;  
 }
 
+.load-more-btn {
+  margin-inline: auto;
+}
+
 @keyframes slideInLeft {
   from {
     transform: translateX(-100%);

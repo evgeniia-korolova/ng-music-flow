@@ -13,10 +13,11 @@ import { TRACK_DATA_PROVIDER } from '../../../widgets/tracks-list/model/track-pr
 import TracksList from '../../../widgets/tracks-list/tracks-list';
 import { ResponsiveService } from '../../../shared/services/responsive-service/responsive-service';
 import { Icon } from '../../../shared/ui/icon/icon.component';
+import { Button } from '../../../shared/ui/button/button';
 
 @Component({
   selector: 'app-search-page',
-  imports: [SearchFilters, TracksList, Icon],
+  imports: [SearchFilters, TracksList, Icon, Button],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +30,7 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
   ],
 })
 export default class SearchPage implements OnDestroy {
-  private readonly store = inject(SearchStore);
+  protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
 
   protected isSidebarOpen = signal(false);
@@ -71,10 +72,13 @@ export default class SearchPage implements OnDestroy {
 
   toggleSidebar() {
     this.isSidebarOpen.update((state) => !state);
-    console.log(this.isSidebarOpen());
   }
 
   ngOnDestroy(): void {
     document.body.classList.remove('no-scroll');
+  }
+
+  onLoadMore(): void {
+    this.store.loadMore();
   }
 }
