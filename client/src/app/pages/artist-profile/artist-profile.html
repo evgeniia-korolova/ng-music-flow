@@ -4,7 +4,7 @@
       <p class="artist-profile__loading">Profile is loading...</p>
     }
     @if (artistStore.error()) {
-      <p class="artist-profile__loading">{{ artistStore.error() }}</p>
+      <p class="artist-profile__loading">Oops! Artist not found.</p>
     }
     @if (artistStore.currentArtist(); as artist) {
       <app-artist-card [artist]="artist" [isLink]="false"></app-artist-card>
@@ -15,7 +15,7 @@
     @for (item of artistStore.tracks(); track $index) {
       <app-track-card [track]="item" [showWave]="false"></app-track-card>
     }
-    @if (artistStore.hasMoreTracks()) {
+    @if (artistStore.currentArtist() && artistStore.hasMoreTracks()) {
       <div class="artist-profile__action">
         <app-button (click)="onLoadMore()">Load more</app-button>
       </div>
@@ -24,8 +24,6 @@
 </div>
 @if (isScrollButtonVisible()) {
   <div class="scroll-to-top-wrapper">
-    <app-button size="icon-rounded-sm" (click)="scrollToTop()">
-      <app-icon icon="arrow-up"></app-icon>
-    </app-button>
+    <app-button size="icon-rounded-lg" (click)="scrollToTop()">&uarr;</app-button>
   </div>
 }
