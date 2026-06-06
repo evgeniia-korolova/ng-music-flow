@@ -86,6 +86,7 @@ export const routes: Routes = [
           },
         ],
       },
+      { path: 'about', loadComponent: () => import('./pages/about/ui/about').then((m) => m.About) },
       {
         path: '**',
         loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
