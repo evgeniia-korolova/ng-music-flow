@@ -5,7 +5,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: 'Evgeniia Korolova',
     role: 'Team Lead & Data Whisperer',
     shortBio:
-      'Ruler of the Netlify kingdom and absolute master of track data. Secretly plotting to steal authentication and filtering tasks from Merab. Likes perfectly sorted tracks.',
+      'Ruler of the Netlify kingdom and absolute master of track data. Happily surrendered all authentication tasks to Merab. Likes perfectly sorted tracks.',
     photo: '/team-about/Evgenia.jpg',
     gitLink: 'https://github.com/evgeniia-korolova',
   },
@@ -13,7 +13,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: 'Merab Kopaleishvili',
     role: 'Guardian of Auth & Theme Switcher',
     shortBio:
-      'Lord of Day/Night themes and the ultimate gatekeeper of Login buttons. Constantly defending his precious auth tasks from Evgeniia. Protects his code like a dragon.',
+      'Lord of Day/Night themes and the ultimate gatekeeper of Login buttons. Loves his precious auth tasks and protects his code like a dragon.',
     photo: '/team-about/Merab.png',
     gitLink: 'https://github.com/mero93',
   },

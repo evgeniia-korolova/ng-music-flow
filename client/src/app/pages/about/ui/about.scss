@@ -5,6 +5,7 @@
     flex-direction: column;
     gap: 40px;
     justify-content: space-between;
+    min-height: 100vh;
   }
   &__grid {
     display: grid;
@@ -24,6 +25,7 @@
   }
 }
 .card-team {
+  cursor: default;
   display: flex;
   flex-direction: column;
   gap: 20px;
