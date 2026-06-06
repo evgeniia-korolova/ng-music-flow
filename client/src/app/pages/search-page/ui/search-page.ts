@@ -14,6 +14,7 @@ import TracksList from '../../../widgets/tracks-list/tracks-list';
 import { ResponsiveService } from '../../../shared/services/responsive-service/responsive-service';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { Button } from '../../../shared/ui/button/button';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-page',
@@ -22,7 +23,6 @@ import { Button } from '../../../shared/ui/button/button';
   styleUrl: './search-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    SearchStore,
     {
       provide: TRACK_DATA_PROVIDER,
       useExisting: SearchStore,
@@ -30,6 +30,8 @@ import { Button } from '../../../shared/ui/button/button';
   ],
 })
 export default class SearchPage implements OnDestroy {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
 
@@ -40,22 +42,21 @@ export default class SearchPage implements OnDestroy {
   readonly min = input<string | undefined>();
   readonly max = input<string | undefined>();
 
-  readonly q = input<string | undefined>();
-
   constructor() {
     effect(() => {
-      const tagsValue = this.tags();
-      const sortByValue = this.sortBy();
-      const minValue = this.min();
-      const maxValue = this.max();
-      const queryValue = this.q();
+      const queryParams = {
+        q: this.store.query() || null,
+        tags: this.store.filters().genres?.length ? this.store.filters().genres.join(',') : null,
+        sortBy: this.store.filters().sortBy ?? null,
+        min: this.store.filters().durationMin ?? null,
+        max: this.store.filters().durationMax ?? null,
+        offset: this.store.offset() || null,
+      };
 
-      this.store.setFiltersFromUrl({
-        query: queryValue,
-        tags: tagsValue,
-        sortBy: sortByValue,
-        min: minValue ? +minValue : undefined,
-        max: maxValue ? +maxValue : undefined,
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        replaceUrl: true,
       });
     });
 
@@ -70,6 +71,12 @@ export default class SearchPage implements OnDestroy {
         } else {
           scrollContainer.classList.remove('no-scroll');
         }
+      }
+    });
+
+    effect(() => {
+      if (this.store.filters()) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }
