@@ -9,5 +9,5 @@ import { TeamMember } from '../model/about.model';
   styleUrl: './about.scss',
 })
 export class About {
-  protected teamMembers: TeamMember[] = TEAM_MEMBERS;
+  teamMembers: TeamMember[] = TEAM_MEMBERS;
 }

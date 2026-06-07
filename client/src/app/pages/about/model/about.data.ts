@@ -13,7 +13,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: 'Merab Kopaleishvili',
     role: 'Guardian of Auth & Theme Switcher',
     shortBio:
-      'Lord of Day/Night themes and the ultimate gatekeeper of Login buttons. Loves his precious auth tasks and protects his code like a dragon.',
+      'Lord of Day/Night themes and the ultimate gatekeeper of Login buttons. Protects his auth code like a dragon, but secretly crafts incredibly beautiful buttons, icons, and gradients.',
     photo: '/team-about/Merab.png',
     gitLink: 'https://github.com/mero93',
   },
