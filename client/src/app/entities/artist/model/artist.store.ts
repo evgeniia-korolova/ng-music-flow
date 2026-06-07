@@ -93,7 +93,7 @@ export const ArtistStore = signalStore(
               },
               error: (err) => {
                 console.log(err);
-                patchState(store, { isLoading: false, error: 'Error' });
+                patchState(store, { isLoading: false, hasMoreTracks: false, error: 'Error' });
               },
             }),
           ),
