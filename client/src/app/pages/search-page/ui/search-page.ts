@@ -75,7 +75,10 @@ export default class SearchPage implements OnDestroy {
     });
 
     effect(() => {
-      if (this.store.filters()) {
+      this.store.filters();
+      this.store.query();
+      const offset = this.store.offset();
+      if (offset === 0) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });

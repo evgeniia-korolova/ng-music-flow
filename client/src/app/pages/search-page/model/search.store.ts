@@ -15,7 +15,7 @@ import {
 } from './search.model';
 import { Track, TrackDto } from '../../../entities/track/model/track.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { combineLatest, debounceTime, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, delay, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
 import { computed, inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { tapResponse } from '@ngrx/operators';
@@ -34,7 +34,6 @@ const initialState: SearchState = {
   },
   isLoading: false,
   error: null,
-  //isInitialized: false,
   offset: 0,
   totalCount: null,
 };
@@ -53,7 +52,6 @@ export const SearchStore = signalStore(
   withState(extendedInitialState),
   withComputed((store) => {
     return {
-      // tracks: sortedTracksSignal,
       tracks: store.rawTracks,
       listTitle: computed(() => {
         const query = store.query().trim();
@@ -95,9 +93,7 @@ export const SearchStore = signalStore(
 
     return {
       setQuery(query: string): void {
-        patchState(store, { query });
-        console.log('after', store.query());
-        console.trace();
+        patchState(store, { query, offset: 0 });
       },
 
       loadMore(): void {
@@ -105,25 +101,25 @@ export const SearchStore = signalStore(
       },
 
       toggleSortDirection(): void {
-        patchState(store, (state) => ({
-          ...state,
+        const currentFilters = store.filters();
+        patchState(store, {
+          offset: 0,
           filters: {
-            ...state.filters,
-            isAsc: !state.filters.isAsc,
+            ...currentFilters,
+            isAsc: !currentFilters.isAsc,
           },
-        }));
-        window.scrollTo({ top: 0 });
+        });
       },
 
       setGenre(genre: GenreId): void {
-        patchState(store, (state) => ({
-          ...state,
+        const currentFilters = store.filters();
+        patchState(store, {
           offset: 0,
           filters: {
-            ...state.filters,
+            ...currentFilters,
             genres: [genre],
           },
-        }));
+        });
       },
 
       loadSearchResults: rxMethod<{ query: string; filters: SearchFiltersState; offset: number }>(
@@ -134,12 +130,11 @@ export const SearchStore = signalStore(
             const cacheKey = createCacheKey(query, filters);
 
             if (offset === 0 && searchCache.has(cacheKey)) {
-              patchState(store, {
-                rawTracks: searchCache.get(cacheKey) || [],
-                isLoading: false,
-                error: null,
-              });
-              return of(null);
+              const cachedTracks = searchCache.get(cacheKey) || [];
+              return of({
+                results: cachedTracks,
+                headers: { results_fullcount: store.totalCount() },
+              }).pipe(delay(0));
             }
 
             const apiParams: Record<string, string | number | boolean> = {};
@@ -155,7 +150,6 @@ export const SearchStore = signalStore(
 
             if (isSearchMode) {
               apiParams['search'] = query;
-              console.log('search');
 
               apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
               if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
@@ -170,8 +164,6 @@ export const SearchStore = signalStore(
                 apiParams['fuzzytags'] = filters.genres.join('+');
               } //не работает
             } else {
-              console.log('not search');
-
               apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
               if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
 
@@ -246,13 +238,6 @@ export const SearchStore = signalStore(
           },
         });
       },
-
-      // resetOffset(): void {
-      //   patchState(store, (state) => ({
-      //     ...state,
-      //     offset: 0
-      //   }))
-      // },
     };
   }),
   withHooks({

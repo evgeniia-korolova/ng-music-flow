@@ -15,13 +15,12 @@ import {
 } from './search.model';
 import { Track, TrackDto } from '../../../entities/track/model/track.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { combineLatest, debounceTime, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, delay, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
 import { computed, inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { tapResponse } from '@ngrx/operators';
 import { mapTrack } from '../../../entities/track/lib/map-track';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 import { isValidRichTrack } from '../../../entities/track/model/track.validator';
 import { sortTracks } from '../../../entities/track/model/sort-tracks';
 
@@ -36,7 +35,6 @@ const initialState: SearchState = {
   },
   isLoading: false,
   error: null,
-  //isInitialized: false,
   offset: 0,
   totalCount: null,
 };
@@ -50,7 +48,7 @@ const extendedInitialState: ExtendedSearchState = {
   rawTracks: [],
 };
 
-export const SearchStoreFront = signalStore(
+export const SearchStoreFrontSorting = signalStore(
   withState(extendedInitialState),
   withComputed((store) => {
     const sortedTracksSignal = computed(() => {
@@ -67,10 +65,24 @@ export const SearchStoreFront = signalStore(
     return {
       tracks: sortedTracksSignal,
       listTitle: computed(() => {
-        if (store.query()) return `Results of search "${store.query()}"`;
-        if (store.filters.genres().length > 0)
-          return `Results of search: ${store.filters.genres().join(', ')}`;
-        return 'All results';
+        const query = store.query().trim();
+        const genres = store.filters().genres;
+
+        if (!query && genres.length === 0) {
+          return 'All results';
+        }
+
+        const searchParts: string[] = [];
+
+        if (query) {
+          searchParts.push(query);
+        }
+
+        if (genres.length > 0) {
+          searchParts.push(...genres);
+        }
+
+        return `Results of search: ${searchParts.join(', ')}`;
       }),
 
       hasMore: computed(() => {
@@ -83,7 +95,6 @@ export const SearchStoreFront = signalStore(
 
   withMethods((store) => {
     const jamendoApi = inject(JamendoApiService);
-    const router = inject(Router);
     const searchCache = new Map<string, Track[]>();
 
     const createCacheKey = (query: string, filters: SearchFiltersState): string => {
@@ -92,8 +103,8 @@ export const SearchStoreFront = signalStore(
     };
 
     return {
-      updateSearchQuery(query: string): void {
-        patchState(store, { query });
+      setQuery(query: string): void {
+        patchState(store, { query, offset: 0 });
       },
 
       loadMore(): void {
@@ -101,43 +112,25 @@ export const SearchStoreFront = signalStore(
       },
 
       toggleSortDirection(): void {
-        patchState(store, (state) => ({
-          ...state,
+        const currentFilters = store.filters();
+        patchState(store, {
+          offset: 0,
           filters: {
-            ...state.filters,
-            isAsc: !state.filters.isAsc,
+            ...currentFilters,
+            isAsc: !currentFilters.isAsc,
           },
-        }));
-        window.scrollTo({ top: 0 });
+        });
       },
 
-      setFiltersFromUrl(params: {
-        query?: string;
-        tags?: string;
-        sortBy?: string;
-        min?: number;
-        max?: number;
-        asc?: string;
-      }): void {
-        console.log('before', store.query());
-        const activeGenres = params.tags ? (params.tags.split(',') as GenreId[]) : [];
-
-        const targetQuery = params.query ?? '';
-
-        patchState(store, (state) => ({
-          ...state,
-          //isInitialized: true,
-          query: targetQuery,
+      setGenre(genre: GenreId): void {
+        const currentFilters = store.filters();
+        patchState(store, {
+          offset: 0,
           filters: {
-            ...state.filters,
-            genres: activeGenres,
-            sortBy: (params.sortBy as SearchSortOrder) ?? store.filters.sortBy(),
-            durationMin: params.min !== undefined ? +params.min : store.filters.durationMin(),
-            durationMax: params.max !== undefined ? +params.max : store.filters.durationMax(),
-            isAsc: params.asc !== undefined ? params.asc === 'true' : store.filters.isAsc(),
+            ...currentFilters,
+            genres: [genre],
           },
-        }));
-        console.log('after', store.query());
+        });
       },
 
       loadSearchResults: rxMethod<{ query: string; filters: SearchFiltersState; offset: number }>(
@@ -148,12 +141,11 @@ export const SearchStoreFront = signalStore(
             const cacheKey = createCacheKey(query, filters);
 
             if (offset === 0 && searchCache.has(cacheKey)) {
-              patchState(store, {
-                rawTracks: searchCache.get(cacheKey) || [],
-                isLoading: false,
-                error: null,
-              });
-              return of(null);
+              const cachedTracks = searchCache.get(cacheKey) || [];
+              return of({
+                results: cachedTracks,
+                headers: { results_fullcount: store.totalCount() },
+              }).pipe(delay(0));
             }
 
             const apiParams: Record<string, string | number | boolean> = {};
@@ -216,38 +208,25 @@ export const SearchStoreFront = signalStore(
       ),
 
       updateFiltersFromForm(formValue: RawFormValue): void {
-        console.log('setFiltersFromUrl', formValue);
+        const activeGenres = (
+          formValue.genres
+            ? Object.keys(formValue.genres).filter((id) => formValue.genres![id] === true)
+            : []
+        ) as GenreId[];
 
-        let activeGenres: GenreId[] = [];
-        if (formValue.genres) {
-          activeGenres = Object.keys(formValue.genres)
-            .filter((genreId) => formValue.genres![genreId] === true)
-            .map((genreId) => genreId as GenreId);
-        }
+        const currentFilters = store.filters();
 
-        const targetSortBy: SearchSortOrder =
-          (formValue.sortBy as SearchSortOrder) ?? store.filters.sortBy();
-        const targetMin =
-          formValue.durationMin !== undefined && formValue.durationMin !== null
-            ? +formValue.durationMin
-            : store.filters.durationMin();
-        const targetMax =
-          formValue.durationMax !== undefined && formValue.durationMax !== null
-            ? +formValue.durationMax
-            : store.filters.durationMax();
-
-        router.navigate(['/search'], {
-          queryParams: {
-            //query: store.query() || null,
-            offset: 0,
-            tags: activeGenres.length > 0 ? activeGenres.join(',') : null,
-            sortBy: targetSortBy === 'popularity' ? null : targetSortBy,
-            min: targetMin === 0 ? null : targetMin,
-            max: targetMax === 600 ? null : targetMax,
-            asc: store.filters.isAsc() ? 'true' : 'false',
+        patchState(store, {
+          offset: 0,
+          filters: {
+            ...currentFilters,
+            genres: activeGenres,
+            sortBy: (formValue.sortBy as SearchSortOrder) ?? currentFilters.sortBy,
+            durationMin:
+              formValue.durationMin != null ? +formValue.durationMin : currentFilters.durationMin,
+            durationMax:
+              formValue.durationMax != null ? +formValue.durationMax : currentFilters.durationMax,
           },
-          queryParamsHandling: 'merge',
-          replaceUrl: true,
         });
       },
     };

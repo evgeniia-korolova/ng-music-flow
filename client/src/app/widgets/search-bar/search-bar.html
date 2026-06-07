@@ -1,6 +1,19 @@
-<input
-  #searchInput
-  type="text"
-  placeholder="Search tracks..."
-  (input)="onChange(searchInput.value)"
-/>
+<section class="search-bar">
+  <app-icon icon="search" class="search-bar__icon-search" />
+  <input
+    [formField]="searchForm.query"
+    type="text"
+    placeholder="Search tracks..."
+    class="search-bar__input"
+  />
+  @if (searchForm.query().value()) {
+    <button
+      type="button"
+      (click)="clearSearch()"
+      class="search-bar__clear-btn"
+      aria-label="Clear search"
+    >
+      <app-icon icon="x" />
+    </button>
+  }
+</section>

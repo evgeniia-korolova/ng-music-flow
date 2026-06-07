@@ -17,6 +17,6 @@ export class GenreCard {
 
   onGenreClick(genreId: string): void {
     this.store.setGenre(genreId);
-    this.router.navigate(['/search']);
+    this.router.navigateByUrl('/search');
   }
 }

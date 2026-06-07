@@ -5,7 +5,6 @@ import {
   computed,
   inject,
   OnInit,
-  signal,
 } from '@angular/core';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
@@ -16,6 +15,7 @@ import { Icon } from '../../shared/ui/icon/icon.component';
 import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
 import { Button } from '../../shared/ui/button/button';
 import { AuthStore } from '../../entities/user/user.state';
+import { SearchToggleService } from '../../features/search/services/search-toggle-service';
 
 @Component({
   selector: 'app-header',
@@ -37,8 +37,10 @@ export class Header implements OnInit {
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  protected readonly searchService = inject(SearchToggleService);
 
-  readonly showSearchBar = signal(false);
+  //readonly showSearchBar = signal(false);
+  readonly showSearchBar = this.searchService.isSearchBarVisible;
 
   user = computed(() => this.authStore.user());
 
@@ -65,9 +67,9 @@ export class Header implements OnInit {
     this.navItems = routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
   }
 
-  toggleSearchBar = () => {
-    this.showSearchBar.update((val) => !val);
-  };
+  // toggleSearchBar = () => {
+  //   this.showSearchBar.update((val) => !val);
+  // };
 
   ngOnInit(): void {
     this.setNavItems();
