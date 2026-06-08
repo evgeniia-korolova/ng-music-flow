@@ -36,14 +36,12 @@ export const routes: Routes = [
             title: 'Genres',
           },
         ],
-        canActivate: [authGuard],
       },
       {
         path: 'artists',
         loadComponent: () => import('./pages/artists/artists'),
         title: 'Artists',
         data: { displayOnNavbar: true },
-        canActivate: [authGuard],
       },
       {
         path: 'search',
@@ -91,9 +89,16 @@ export const routes: Routes = [
       },
       {
         path: 'about',
-        loadComponent: () => import('./pages/about/ui/about').then((m) => m.About),
+        loadComponent: () => import('./pages/about/ui/about'),
         title: 'About',
         data: { displayOnNavbar: true },
+      },
+      {
+        path: 'library',
+        loadComponent: () => import('./pages/library/library'),
+        title: 'Library',
+        data: { displayOnNavbar: true },
+        canActivate: [authGuard],
       },
     ],
   },

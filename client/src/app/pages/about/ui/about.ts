@@ -8,6 +8,6 @@ import { TeamMember } from '../model/about.model';
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })
-export class About {
+export default class About {
   teamMembers: TeamMember[] = TEAM_MEMBERS;
 }

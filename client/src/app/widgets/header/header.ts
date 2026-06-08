@@ -48,7 +48,7 @@ export class Header implements OnInit {
   signOut = () => {
     this.authStore.logout();
     this.cdr.detectChanges();
-    this.router.navigateByUrl('/discover');
+    this.router.navigateByUrl('discover');
   };
 
   handleAuthButtonClick = (event: Event) => {
