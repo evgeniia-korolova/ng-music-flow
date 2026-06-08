@@ -169,7 +169,7 @@ export class AuthStore {
     }
   }
 
-  checkOnInit(): void {
+  async checkOnInit(): Promise<void> {
     const storedData = this.retrieveTokenFromLocalStorage();
 
     if (!storedData) {
@@ -178,7 +178,7 @@ export class AuthStore {
     }
 
     this.updateState({ ...storedData });
-    this.retrieveUserInformation();
+    await this.retrieveUserInformation();
   }
 
   private updateState(partialState: Partial<AuthState>): void {
