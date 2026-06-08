@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -35,12 +36,14 @@ export const routes: Routes = [
             title: 'Genres',
           },
         ],
+        canActivate: [authGuard],
       },
       {
         path: 'artists',
         loadComponent: () => import('./pages/artists/artists'),
         title: 'Artists',
         data: { displayOnNavbar: true },
+        canActivate: [authGuard],
       },
       {
         path: 'search',
