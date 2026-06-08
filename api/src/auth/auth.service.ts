@@ -33,9 +33,9 @@ export class AuthService {
   async login(loginDto: LoginDto): Promise<AuthResponse> {
     const { email, password } = loginDto;
 
-    const { match, user } = await this.validateUser(email, password);
+    const user = await this.validateUser(email, password);
 
-    if (!match) {
+    if (!user) {
       throw new ApiException(
         {
           message: 'Invalid email or password',
@@ -51,22 +51,14 @@ export class AuthService {
   private async validateUser(
     email: string,
     password: string,
-  ): Promise<{ match: boolean; user: UserEntity }> {
+  ): Promise<UserEntity | null> {
     const user = await this.users.findByEmailWithPassword(email);
-
-    if (!user) {
-      throw new ApiException(
-        {
-          message: 'User with this email not found',
-          code: 'AUTH.EMAIL.NOTFOUND',
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
+    if (!user) return null;
 
     const match = await bcrypt.compare(password, user.password);
+    if (!match) return null;
 
-    return { match, user };
+    return user;
   }
 
   private generateAuthResponse(user: UserEntity): AuthResponse {

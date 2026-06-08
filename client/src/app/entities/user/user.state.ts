@@ -2,9 +2,9 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { AuthResponse, UserProfile } from './user.model';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
-import { ApiError } from '../../shared/api/api-response';
+import { ApiError, ApiResponse } from '../../shared/api/api-response';
 import { jwtDecode } from 'jwt-decode';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 
@@ -76,10 +76,7 @@ export class AuthStore {
       this.updateState({
         loading: false,
         initialCheck: true,
-        error: {
-          message: (err instanceof Error && err.message) || 'Something went wrong',
-          status: 500,
-        },
+        error: this.handleError(err),
       });
     }
   }
@@ -111,6 +108,16 @@ export class AuthStore {
 
       this.saveTokenToLocalStorage(response.data?.accessToken);
     } catch (err) {
+      if (err instanceof HttpErrorResponse) {
+        const apiResponse = err.error as ApiResponse<null>;
+
+        this.updateState({
+          loading: false,
+          initialCheck: true,
+          error: apiResponse.error,
+        });
+        return;
+      }
       this.updateState({
         loading: false,
         initialCheck: true,
@@ -157,10 +164,7 @@ export class AuthStore {
       this.logout();
       this.updateState({
         initialCheck: true,
-        error: {
-          message: (err instanceof Error && err.message) || 'Something went wrong',
-          status: 500,
-        },
+        error: this.handleError(err),
       });
     }
   }
@@ -200,5 +204,20 @@ export class AuthStore {
   private saveTokenToLocalStorage(token?: string): void {
     if (!token) return;
     localStorage.setItem(TOKEN_KEY, token);
+  }
+
+  private handleError(err: unknown): ApiError {
+    if (err instanceof HttpErrorResponse && err.error) {
+      const apiResponse = err.error as ApiResponse<null>;
+
+      if (apiResponse.error) {
+        return apiResponse.error;
+      }
+    }
+
+    return {
+      message: err instanceof Error ? err.message : 'Something went wrong',
+      status: err instanceof HttpErrorResponse ? err.status : 500,
+    };
   }
 }
