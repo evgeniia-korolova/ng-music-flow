@@ -1,9 +1,12 @@
 <section class="search-bar">
-  <app-icon icon="search" class="search-bar__icon-search" />
+  <button (click)="navigateToSearch()" class="search-bar__icon-search">
+    <app-icon icon="search" />
+  </button>
   <input
     [formField]="searchForm.query"
     type="text"
     placeholder="Search tracks..."
+    (keydown.enter)="navigateToSearch()"
     class="search-bar__input"
   />
   @if (searchForm.query().value()) {

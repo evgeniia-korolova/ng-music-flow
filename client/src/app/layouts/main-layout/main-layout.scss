@@ -21,14 +21,21 @@
   color: var(--color-text-on-bg);
   border-top: 2px solid var(--color-bg-surface);
   display: grid;
-  grid-template-columns: 1fr; 
+  grid-template-columns: 1fr;
   align-items: center;
   gap: 1rem;
   padding: 0.5rem 1rem;
 }
 
+// временные стили
+.breadcrumbs {
+  padding: 10px 40px 10px 38px;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+
 @media (min-width: 768px) {
-  .layout-toolbar--sticky {    
+  .layout-toolbar--sticky {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }

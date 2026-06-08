@@ -15,6 +15,7 @@ import { ResponsiveService } from '../../../shared/services/responsive-service/r
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { Button } from '../../../shared/ui/button/button';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-search-page',
@@ -32,6 +33,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export default class SearchPage implements OnDestroy {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private location = inject(Location);
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
 
@@ -44,20 +46,23 @@ export default class SearchPage implements OnDestroy {
 
   constructor() {
     effect(() => {
-      const queryParams = {
-        q: this.store.query() || null,
-        tags: this.store.filters().genres?.length ? this.store.filters().genres.join(',') : null,
-        sortBy: this.store.filters().sortBy ?? null,
-        min: this.store.filters().durationMin ?? null,
-        max: this.store.filters().durationMax ?? null,
-        offset: this.store.offset() || null,
-      };
+      const params = new URLSearchParams();
+      if (this.store.query()) params.set('q', this.store.query());
+      if (this.store.filters().genres?.length)
+        params.set('tags', this.store.filters().genres.join(','));
+      if (this.store.filters().sortBy) params.set('sortBy', this.store.filters().sortBy);
+      if (this.store.filters().durationMin)
+        params.set('min', this.store.filters().durationMin.toString());
+      if (this.store.filters().durationMax)
+        params.set('max', this.store.filters().durationMax.toString());
+      if (this.store.offset()) params.set('offset', this.store.offset().toString());
 
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams,
-        replaceUrl: true,
-      });
+      const queryString = params.toString();
+      const url = queryString
+        ? `${this.router.url.split('?')[0]}?${queryString}`
+        : this.router.url.split('?')[0];
+
+      this.location.replaceState(url);
     });
 
     effect(() => {
@@ -75,10 +80,10 @@ export default class SearchPage implements OnDestroy {
     });
 
     effect(() => {
-      this.store.filters();
+      //this.store.filters();
       this.store.query();
       const offset = this.store.offset();
-      if (offset === 0) {
+      if (offset !== 0) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
