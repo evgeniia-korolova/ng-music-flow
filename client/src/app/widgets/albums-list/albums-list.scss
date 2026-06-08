@@ -6,6 +6,7 @@ swiper-container {
   width: 100%;
   --swiper-pagination-bottom: 0px;
   // padding-bottom: 40px;
+  --swiper-pagination-bullet-inactive-color: var(--color-btn-default-border-hover);
 }
 
 swiper-slide {

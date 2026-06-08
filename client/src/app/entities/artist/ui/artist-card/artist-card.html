@@ -1,4 +1,5 @@
 <a
+  class="artist-card bg-[var(--color-bg-surface)] group flex flex-col h-full overflow-hidden rounded-lg shadow-lg"
   class="artist-card group block overflow-hidden rounded-lg shadow-lg"
   [routerLink]="isLink() ? ['/artists', artist().id] : null"
   [class.cursor-default]="!isLink()"

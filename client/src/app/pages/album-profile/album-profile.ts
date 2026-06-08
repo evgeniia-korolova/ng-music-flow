@@ -10,9 +10,8 @@ import { TrackCard } from '../../entities/track/ui/track-card/track-card';
   styleUrl: './album-profile.scss',
 })
 export class AlbumProfile {
-  protected albumStore = inject(AlbumStore);
-  protected albumId = input.required<string>();
-  protected album = this.albumStore.currentAlbum;
+  public readonly albumStore = inject(AlbumStore);
+  public readonly albumId = input.required<string>();
 
   constructor() {
     this.albumStore.loadAlbumDetails(this.albumId);

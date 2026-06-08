@@ -12,8 +12,8 @@ import { Button } from '../../shared/ui/button/button';
   styleUrl: './artist-profile.scss',
 })
 export class ArtistProfile {
-  protected artistStore = inject(ArtistStore);
-  protected artistId = input.required<string>();
+  public readonly artistStore = inject(ArtistStore);
+  public readonly artistId = input.required<string>();
 
   protected isScrollButtonVisible = signal(false);
 

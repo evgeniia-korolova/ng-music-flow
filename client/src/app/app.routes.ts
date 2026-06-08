@@ -92,10 +92,10 @@ export const routes: Routes = [
         title: 'About',
         data: { displayOnNavbar: true },
       },
-      {
-        path: '**',
-        loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
-      },
     ],
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
   },
 ];

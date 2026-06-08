@@ -3,7 +3,7 @@
     <p class="album-profile__loading">Album is loading...</p>
   }
   @if (albumStore.error()) {
-    <div class="album-profile__error">{{ albumStore.error() }}</div>
+    <div class="album-profile__error">Album is not found...</div>
   }
   @if (albumStore.currentAlbum(); as album) {
     <div class="album-profile__info">
