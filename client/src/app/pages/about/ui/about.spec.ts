@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { About } from '../ui/about';
+import About from '../ui/about';
 
 describe('About', () => {
   let component: About;

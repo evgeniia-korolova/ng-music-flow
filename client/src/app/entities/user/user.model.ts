@@ -25,7 +25,7 @@ export interface UserSocials {
 
 export interface UserDto {
   user: UserProfile;
-  token: string;
+  accessToken: string;
 }
 
 export type AuthResponse = ApiResponse<UserDto>;
