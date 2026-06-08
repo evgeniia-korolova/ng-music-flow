@@ -4,7 +4,7 @@ import {
   IsString,
   Length,
   Matches,
-} from 'class-validator/types';
+} from 'class-validator';
 
 export class RegisterDto {
   @IsEmail({}, { message: 'Must be a correct email' })
