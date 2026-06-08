@@ -11,7 +11,13 @@
             class="search-filters__hidden-input visually-hidden"
           />
 
-          <label [for]="'genre-' + genre.id" class="search-filters__genre-chip">
+          <label
+            [for]="'genre-' + genre.id"
+            class="search-filters__genre-chip"
+            [style.view-transition-name]="
+              store.filters().genres.includes(genre.id) ? 'genre' + genre.id : null
+            "
+          >
             {{ genre.title }}
           </label>
         }

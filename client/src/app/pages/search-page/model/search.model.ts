@@ -24,7 +24,7 @@ export interface SearchState {
   readonly filters: SearchFiltersState;
   readonly isLoading: boolean;
   readonly error: string | null;
-  isInitialized: boolean;
+  //isInitialized: boolean;
   offset: number;
   totalCount: number | null;
 }

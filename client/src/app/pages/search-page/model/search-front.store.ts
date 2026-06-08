@@ -22,6 +22,7 @@ import { tapResponse } from '@ngrx/operators';
 import { mapTrack } from '../../../entities/track/lib/map-track';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { isValidRichTrack } from '../../../entities/track/model/track.validator';
+import { sortTracks } from '../../../entities/track/model/sort-tracks';
 
 const initialState: SearchState = {
   query: '',
@@ -47,12 +48,22 @@ const extendedInitialState: ExtendedSearchState = {
   rawTracks: [],
 };
 
-export const SearchStore = signalStore(
-  { providedIn: 'root' },
+export const SearchStoreFrontSorting = signalStore(
   withState(extendedInitialState),
   withComputed((store) => {
+    const sortedTracksSignal = computed(() => {
+      const raw = store.rawTracks();
+      const sortBy = store.filters.sortBy();
+      const isAsc = store.filters.isAsc();
+
+      if (sortBy === 'title' || sortBy === 'artist') {
+        return sortTracks(raw, sortBy, isAsc);
+      }
+      return raw;
+    });
+
     return {
-      tracks: store.rawTracks,
+      tracks: sortedTracksSignal,
       listTitle: computed(() => {
         const query = store.query().trim();
         const genres = store.filters().genres;
@@ -138,45 +149,25 @@ export const SearchStore = signalStore(
             }
 
             const apiParams: Record<string, string | number | boolean> = {};
-            const isSearchMode = query.trim().length > 0;
 
             apiParams['limit'] = 10;
             apiParams['offset'] = offset;
             apiParams['include'] = 'stats+musicinfo';
-            //if (query) apiParams['search'] = query;
+            if (query) apiParams['search'] = query;
             if (offset === 0) {
               apiParams['fullcount'] = true;
             }
 
-            if (isSearchMode) {
-              apiParams['search'] = query;
+            apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
 
-              apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
-              if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
-              if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
-
-              if (filters.sortBy === 'title')
-                apiParams['order'] = filters.isAsc ? 'name_asc' : 'name_desc';
-              if (filters.sortBy === 'artist')
-                apiParams['order'] = filters.isAsc ? 'artist_name_asc' : 'artist_name_desc';
-
-              if (filters.genres && filters.genres.length > 0) {
-                apiParams['fuzzytags'] = filters.genres.join('+');
-              } //не работает
-            } else {
-              apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
-              if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
-
-              if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
-
-              if (filters.genres && filters.genres.length > 0) {
-                apiParams['fuzzytags'] = filters.genres.join('+');
-              }
-              if (filters.sortBy === 'title')
-                apiParams['order'] = filters.isAsc ? 'name_asc' : 'name_desc';
-              if (filters.sortBy === 'artist')
-                apiParams['order'] = filters.isAsc ? 'artist_name_asc' : 'artist_name_desc';
+            if (filters.genres && filters.genres.length > 0) {
+              apiParams['fuzzytags'] = filters.genres.join('+');
             }
+
+            if (filters.sortBy === 'title')
+              apiParams['order'] = filters.isAsc ? 'name_asc' : 'name_desc';
+            if (filters.sortBy === 'artist')
+              apiParams['order'] = filters.isAsc ? 'artist_name_asc' : 'artist_name_desc';
 
             return jamendoApi.get<TrackDto>('tracks', apiParams).pipe(
               tapResponse({

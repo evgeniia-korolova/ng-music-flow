@@ -1,4 +1,10 @@
 <app-header />
+<section class="layout-toolbar layout-toolbar--sticky">
+  <app-breadcrumbs class="breadcrumbs" />
+  @if (searchService.isSearchBarVisible()) {
+    <app-search-bar />
+  }
+</section>
 <main class="flex-1">
   <router-outlet />
 </main>
