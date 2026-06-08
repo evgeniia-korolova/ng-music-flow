@@ -14,6 +14,8 @@ import TracksList from '../../../widgets/tracks-list/tracks-list';
 import { ResponsiveService } from '../../../shared/services/responsive-service/responsive-service';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { Button } from '../../../shared/ui/button/button';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-search-page',
@@ -22,7 +24,6 @@ import { Button } from '../../../shared/ui/button/button';
   styleUrl: './search-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    SearchStore,
     {
       provide: TRACK_DATA_PROVIDER,
       useExisting: SearchStore,
@@ -30,6 +31,9 @@ import { Button } from '../../../shared/ui/button/button';
   ],
 })
 export default class SearchPage implements OnDestroy {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private location = inject(Location);
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
 
@@ -42,17 +46,23 @@ export default class SearchPage implements OnDestroy {
 
   constructor() {
     effect(() => {
-      const tagsValue = this.tags();
-      const sortByValue = this.sortBy();
-      const minValue = this.min();
-      const maxValue = this.max();
+      const params = new URLSearchParams();
+      if (this.store.query()) params.set('q', this.store.query());
+      if (this.store.filters().genres?.length)
+        params.set('tags', this.store.filters().genres.join(','));
+      if (this.store.filters().sortBy) params.set('sortBy', this.store.filters().sortBy);
+      if (this.store.filters().durationMin)
+        params.set('min', this.store.filters().durationMin.toString());
+      if (this.store.filters().durationMax)
+        params.set('max', this.store.filters().durationMax.toString());
+      if (this.store.offset()) params.set('offset', this.store.offset().toString());
 
-      this.store.setFiltersFromUrl({
-        tags: tagsValue,
-        sortBy: sortByValue,
-        min: minValue ? +minValue : undefined,
-        max: maxValue ? +maxValue : undefined,
-      });
+      const queryString = params.toString();
+      const url = queryString
+        ? `${this.router.url.split('?')[0]}?${queryString}`
+        : this.router.url.split('?')[0];
+
+      this.location.replaceState(url);
     });
 
     effect(() => {
@@ -66,6 +76,15 @@ export default class SearchPage implements OnDestroy {
         } else {
           scrollContainer.classList.remove('no-scroll');
         }
+      }
+    });
+
+    effect(() => {
+      //this.store.filters();
+      this.store.query();
+      const offset = this.store.offset();
+      if (offset !== 0) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     });
   }

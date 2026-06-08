@@ -67,23 +67,24 @@ export class SearchFilters implements OnInit {
   }
 
   ngOnInit(): void {
-    this.filterForm.valueChanges
-      .pipe(
-        // Передаем destroyRef, так как мы находимся в ngOnInit, а не в конструкторе
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((value) => {
-        const currentFormValue = this.filterForm.getRawValue();
-        const min = currentFormValue.durationMin ?? 0;
-        const max = currentFormValue.durationMax ?? 600;
+    this.filterForm.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+      const currentFormValue = this.filterForm.getRawValue();
+      let min = currentFormValue.durationMin ?? 0;
+      const max = currentFormValue.durationMax ?? 600;
 
-        if (min > max) {
-          this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
-          return;
-        }
+      if (min > max) {
+        min = max;
 
-        this.store.updateFiltersFromForm(value);
-      });
+        this.filterForm.patchValue({ durationMin: max }, { emitEvent: false });
+      }
+
+      const safeFormValue = {
+        ...currentFormValue,
+        durationMin: min,
+      };
+
+      this.store.updateFiltersFromForm(safeFormValue);
+    });
   }
 
   protected handleRadioClick(targetSort: string): void {
