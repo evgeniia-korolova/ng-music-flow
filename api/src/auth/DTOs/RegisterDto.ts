@@ -26,11 +26,13 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty({ message: 'Password is required' })
   @Length(8, 24, { message: 'Password must be between 8 and 24 letters' })
-  @Matches(/.*[A-Z].*/, { message: 'Must include uppercase letter' })
-  @Matches(/.*[a-z].*/, { message: 'Must include lowercase letter' })
-  @Matches(/.*\d.*/, { message: 'Must include number' })
-  @Matches(/.*[@$!%*?&].*/, { message: 'Must include special character' })
-  @Matches(/^\S+$/, { message: 'Must not include spaces' })
+  @Matches(/.*[A-Z].*/, { message: 'Password must include uppercase letter' })
+  @Matches(/.*[a-z].*/, { message: 'Password must include lowercase letter' })
+  @Matches(/.*\d.*/, { message: 'Password must include number' })
+  @Matches(/.*[@$!%*?&].*/, {
+    message: 'Password must include special character',
+  })
+  @Matches(/^\S+$/, { message: 'Password must not include spaces' })
   password!: string;
 
   @IsString()
