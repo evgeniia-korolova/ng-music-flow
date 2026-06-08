@@ -19,7 +19,7 @@ export class UserEntity {
   @Column({ select: false })
   password!: string;
 
-  @Column('simple-array', { default: ['user'] })
+  @Column('text', { array: true, default: ['user'] })
   roles!: string[];
 
   @CreateDateColumn()
