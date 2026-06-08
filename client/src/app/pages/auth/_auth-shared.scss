@@ -69,11 +69,28 @@
 .auth-page-footer {
   display: grid;
   grid-template-columns: 1fr;
+  direction: reverse;
   justify-content: center;
   gap: 1rem;
 
+  .submit-btn {
+    order: 1;
+  }
+
+  .switch-btn {
+    order: 2;
+  }
+
   @media (min-width: 640px) {
     grid-template-columns: 1fr 1fr;
+
+    .submit-btn {
+      order: unset;
+    }
+
+    .switch-btn {
+      order: unset;
+    }
   }
 
   background-color: var(--color-bg-accent);
