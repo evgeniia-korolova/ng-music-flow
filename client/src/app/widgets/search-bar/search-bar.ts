@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SearchStore } from '../../pages/search-page/model/search.store';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { debounce, form, FormField } from '@angular/forms/signals';
+import { AutofocusDirective } from '../../shared/directives/autofocus.directive';
 
 interface SearchFormData {
   query: string;
@@ -11,7 +12,7 @@ interface SearchFormData {
 
 @Component({
   selector: 'app-search-bar',
-  imports: [FormsModule, Icon, FormField],
+  imports: [FormsModule, Icon, FormField, AutofocusDirective],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
