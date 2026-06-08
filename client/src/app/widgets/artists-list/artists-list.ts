@@ -9,5 +9,9 @@ import { ArtistStore } from '../../entities/artist/model/artist.store';
   styleUrl: './artists-list.scss',
 })
 export class ArtistsList {
-  store = inject(ArtistStore);
+  protected store = inject(ArtistStore);
+
+  constructor() {
+    this.store.loadArtists();
+  }
 }

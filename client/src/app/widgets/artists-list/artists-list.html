@@ -3,10 +3,10 @@
   aria-label="Artists"
 >
   @if (store.isLoading()) {
-    <p>Artists are loading...</p>
+    <li>Artists are loading...</li>
   }
   @if (store.error()) {
-    <p>{{ store.error() }}</p>
+    <li>{{ store.error() }}</li>
   }
   @for (item of store.items(); track item.id) {
     @defer (on viewport) {

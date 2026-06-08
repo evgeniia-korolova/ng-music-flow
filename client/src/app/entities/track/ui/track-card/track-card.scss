@@ -2,19 +2,12 @@
   display: block;
 }
 
-// .card {
-//   background: var(--color-surface);
-
-//   &:hover {
-//     background: var(--color-bg-accent);
-//   }
-// }
-
 .track-card {
   box-sizing: border-box;
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   border-radius: 0.5rem;
   padding: 0.75rem 1rem;
@@ -80,7 +73,7 @@
     justify-content: center;
     flex-direction: column;
     flex: none;
-    gap: 0.125rem;
+    gap: 0.5rem;
   }
 
   &__title {
@@ -92,7 +85,7 @@
     transition: color 0.2s ease;
 
     &:hover {
-      color: var(--color-text-accent);
+      color: var(--color-brand-active);
     }
   }
 
@@ -101,20 +94,21 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     font-size: 0.875rem;
-    color: var(--color-text-muted);
+
+    &:hover {
+      color: var(--color-brand-active);
+    }
 
     a {
       transition: color 0.2s ease;
 
       &:hover {
-        color: var(--color-text-on-bg);
-        text-decoration: underline;
+        color: var(--color-brand-active);
       }
     }
   }
 
   &__divider {
-    opacity: 0.4;
     margin: 0 0.25rem;
   }
 
@@ -147,4 +141,21 @@
 
 .icon-active {
   color: var(--color-brand-active);
+}
+
+@media (max-width: 768px) {
+  .track-card {
+    justify-content: space-around;
+  }
+}
+
+@media (max-width: 440px) {
+  .track-card {
+    // padding: 0.75rem 0rem;
+
+    &__info {
+      width: 8rem;
+      text-align: center;
+    }
+  }
 }

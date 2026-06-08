@@ -1,0 +1,75 @@
+.team {
+  &__wrapper {
+    padding: 50px 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    justify-content: space-between;
+  }
+  &__grid {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 320px));
+    gap: 30px;
+  }
+
+  &__rs-logo {
+    max-width: 100px;
+    margin: 0 auto;
+    img {
+      width: 100%;
+    }
+  }
+}
+.card-team {
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-on-bg);
+  &__image {
+    width: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    img {
+      aspect-ratio: 1/1; /* 1/1 */
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    @media (width < 640px) {
+      width: 140px;
+    }
+  }
+  &__content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+  }
+  &__name {
+    font-weight: 700;
+  }
+
+  &__role {
+    font-size: 14px;
+    color: var(--color-muted);
+  }
+
+  &__bio {
+    flex-grow: 1;
+  }
+  &__link {
+    @media (any-hover: hover) {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

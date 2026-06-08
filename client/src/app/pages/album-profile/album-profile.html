@@ -1,0 +1,18 @@
+<div class="album-profile__wrapper">
+  @if (albumStore.isLoading()) {
+    <p class="album-profile__loading">Album is loading...</p>
+  }
+  @if (albumStore.error()) {
+    <div class="album-profile__error">Album is not found...</div>
+  }
+  @if (albumStore.currentAlbum(); as album) {
+    <div class="album-profile__info">
+      <app-album-card [album]="album" [isLink]="false"></app-album-card>
+    </div>
+    <div class="album-profile__tracks">
+      @for (item of album.tracks; track item.id) {
+        <app-track-card [track]="item" [showWave]="false"></app-track-card>
+      }
+    </div>
+  }
+</div>

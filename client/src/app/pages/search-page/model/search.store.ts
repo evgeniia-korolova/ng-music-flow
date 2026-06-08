@@ -15,13 +15,12 @@ import {
 } from './search.model';
 import { Track, TrackDto } from '../../../entities/track/model/track.model';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { combineLatest, debounceTime, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, delay, finalize, map, of, pipe, switchMap, tap } from 'rxjs';
 import { computed, inject } from '@angular/core';
 import { JamendoApiService } from '../../../shared/api/jamendo-api-service';
 import { tapResponse } from '@ngrx/operators';
 import { mapTrack } from '../../../entities/track/lib/map-track';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 import { isValidRichTrack } from '../../../entities/track/model/track.validator';
 
 const initialState: SearchState = {
@@ -29,144 +28,186 @@ const initialState: SearchState = {
   filters: {
     sortBy: 'popularity',
     genres: [],
-    durationMin: 0,
+    durationMin: 30,
     durationMax: 600,
+    isAsc: true, //от A до Z
   },
   isLoading: false,
   error: null,
-  isInitialized: false,
+  offset: 0,
+  totalCount: null,
 };
 
 interface ExtendedSearchState extends SearchState {
-  tracks: Track[];
+  rawTracks: Track[];
 }
 
 const extendedInitialState: ExtendedSearchState = {
   ...initialState,
-  tracks: [],
+  rawTracks: [],
 };
 
 export const SearchStore = signalStore(
+  { providedIn: 'root' },
   withState(extendedInitialState),
-  withComputed((store) => ({
-    listTitle: computed(() => {
-      if (store.query()) {
-        return `Results of search "${store.query()}"`;
-      }
-      if (store.filters.genres().length > 0) {
-        return `Results of search: ${store.filters.genres().join(', ')}`;
-      }
-      return 'All results';
-    }),
-  })),
+  withComputed((store) => {
+    return {
+      tracks: store.rawTracks,
+      listTitle: computed(() => {
+        const query = store.query().trim();
+        const genres = store.filters().genres;
+
+        if (!query && genres.length === 0) {
+          return 'All results';
+        }
+
+        const searchParts: string[] = [];
+
+        if (query) {
+          searchParts.push(query);
+        }
+
+        if (genres.length > 0) {
+          searchParts.push(...genres);
+        }
+
+        return `Results of search: ${searchParts.join(', ')}`;
+      }),
+
+      hasMore: computed(() => {
+        const total = store.totalCount();
+        if (total === null) return false;
+        return store.rawTracks().length < total;
+      }),
+    };
+  }),
+
   withMethods((store) => {
     const jamendoApi = inject(JamendoApiService);
-    const router = inject(Router);
     const searchCache = new Map<string, Track[]>();
 
     const createCacheKey = (query: string, filters: SearchFiltersState): string => {
       const genresKey = filters.genres ? [...filters.genres].sort().join(',') : '';
-      return `q:${query.trim().toLowerCase()}|sort:${filters.sortBy}|genres:${genresKey}|dur:${filters.durationMin}-${filters.durationMax}`;
+      return `q:${query.trim().toLowerCase()}|sort:${filters.sortBy}|genres:${genresKey}|dur:${filters.durationMin}-${filters.durationMax}|asc:${filters.isAsc}`;
     };
 
     return {
-      updateSearchQuery(query: string): void {
-        patchState(store, { query });
+      setQuery(query: string): void {
+        patchState(store, { query, offset: 0 });
       },
 
-      setFiltersFromUrl(params: {
-        tags?: string;
-        sortBy?: string;
-        min?: number;
-        max?: number;
-      }): void {
-        if (store.isInitialized()) return;
+      loadMore(): void {
+        patchState(store, (state) => ({ offset: state.offset + 10 }));
+      },
 
-        const activeGenres = params.tags ? (params.tags.split(',') as GenreId[]) : [];
-
-        patchState(store, (state) => ({
-          ...state,
-          isInitialized: true,
+      toggleSortDirection(): void {
+        const currentFilters = store.filters();
+        patchState(store, {
+          offset: 0,
           filters: {
-            ...state.filters,
-            genres: activeGenres,
-            sortBy: (params.sortBy as SearchSortOrder) ?? store.filters.sortBy(),
-            durationMin: params.min !== undefined ? +params.min : store.filters.durationMin(),
-            durationMax: params.max !== undefined ? +params.max : store.filters.durationMax(),
+            ...currentFilters,
+            isAsc: !currentFilters.isAsc,
           },
-        }));
+        });
       },
 
-      loadSearchResults: rxMethod<{ query: string; filters: SearchFiltersState }>(
+      setGenre(genre: GenreId): void {
+        const currentFilters = store.filters();
+        patchState(store, {
+          offset: 0,
+          filters: {
+            ...currentFilters,
+            genres: [genre],
+          },
+        });
+      },
+
+      loadSearchResults: rxMethod<{ query: string; filters: SearchFiltersState; offset: number }>(
         pipe(
           debounceTime(400),
           tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap(({ query, filters }) => {
+          switchMap(({ query, filters, offset }) => {
             const cacheKey = createCacheKey(query, filters);
 
-            if (searchCache.has(cacheKey)) {
+            if (offset === 0 && searchCache.has(cacheKey)) {
               const cachedTracks = searchCache.get(cacheKey) || [];
-
-              patchState(store, {
-                tracks: cachedTracks,
-                isLoading: false,
-                error: null,
-              });
-
-              return of(null);
+              return of({
+                results: cachedTracks,
+                headers: { results_fullcount: store.totalCount() },
+              }).pipe(delay(0));
             }
 
-            patchState(store, { isLoading: true, error: null });
+            const apiParams: Record<string, string | number | boolean> = {};
+            const isSearchMode = query.trim().length > 0;
 
-            const apiParams: Record<string, string | number | boolean> = {
-              limit: 40,
-              include: 'stats',
-            };
+            apiParams['limit'] = 10;
+            apiParams['offset'] = offset;
+            apiParams['include'] = 'stats+musicinfo';
+            //if (query) apiParams['search'] = query;
+            if (offset === 0) {
+              apiParams['fullcount'] = true;
+            }
 
-            if (query) {
+            if (isSearchMode) {
               apiParams['search'] = query;
+
+              apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
+              if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
+              if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
+
+              if (filters.sortBy === 'title')
+                apiParams['order'] = filters.isAsc ? 'name_asc' : 'name_desc';
+              if (filters.sortBy === 'artist')
+                apiParams['order'] = filters.isAsc ? 'artist_name_asc' : 'artist_name_desc';
+
+              if (filters.genres && filters.genres.length > 0) {
+                apiParams['fuzzytags'] = filters.genres.join('+');
+              } //не работает
+            } else {
+              apiParams['durationbetween'] = `${filters.durationMin}_${filters.durationMax}`;
+              if (filters.sortBy === 'popularity') apiParams['order'] = 'listens_total';
+
+              if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
+
+              if (filters.genres && filters.genres.length > 0) {
+                apiParams['fuzzytags'] = filters.genres.join('+');
+              }
+              if (filters.sortBy === 'title')
+                apiParams['order'] = filters.isAsc ? 'name_asc' : 'name_desc';
+              if (filters.sortBy === 'artist')
+                apiParams['order'] = filters.isAsc ? 'artist_name_asc' : 'artist_name_desc';
             }
-
-            if (filters.genres && filters.genres.length > 0) {
-              apiParams['fuzzytags'] = filters.genres.join('+');
-            }
-
-            apiParams['duration_between'] = `${filters.durationMin}_${filters.durationMax}`;
-
-            if (filters.sortBy === 'popularity') apiParams['order'] = 'popularity_total';
-            if (filters.sortBy === 'date') apiParams['order'] = 'releasedate_desc';
-            if (filters.sortBy === 'name') apiParams['order'] = 'name_asc';
 
             return jamendoApi.get<TrackDto>('tracks', apiParams).pipe(
               tapResponse({
                 next: (response) => {
-                  const allMappedTracks = response.results.map(mapTrack);
+                  const richTracks = response.results.map(mapTrack).filter(isValidRichTrack);
+                  const currentTracks = store.rawTracks();
+                  const filteredNewTracks =
+                    offset === 0
+                      ? richTracks
+                      : richTracks.filter(
+                          (newTrack) => !currentTracks.some((old) => old.id === newTrack.id),
+                        );
 
-                  const richTracks = allMappedTracks.filter((track) => {
-                    if (!isValidRichTrack(track)) return false;
+                  const updatedTracks =
+                    offset === 0 ? filteredNewTracks : [...currentTracks, ...filteredNewTracks];
 
-                    if (
-                      track.duration < filters.durationMin ||
-                      track.duration > filters.durationMax
-                    ) {
-                      return false;
-                    }
+                  if (offset === 0) {
+                    searchCache.set(cacheKey, richTracks);
+                  }
 
-                    return true;
-                  });
-
-                  searchCache.set(cacheKey, richTracks);
+                  const totalCount = response.headers.results_fullcount ?? store.totalCount();
 
                   patchState(store, {
-                    tracks: richTracks,
+                    rawTracks: updatedTracks,
                     error: null,
+                    totalCount,
                   });
                 },
                 error: (err) => {
                   console.error('Error inside SearchStore:', err);
-                  patchState(store, {
-                    error: 'Failed to load results. Please try once more.',
-                  });
+                  patchState(store, { error: 'Failed to load results.' });
                 },
               }),
               finalize(() => patchState(store, { isLoading: false })),
@@ -176,62 +217,37 @@ export const SearchStore = signalStore(
       ),
 
       updateFiltersFromForm(formValue: RawFormValue): void {
-        if (!store.isInitialized()) {
-          patchState(store, { isInitialized: true });
-        }
+        const activeGenres = (
+          formValue.genres
+            ? Object.keys(formValue.genres).filter((id) => formValue.genres![id] === true)
+            : []
+        ) as GenreId[];
 
-        let activeGenres: string[] = [];
+        const currentFilters = store.filters();
 
-        if (formValue.genres) {
-          activeGenres = Object.keys(formValue.genres)
-            .filter((genreId) => formValue.genres![genreId] === true)
-            .map((genreId) => genreId as GenreId);
-        }
-
-        const targetSortBy = formValue.sortBy ?? store.filters.sortBy();
-        const targetMin =
-          formValue.durationMin !== undefined && formValue.durationMin !== null
-            ? +formValue.durationMin
-            : store.filters.durationMin();
-        const targetMax =
-          formValue.durationMax !== undefined && formValue.durationMax !== null
-            ? +formValue.durationMax
-            : store.filters.durationMax();
-
-        patchState(store, (state) => ({
-          ...state,
+        patchState(store, {
+          offset: 0,
           filters: {
-            ...state.filters,
+            ...currentFilters,
             genres: activeGenres,
-            sortBy: targetSortBy,
-            durationMin: targetMin,
-            durationMax: targetMax,
+            sortBy: (formValue.sortBy as SearchSortOrder) ?? currentFilters.sortBy,
+            durationMin:
+              formValue.durationMin != null ? +formValue.durationMin : currentFilters.durationMin,
+            durationMax:
+              formValue.durationMax != null ? +formValue.durationMax : currentFilters.durationMax,
           },
-        }));
-
-        router.navigate(['/search'], {
-          queryParams: {
-            tags: activeGenres.length > 0 ? activeGenres.join(',') : null,
-            sortBy: targetSortBy === 'popularity' ? null : targetSortBy,
-
-            min: targetMin === 0 ? null : targetMin,
-            max: targetMax === 600 ? null : targetMax,
-          },
-          queryParamsHandling: 'merge',
         });
       },
     };
   }),
-
   withHooks({
     onInit(store) {
       const query$ = toObservable(store.query);
       const filters$ = toObservable(store.filters);
-
-      const searchTrigger$ = combineLatest([query$, filters$]).pipe(
-        map(([query, filters]) => ({ query, filters })),
+      const offset$ = toObservable(store.offset);
+      const searchTrigger$ = combineLatest([query$, filters$, offset$]).pipe(
+        map(([query, filters, offset]) => ({ query, filters, offset })),
       );
-
       store.loadSearchResults(searchTrigger$);
     },
   }),

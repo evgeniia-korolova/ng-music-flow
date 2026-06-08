@@ -1,0 +1,57 @@
+<form
+  class="auth-form"
+  id="registerFormId"
+  (submit)="$event.preventDefault(); onSubmit()"
+  novalidate
+>
+  <div class="auth-page-header">
+    <h3>Join now!</h3>
+  </div>
+
+  <div class="auth-page-main">
+    <div class="general-message" [class.error]="generalError()">
+      <app-icon [icon]="generalMessage().icon" [style.font-size]="'1.2rem'" />
+      <p>{{ generalMessage().message }}</p>
+    </div>
+
+    <app-input
+      [field]="registerForm.username"
+      label="Username"
+      inputType="text"
+      placeHolder="Enter your username"
+      appAutofocus
+    />
+
+    <app-input
+      [field]="registerForm.email"
+      label="Email Address"
+      inputType="text"
+      placeHolder="name@example.com"
+    />
+
+    <app-input [field]="registerForm.password" label="Password" inputType="password" />
+
+    <app-input
+      [field]="registerForm.confirmPassword"
+      label="Confirm Password"
+      inputType="password"
+    />
+  </div>
+
+  <div class="auth-page-footer">
+    <app-button type="button" variant="outline" routerLink="/auth/login" class="switch-btn">
+      Sign into existing account
+    </app-button>
+    <app-button
+      type="submit"
+      class="submit-btn"
+      [disabled]="!registerForm().valid()"
+      [class.loading]="store.loading()"
+    >
+      <app-icon [icon]="submitButton().icon"></app-icon>
+      <span>
+        {{ submitButton().message }}
+      </span>
+    </app-button>
+  </div>
+</form>

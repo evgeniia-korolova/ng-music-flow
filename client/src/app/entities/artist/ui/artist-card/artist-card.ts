@@ -9,5 +9,6 @@ import { RouterLink } from '@angular/router';
   styleUrl: './artist-card.scss',
 })
 export class ArtistCard {
-  public readonly artist = input.required<Artist>();
+  public artist = input.required<Artist>();
+  public isLink = input<boolean>(true);
 }

@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { Track } from '../../model/track.model';
 import { TrackWaveform } from '../track-waveform/track-waveform';
 import { AudioPlayerService } from '../../../../shared/services/audio-player/audio-player-service';
@@ -10,14 +10,16 @@ import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-track-card',
-  imports: [TrackWaveform, RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe],
+  imports: [RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe, TrackWaveform],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TrackCard {
   protected playerService = inject(AudioPlayerService);
   readonly track = input.required<Track>();
   readonly isPlaying = this.playerService.isPlaying;
+  readonly showWave = input.required<boolean>();
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {

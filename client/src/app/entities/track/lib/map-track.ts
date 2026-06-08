@@ -3,6 +3,22 @@ import { Track, TrackDto } from '../model/track.model';
 export function mapTrack(dto: TrackDto): Track {
   let realPeaks: number[] = [];
 
+  function cleanText(value: string | undefined, fallback: string): string {
+    const trimmed = value?.trim();
+
+    if (!trimmed || !/[\p{L}\p{N}]/u.test(trimmed)) {
+      return fallback;
+    }
+
+    return trimmed;
+  }
+
+  const cleanTitle = cleanText(dto.name, 'No Name');
+
+  const cleanArtistName = cleanText(dto.artist_name, 'Unknown Artist');
+
+  const cleanAlbumName = cleanText(dto.album_name, 'Unknown Album');
+
   try {
     if (dto.waveform && typeof dto.waveform === 'string') {
       const parsedWaveform = JSON.parse(dto.waveform);
@@ -20,20 +36,21 @@ export function mapTrack(dto: TrackDto): Track {
 
   return {
     id: dto.id,
-    title: dto.name,
+    title: cleanTitle,
     duration: dto.duration,
     artist: {
-      name: dto.artist_name,
+      name: cleanArtistName,
       id: dto.artist_id,
     },
     album: {
       id: dto.album_id,
-      name: dto.album_name,
+      name: cleanAlbumName,
     },
     coverUrl: dto.album_image || 'images/track-placeholder.jpg',
     audioUrl: dto.audio,
     playCount: dto.stats?.rate_listened_total || 0,
     rating: dto.stats?.rate_total || 0,
     waveform: realPeaks,
+    releasedate: dto.releasedate,
   };
 }

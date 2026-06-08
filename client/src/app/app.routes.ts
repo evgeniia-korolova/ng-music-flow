@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -31,7 +32,7 @@ export const routes: Routes = [
           },
           {
             path: 'genres',
-            loadComponent: () => import('./widgets/genres/genres'),
+            loadComponent: () => import('./widgets/genres/genres').then((m) => m.Genres),
             title: 'Genres',
           },
         ],
@@ -54,9 +55,55 @@ export const routes: Routes = [
       },
       {
         path: 'artists/:artistId',
-        loadComponent: () => import('./pages/artist-profile/artist-profile'),
+        loadComponent: () =>
+          import('./pages/artist-profile/artist-profile').then((m) => m.ArtistProfile),
         title: 'ArtistProfile',
       },
+      {
+        path: 'albums/:albumId',
+        loadComponent: () =>
+          import('./pages/album-profile/album-profile').then((m) => m.AlbumProfile),
+      },
+      {
+        path: 'auth',
+        loadComponent: () => import('./pages/auth/auth'),
+        children: [
+          {
+            path: 'login',
+            title: 'Sign In',
+            loadComponent: () => import('./features/auth/login-form/login-form'),
+            data: { mode: 'login' },
+          },
+          {
+            path: 'register',
+            title: 'Sign Up',
+            loadComponent: () => import('./features/auth/register-form/register-form'),
+            data: { mode: 'register' },
+          },
+          {
+            path: '',
+            redirectTo: 'login',
+            pathMatch: 'full',
+          },
+        ],
+      },
+      {
+        path: 'about',
+        loadComponent: () => import('./pages/about/ui/about'),
+        title: 'About',
+        data: { displayOnNavbar: true },
+      },
+      {
+        path: 'library',
+        loadComponent: () => import('./pages/library/library'),
+        title: 'Library',
+        data: { displayOnNavbar: true },
+        canActivate: [authGuard],
+      },
     ],
+  },
+  {
+    path: '**',
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
   },
 ];

@@ -1,0 +1,27 @@
+.not-found__wrapper {
+  padding: 50px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+.not-found__btn {
+  width: 300px;
+}
+.not-found__image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    max-width: 100%;
+    object-fit: cover;
+  }
+}
+.not-found__title {
+  width: max-content;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  color: var(--color-bg-accent);
+  text-align: center;
+}

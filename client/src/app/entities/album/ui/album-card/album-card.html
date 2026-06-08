@@ -1,0 +1,13 @@
+<a
+  [routerLink]="isLink() ? ['/albums', album().id] : null"
+  class="album__wrapper"
+  [class.static-album]="!isLink()"
+>
+  <div class="album__image">
+    <img [src]="album().image" [alt]="album().name" />
+  </div>
+  <div class="album__content">
+    <h3 class="album__title" [class.hover:underline]="isLink()">{{ album().name }}</h3>
+    <p class="album__releasedate">{{ album().releasedate }}</p>
+  </div>
+</a>

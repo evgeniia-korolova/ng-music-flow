@@ -1,0 +1,17 @@
+<swiper-container
+  [breakpoints]="{ '320': { slidesPerView: 2 }, '1024': { slidesPerView: 3 } }"
+  space-between="16"
+  [pagination]="isPagination() ? { clickable: true } : false"
+>
+  @for (item of albums(); track item.id) {
+    @defer (on viewport) {
+      <swiper-slide>
+        <app-album-card [album]="item"></app-album-card>
+      </swiper-slide>
+    } @placeholder (minimum 500ms) {
+      <swiper-slide
+        class="bg-accent block h-80 w-full animate-pulse overflow-hidden rounded-lg shadow-lg"
+      ></swiper-slide>
+    }
+  }
+</swiper-container>

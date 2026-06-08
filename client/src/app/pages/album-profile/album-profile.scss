@@ -1,0 +1,21 @@
+.album-profile__wrapper {
+  padding: 50px 15px;
+  display: grid;
+  gap: 30px;
+  margin: 0 auto;
+  @media (width > 640px) {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1440px;
+    align-items: start;
+  }
+}
+.album-profile__loading,
+.album-profile__error {
+  font-size: 36px;
+  font-weight: 600;
+}
+.album-profile__tracks {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
