@@ -1,8 +1,13 @@
-<a
-  [routerLink]="isLink() ? ['/albums', album().id] : null"
-  class="album__wrapper"
-  [class.static-album]="!isLink()"
->
+@if (isLink()) {
+  <a [routerLink]="['/albums', album().id]" class="album__wrapper">
+    <ng-container *ngTemplateOutlet="albumContent"></ng-container>
+  </a>
+} @else {
+  <article class="album__wrapper">
+    <ng-container *ngTemplateOutlet="albumContent"></ng-container>
+  </article>
+}
+<ng-template #albumContent>
   <div class="album__image">
     <img [src]="album().image" [alt]="album().name" />
   </div>
@@ -10,4 +15,4 @@
     <h3 class="album__title" [class.hover:underline]="isLink()">{{ album().name }}</h3>
     <p class="album__releasedate">{{ album().releasedate }}</p>
   </div>
-</a>
+</ng-template>
