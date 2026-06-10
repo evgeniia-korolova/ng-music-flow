@@ -15,6 +15,24 @@ export class AudioPlayerService {
   readonly currentTime = signal<number>(0);
   readonly duration = signal<number>(0);
 
+  readonly queue = signal<Track[]>([]);
+
+  readonly volume = signal<number>(0.7);
+  private preMuteVolume = 0.7;
+
+  readonly currentTrackIndex = computed(() => {
+    const track = this.currentTrack();
+    if (!track) return -1;
+    return this.queue().findIndex((t) => t.id === track.id);
+  });
+
+  readonly hasPrevious = computed(() => this.currentTrackIndex() > 0);
+
+  readonly hasNext = computed(() => {
+    const index = this.currentTrackIndex();
+    return index >= 0 && index < this.queue().length - 1;
+  });
+
   progressPercent = computed(() => {
     const time = this.currentTime();
     const duration = this.duration();
@@ -30,7 +48,13 @@ export class AudioPlayerService {
     this.initializeAudioEvents();
   }
 
-  playTrack(track: Track): void {
+  playTrack(track: Track, customQueue?: Track[]): void {
+    if (customQueue) {
+      this.queue.set(customQueue);
+    } else if (this.queue().length === 0 || !this.queue().some((t) => t.id === track.id)) {
+      this.queue.set([track]);
+    }
+
     const activeTrack = this.currentTrack();
 
     if (activeTrack?.id === track.id) {
@@ -113,11 +137,52 @@ export class AudioPlayerService {
     });
   }
 
+  next(): void {
+    if (this.hasNext()) {
+      const nextTrack = this.queue()[this.currentTrackIndex() + 1];
+      this.loadTrack(nextTrack);
+    }
+  }
+
+  previous(): void {
+    if (this.hasPrevious()) {
+      const prevTrack = this.queue()[this.currentTrackIndex() - 1];
+      this.loadTrack(prevTrack);
+    }
+  }
+
+  ended(): void {
+    this.audio.addEventListener('ended', () => {
+      this.isPlaying.set(false);
+      this.currentTime.set(0);
+      if (this.hasNext()) {
+        this.next();
+      }
+    });
+  }
+
   private resetPlayerState(): void {
     this.isReady.set(false);
     this.isBuffering.set(false);
 
     this.currentTime.set(0);
     this.duration.set(0);
+  }
+
+  setVolume(value: number): void {
+    const boundedVolume = Math.max(0, Math.min(1, value));
+    this.volume.set(boundedVolume);
+    this.audio.volume = boundedVolume;
+  }
+
+  muteToggle(): void {
+    const currentVol = this.volume();
+
+    if (currentVol > 0) {
+      this.preMuteVolume = currentVol;
+      this.setVolume(0);
+    } else {
+      this.setVolume(this.preMuteVolume || 0.5);
+    }
   }
 }

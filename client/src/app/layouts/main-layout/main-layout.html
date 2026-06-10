@@ -1,4 +1,4 @@
-<app-header />
+<app-header class="header" />
 <section class="layout-toolbar layout-toolbar--sticky">
   <app-breadcrumbs class="breadcrumbs" />
   @if (searchService.isSearchBarVisible()) {
@@ -7,6 +7,7 @@
 </section>
 <main class="flex-1">
   <router-outlet />
+  <app-global-player />
 </main>
 <footer>
   <app-footer />

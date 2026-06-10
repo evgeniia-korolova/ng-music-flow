@@ -1,0 +1,89 @@
+@if (currentTrack(); as track) {
+  <section class="global-player">
+    <div class="global-player__top-row">
+      <div class="global-player__meta">
+        <img class="global-player__cover" [src]="track.coverUrl" [alt]="track.title" />
+        <div class="global-player__text">
+          <h4 class="global-player__title">{{ track.title | titlecase }}</h4>
+          <h4 class="global-player__artist">
+            {{ track.artist.name }}
+          </h4>
+        </div>
+      </div>
+
+      <div class="global-player__controls">
+        <button
+          class="player-btn"
+          [disabled]="!playerService.hasPrevious()"
+          (click)="playerService.previous()"
+        >
+          <app-icon icon="skip-previous" />
+        </button>
+
+        <button class="player-btn player-btn--main" (click)="playerService.togglePlayback()">
+          <app-icon [icon]="isPlaying() ? 'pause' : 'play'" />
+        </button>
+
+        <button
+          class="player-btn"
+          [disabled]="!playerService.hasNext()"
+          (click)="playerService.next()"
+        >
+          <app-icon icon="skip-next" />
+        </button>
+      </div>
+
+      <div class="global-player__options">
+        <button class="player-btn btn-queue" (click)="toggleQueueMenu()">
+          <app-icon icon="playlist-music" />
+        </button>
+
+        <div class="global-player__volume">
+          <button (click)="playerService.muteToggle()" class="player-btn player-btn--icon">
+            <app-icon [icon]="playerService.volume() === 0 ? 'volume-off' : 'volume-high'" />
+          </button>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="1"
+            [value]="playerService.volume()"
+            (input)="onVolumeChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="global-player__wave">
+      <div class="global-player__progress-container">
+        <span class="time-label">{{ playerService.currentTime() | duration }}</span>
+
+        <div class="global-player__wave-wrapper">
+          <app-track-waveform
+            [isActive]="true"
+            [progress]="progressPercent()"
+            [peaks]="track.waveform"
+          >
+          </app-track-waveform>
+
+          <input
+            type="range"
+            class="global-player__seek-slider"
+            min="0"
+            max="100"
+            step="0.1"
+            [value]="progressPercent()"
+            (input)="onSeek($event)"
+          />
+        </div>
+
+        <span class="time-label">{{ playerService.duration() | duration }}</span>
+      </div>
+    </div>
+
+    <!-- ЗОНА 2: Контролы управления, Волна и Прогресс-бар (Центр) -->
+
+    <!-- ЗОНА 3: Дополнительные опции - Громкость и Очередь (Справа) -->
+  </section>
+}
