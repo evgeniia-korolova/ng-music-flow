@@ -26,7 +26,7 @@
     "build-all": "npm run build --prefix client && npm run build --prefix api",
     "test:client": "npm run test --prefix client",
     "test:api": "npm run test --prefix api",
-    "test-all": "npm run test --prefix client && npm run test --prefix api"
+    "test-all": "cd client && npm run test && cd .. && cd api && npm run test"
   },
   "lint-staged": {
     "client/src/**/*.{ts,html}": [
