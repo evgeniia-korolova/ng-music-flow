@@ -39,7 +39,6 @@ export class Header implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   protected readonly searchService = inject(SearchToggleService);
 
-  //readonly showSearchBar = signal(false);
   readonly showSearchBar = this.searchService.isSearchBarVisible;
 
   user = computed(() => this.authStore.user());
@@ -49,7 +48,7 @@ export class Header implements OnInit {
   signOut = () => {
     this.authStore.logout();
     this.cdr.detectChanges();
-    this.router.navigateByUrl('/discover');
+    this.router.navigateByUrl('discover');
   };
 
   handleAuthButtonClick = (event: Event) => {
@@ -66,10 +65,6 @@ export class Header implements OnInit {
 
     this.navItems = routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
   }
-
-  // toggleSearchBar = () => {
-  //   this.showSearchBar.update((val) => !val);
-  // };
 
   ngOnInit(): void {
     this.setNavItems();

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { authGuard } from './shared/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -88,9 +89,16 @@ export const routes: Routes = [
       },
       {
         path: 'about',
-        loadComponent: () => import('./pages/about/ui/about').then((m) => m.About),
+        loadComponent: () => import('./pages/about/ui/about'),
         title: 'About',
         data: { displayOnNavbar: true },
+      },
+      {
+        path: 'library',
+        loadComponent: () => import('./pages/library/library'),
+        title: 'Library',
+        data: { displayOnNavbar: true },
+        canActivate: [authGuard],
       },
     ],
   },

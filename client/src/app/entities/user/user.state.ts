@@ -1,26 +1,24 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { AuthResponse, UserProfile } from './user.model';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
-import { ApiError } from '../../shared/api/api-response';
+import { ApiError, ApiResponse } from '../../shared/api/api-response';
 import { jwtDecode } from 'jwt-decode';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 export interface AuthState {
   user: UserProfile | null;
-  token: string | null;
+  accessToken: string | null;
   loading: boolean;
   initialCheck: boolean;
   error: ApiError | null;
 }
 
 const initialState: AuthState = {
-  user: {
-    id: '',
-    email: '',
-    username: 'W',
-    jamendoActive: false,
-  },
-  token: null,
+  user: null,
+  accessToken: null,
   loading: false,
   initialCheck: false,
   error: null,
@@ -32,15 +30,18 @@ const TOKEN_KEY = 'ngMusicFlow:token';
   providedIn: 'root',
 })
 export class AuthStore {
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.appApiUrl}/auth`;
+
   private readonly state = signal<AuthState>(initialState);
 
   readonly user = computed(() => this.state().user);
-  readonly token = computed(() => this.state().token);
+  readonly token = computed(() => this.state().accessToken);
   readonly loading = computed(() => this.state().loading);
   readonly initialCheck = computed(() => this.state().initialCheck);
   readonly error = computed(() => this.state().error);
 
-  readonly isUnsafeAuthenticated = computed(() => !!this.state().token);
+  readonly isUnsafeAuthenticated = computed(() => !!this.state().accessToken);
   readonly isSafeAuthenticated = computed(
     () => this.isUnsafeAuthenticated() && this.initialCheck(),
   );
@@ -49,7 +50,9 @@ export class AuthStore {
     this.updateState({ loading: true, error: null });
 
     try {
-      const response = await this.mockLoginCall(loginData);
+      const response = await firstValueFrom(
+        this.http.post<AuthResponse>(`${environment.appApiUrl}/auth/login`, loginData),
+      );
 
       if (response.error) {
         this.updateState({
@@ -64,19 +67,16 @@ export class AuthStore {
         loading: false,
         initialCheck: true,
         user: response.data?.user,
-        token: response.data?.token,
+        accessToken: response.data?.accessToken,
         error: null,
       });
 
-      this.saveTokenToLocalStorage(response.data?.token);
+      this.saveTokenToLocalStorage(response.data?.accessToken);
     } catch (err) {
       this.updateState({
         loading: false,
         initialCheck: true,
-        error: {
-          message: (err instanceof Error && err.message) || 'Something went wrong',
-          status: 500,
-        },
+        error: this.handleError(err),
       });
     }
   }
@@ -85,7 +85,9 @@ export class AuthStore {
     this.updateState({ loading: true, error: null });
 
     try {
-      const response = await this.mockRegisterCall(data);
+      const response = await firstValueFrom(
+        this.http.post<AuthResponse>(`${environment.appApiUrl}/auth/register`, data),
+      );
 
       if (response.error) {
         this.updateState({
@@ -100,12 +102,22 @@ export class AuthStore {
         loading: false,
         initialCheck: true,
         user: response.data?.user,
-        token: response.data?.token,
+        accessToken: response.data?.accessToken,
         error: null,
       });
 
-      this.saveTokenToLocalStorage(response.data?.token);
+      this.saveTokenToLocalStorage(response.data?.accessToken);
     } catch (err) {
+      if (err instanceof HttpErrorResponse) {
+        const apiResponse = err.error as ApiResponse<null>;
+
+        this.updateState({
+          loading: false,
+          initialCheck: true,
+          error: apiResponse.error,
+        });
+        return;
+      }
       this.updateState({
         loading: false,
         initialCheck: true,
@@ -120,7 +132,7 @@ export class AuthStore {
   logout(): void {
     this.updateState({
       user: null,
-      token: null,
+      accessToken: null,
       loading: false,
       initialCheck: false,
       error: null,
@@ -132,7 +144,9 @@ export class AuthStore {
     this.updateState({ loading: true, error: null });
 
     try {
-      const response = await this.mockUserInformationCall();
+      const response = await firstValueFrom(
+        this.http.get<AuthResponse>(`${environment.appApiUrl}/users/info`),
+      );
 
       if (response.error) {
         this.logout();
@@ -143,22 +157,19 @@ export class AuthStore {
         loading: false,
         initialCheck: true,
         user: response.data?.user,
-        token: response.data?.token,
+        accessToken: response.data?.accessToken,
         error: null,
       });
     } catch (err) {
       this.logout();
       this.updateState({
         initialCheck: true,
-        error: {
-          message: (err instanceof Error && err.message) || 'Something went wrong',
-          status: 500,
-        },
+        error: this.handleError(err),
       });
     }
   }
 
-  checkOnInit(): void {
+  async checkOnInit(): Promise<void> {
     const storedData = this.retrieveTokenFromLocalStorage();
 
     if (!storedData) {
@@ -167,7 +178,7 @@ export class AuthStore {
     }
 
     this.updateState({ ...storedData });
-    this.retrieveUserInformation();
+    await this.retrieveUserInformation();
   }
 
   private updateState(partialState: Partial<AuthState>): void {
@@ -195,70 +206,18 @@ export class AuthStore {
     localStorage.setItem(TOKEN_KEY, token);
   }
 
-  private mockLoginCall(loginData: LoginData): Promise<AuthResponse> {
-    const random = Math.random();
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (random < 0.33) {
-          resolve({ data: null, error: { message: 'Wrong credentials provided', status: 403 } });
-          return;
-        }
-        if (random < 0.66) {
-          resolve({ data: null, error: { message: 'Unexpected server error', status: 400 } });
-          return;
-        }
-        resolve(this.mockApiResponse(loginData.email, 'User'));
-      }, 3000);
-    });
-  }
+  private handleError(err: unknown): ApiError {
+    if (err instanceof HttpErrorResponse && err.error) {
+      const apiResponse = err.error as ApiResponse<null>;
 
-  private mockRegisterCall(registerData: RegisterData): Promise<AuthResponse> {
-    const random = Math.random();
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        if (random < 0.33) {
-          resolve({
-            data: null,
-            error: { message: 'Email is already taken', status: 403, code: 'AUTH.EMAIL.TAKEN' },
-          });
-          return;
-        }
-        if (random < 0.66) {
-          resolve({
-            data: null,
-            error: {
-              message: 'Username is already taken',
-              status: 403,
-              code: 'AUTH.USERNAME.TAKEN',
-            },
-          });
-          return;
-        }
-        resolve(this.mockApiResponse(registerData.email, 'User'));
-      }, 3000);
-    });
-  }
+      if (apiResponse.error) {
+        return apiResponse.error;
+      }
+    }
 
-  private mockUserInformationCall(): Promise<AuthResponse> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(this.mockApiResponse('retrieved@email.com', 'User'));
-      }, 3000);
-    });
-  }
-
-  private mockApiResponse(email: string, username: string): AuthResponse {
     return {
-      data: {
-        user: {
-          id: 'uuid',
-          email,
-          username,
-          jamendoActive: false,
-        },
-        token: 'mocked-jwt-token',
-      },
-      error: null,
+      message: err instanceof Error ? err.message : 'Something went wrong',
+      status: err instanceof HttpErrorResponse ? err.status : 500,
     };
   }
 }

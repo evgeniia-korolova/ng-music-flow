@@ -118,3 +118,11 @@ header {
     background-color: rgb(169, 116, 204);
   }
 }
+
+.search-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  align-self: center;
+}

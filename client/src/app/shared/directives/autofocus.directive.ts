@@ -5,13 +5,12 @@ import { Input } from '../forms/input/input';
   selector: '[appAutofocus]',
 })
 export class AutofocusDirective {
-  // private readonly inputComponent = inject(Input, { host: true });
   private readonly inputComponent = inject(Input, {
     host: true,
     optional: true,
   });
 
-  private hostElement = inject(ElementRef);
+  private readonly hostElement = inject(ElementRef);
 
   constructor() {
     afterNextRender(() => {
