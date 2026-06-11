@@ -1,13 +1,46 @@
 @if (currentTrack(); as track) {
   <section class="global-player">
+    <h2 class="visually-hidden">Audio Player</h2>
+
+    <!-- queue -->
+    @if (isQueueOpen()) {
+      <div class="global-player__queue-panel">
+        <div class="queue-header">
+          <h3 class="queue-title">Queue</h3>
+          <span class="queue-count">Total tracks: {{ queueTracks().length }}</span>
+        </div>
+
+        <div class="queue-list">
+          @for (qTrack of queueTracks(); track qTrack.id; let idx = $index) {
+            <div class="queue-item" [class.is-active]="qTrack.id === track.id">
+              <button
+                class="player-btn queue-item__play-btn"
+                (click)="playerService.playTrack(qTrack)"
+                [appTooltip]="isPlaying() && qTrack.id === track.id ? 'Pause' : 'Play'"
+              >
+                <app-icon [icon]="isPlaying() && qTrack.id === track.id ? 'pause' : 'play'" />
+              </button>
+              <span class="queue-item__index">{{ idx + 1 }}</span>
+              <img class="queue-item__cover" [src]="qTrack.coverUrl" alt="" />
+              <div class="queue-item__info">
+                <span class="queue-item__title">{{ qTrack.title | titlecase }}</span>
+                <span class="queue-item__artist">{{ qTrack.artist.name }}</span>
+              </div>
+              <span class="queue-item__duration">{{ qTrack.duration | duration }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
     <div class="global-player__top-row">
       <div class="global-player__meta">
         <img class="global-player__cover" [src]="track.coverUrl" [alt]="track.title" />
         <div class="global-player__text">
-          <h4 class="global-player__title">{{ track.title | titlecase }}</h4>
-          <h4 class="global-player__artist">
+          <div class="global-player__title">{{ track.title | titlecase }}</div>
+          <div class="global-player__artist">
             {{ track.artist.name }}
-          </h4>
+          </div>
         </div>
       </div>
 
@@ -16,11 +49,16 @@
           class="player-btn"
           [disabled]="!playerService.hasPrevious()"
           (click)="playerService.previous()"
+          appTooltip="Previous Thack"
         >
           <app-icon icon="skip-previous" />
         </button>
 
-        <button class="player-btn player-btn--main" (click)="playerService.togglePlayback()">
+        <button
+          class="player-btn player-btn--main"
+          (click)="playerService.togglePlayback()"
+          [appTooltip]="isPlaying() ? 'Pause' : 'Play'"
+        >
           <app-icon [icon]="isPlaying() ? 'pause' : 'play'" />
         </button>
 
@@ -28,13 +66,18 @@
           class="player-btn"
           [disabled]="!playerService.hasNext()"
           (click)="playerService.next()"
+          appTooltip="Next Thack"
         >
           <app-icon icon="skip-next" />
         </button>
       </div>
 
       <div class="global-player__options">
-        <button class="player-btn btn-queue" (click)="toggleQueueMenu()">
+        <button
+          class="player-btn btn-queue"
+          (click)="toggleQueueMenu()"
+          [appTooltip]="isQueueOpen() ? 'Close Playlist' : 'Open Playlist'"
+        >
           <app-icon icon="playlist-music" />
         </button>
 
@@ -81,9 +124,5 @@
         <span class="time-label">{{ playerService.duration() | duration }}</span>
       </div>
     </div>
-
-    <!-- ЗОНА 2: Контролы управления, Волна и Прогресс-бар (Центр) -->
-
-    <!-- ЗОНА 3: Дополнительные опции - Громкость и Очередь (Справа) -->
   </section>
 }

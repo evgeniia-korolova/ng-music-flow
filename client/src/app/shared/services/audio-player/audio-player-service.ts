@@ -17,7 +17,7 @@ export class AudioPlayerService {
 
   readonly queue = signal<Track[]>([]);
 
-  readonly volume = signal<number>(0.7);
+  readonly volume = signal<number>(0.3);
   private preMuteVolume = 0.7;
 
   readonly currentTrackIndex = computed(() => {
@@ -49,7 +49,7 @@ export class AudioPlayerService {
   }
 
   playTrack(track: Track, customQueue?: Track[]): void {
-    if (customQueue) {
+    if (customQueue && customQueue.length > 0) {
       this.queue.set(customQueue);
     } else if (this.queue().length === 0 || !this.queue().some((t) => t.id === track.id)) {
       this.queue.set([track]);
@@ -134,6 +134,12 @@ export class AudioPlayerService {
     this.audio.addEventListener('ended', () => {
       this.isPlaying.set(false);
       this.currentTime.set(0);
+
+      if (this.hasNext()) {
+        this.next();
+      } else {
+        this.resetPlayerState();
+      }
     });
   }
 

@@ -20,6 +20,7 @@ export class TrackCard {
   readonly track = input.required<Track>();
   readonly isPlaying = this.playerService.isPlaying;
   readonly showWave = input.required<boolean>();
+  readonly playlistContext = input.required<Track[]>();
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {
@@ -35,6 +36,6 @@ export class TrackCard {
   readonly isPlayingTrack = computed(() => this.isCurrentTrack() && this.playerService.isPlaying());
 
   play(track: Track): void {
-    this.playerService.playTrack(track);
+    this.playerService.playTrack(track, this.playlistContext());
   }
 }
