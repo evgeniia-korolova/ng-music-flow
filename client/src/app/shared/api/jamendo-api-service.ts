@@ -17,7 +17,7 @@ export class JamendoApiService {
         ...(this.clientId ? { client_id: this.clientId } : {}),
         format: 'json',
         ...params,
-        //featured: 'true',
+        // featured: 'true',
       },
     });
 

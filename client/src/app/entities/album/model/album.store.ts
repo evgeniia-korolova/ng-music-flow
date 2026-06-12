@@ -55,7 +55,13 @@ export const AlbumStore = signalStore(
             tapResponse({
               next: (response) => {
                 const rawAlbum = response.results[0];
-                const readyTracks = rawAlbum.tracks.map((track) => mapTrack(track));
+                const readyTracks = rawAlbum.tracks.map((track) =>
+                  mapTrack({
+                    ...track,
+                    album_name: rawAlbum.name,
+                    artist_name: rawAlbum.artist_name,
+                  }),
+                );
                 patchState(store, {
                   isLoading: false,
                   error: null,

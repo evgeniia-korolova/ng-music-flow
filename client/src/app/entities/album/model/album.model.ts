@@ -16,6 +16,7 @@ export interface ArtistAlbumsResponseDTO {
   albums: Album[];
 }
 export interface AlbumDetailsDto extends Album {
+  artist_name: string;
   tracks: TrackDto[];
 }
 export interface AlbumWithTracks extends Album {

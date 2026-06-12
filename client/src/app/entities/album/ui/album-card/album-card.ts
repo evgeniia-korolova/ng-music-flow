@@ -1,10 +1,11 @@
 import { Component, input } from '@angular/core';
 import { Album } from '../../model/album.model';
 import { RouterLink } from '@angular/router';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'app-album-card',
-  imports: [RouterLink],
+  imports: [RouterLink, NgTemplateOutlet],
   templateUrl: './album-card.html',
   styleUrl: './album-card.scss',
 })

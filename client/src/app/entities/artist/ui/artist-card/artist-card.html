@@ -1,9 +1,18 @@
-<a
-  class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-[var(--color-bg-surface)] shadow-lg"
-  class="artist-card group block overflow-hidden rounded-lg shadow-lg"
-  [routerLink]="isLink() ? ['/artists', artist().id] : null"
-  [class.cursor-default]="!isLink()"
->
+@if (isLink()) {
+  <a
+    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-[var(--color-bg-surface)] shadow-lg"
+    [routerLink]="['/artists', artist().id]"
+  >
+    <ng-container *ngTemplateOutlet="cardContent"></ng-container>
+  </a>
+} @else {
+  <article
+    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-[var(--color-bg-surface)] shadow-lg"
+  >
+    <ng-container *ngTemplateOutlet="cardContent"></ng-container>
+  </article>
+}
+<ng-template #cardContent>
   <div class="flex aspect-video w-full items-center justify-center overflow-hidden bg-gray-400">
     <img
       class="h-full w-full object-cover transition duration-300 ease-in-out"
@@ -13,13 +22,13 @@
       [style.view-transition-name]="'artist-image' + artist().id"
     />
   </div>
-  <div class="flex flex-col items-start gap-1 p-[1em] md:p-[1.5em]">
-    <h3 class="truncate text-lg font-semibold" [class.hover:underline]="isLink()">
+  <div class="flex flex-col gap-1 p-[1em] md:p-[1.5em]">
+    <h3 class="text-lg font-semibold" [class.hover:underline]="isLink()">
       {{ artist().name }}
     </h3>
-    <p class="text-sm">{{ artist().website }}</p>
+    <p class="truncate text-sm">{{ artist().website }}</p>
     <p class="text-sm">{{ artist().joinDate }}</p>
     <p class="text-sm">{{ artist().shortUrl }}</p>
     <p class="text-sm">{{ artist().shareUrl }}</p>
   </div>
-</a>
+</ng-template>
