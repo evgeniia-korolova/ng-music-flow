@@ -44,5 +44,7 @@
       >
     }
   </article>
-  <app-scroll-to-top />
+  @if (!isSidebarOpen()) {
+    <app-scroll-to-top />
+  }
 </section>
