@@ -6,7 +6,6 @@
   left: 0;
   width: 100%;
   z-index: 90;
-  
 
   opacity: 0;
   transform: translateY(100%);
@@ -223,14 +222,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;    
+    gap: 0.5rem;
     width: 30%;
-    
 
     @media (max-width: 768px) {
       width: 100%;
       flex-direction: row-reverse;
-      justify-content: center;    
+      justify-content: center;
       gap: 2rem;
     }
   }
@@ -241,9 +239,9 @@
     justify-content: center;
     gap: 10px;
     width: 110px;
-    
+
     @media (max-width: 768px) {
-      width: 180px;             
+      width: 180px;
     }
 
     .player-btn--icon {
@@ -258,7 +256,6 @@
       app-icon {
         font-size: 1.4rem;
       }
-     
     }
 
     input[type='range'] {

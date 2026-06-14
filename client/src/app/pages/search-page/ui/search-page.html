@@ -34,9 +34,17 @@
       <app-tracks-list viewMode="search" />
     </div>
     @if (store.hasMore()) {
-      <app-button class="load-more-btn" (click)="store.loadMore()" [disabled]="store.isLoading()"
+      <app-button
+        class="load-more-btn"
+        (click)="store.loadMore()"
+        variant="default"
+        size="md"
+        [disabled]="store.isLoading()"
         >Load More</app-button
       >
     }
   </article>
+  @if (!isSidebarOpen()) {
+    <app-scroll-to-top />
+  }
 </section>
