@@ -5,6 +5,10 @@
 
   --color-brand-active: #6d36a0;
   --color-bg-accent: #5757f117;
+
+  @media (max-width: 768px) {
+    flex: none; 
+  }
 }
 
 .nav-container {
@@ -13,8 +17,8 @@
   height: 100%;
   width: 100%;
 
-  @media (max-width: 460px) {
-    width: 0;
+  @media (max-width: 768px) {
+    width: 40px;
   }
 }
 

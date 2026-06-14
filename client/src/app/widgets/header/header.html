@@ -6,9 +6,9 @@
         <img src="logo.svg" alt="application logo" />
       </picture>
     </a>
-    <app-navigation-bar [pathCollection]="navItems" />
 
     <div class="header-container__actions">
+      <app-navigation-bar [pathCollection]="navItems" />
       <app-dropdown #userMenu alignment="right" class="register-button">
         <app-button
           trigger
