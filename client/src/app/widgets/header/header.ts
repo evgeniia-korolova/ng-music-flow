@@ -5,6 +5,7 @@ import {
   computed,
   inject,
   OnInit,
+  viewChild,
 } from '@angular/core';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
@@ -16,6 +17,7 @@ import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
 import { Button } from '../../shared/ui/button/button';
 import { AuthStore } from '../../entities/user/user.state';
 import { SearchToggleService } from '../../features/search/services/search-toggle-service';
+import { AutofocusDirective } from '../../shared/directives/autofocus.directive';
 
 @Component({
   selector: 'app-header',
@@ -27,6 +29,7 @@ import { SearchToggleService } from '../../features/search/services/search-toggl
     Icon,
     NavigationBar,
     Button,
+    AutofocusDirective,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
@@ -40,8 +43,9 @@ export class Header implements OnInit {
   protected readonly searchService = inject(SearchToggleService);
 
   readonly showSearchBar = this.searchService.isSearchBarVisible;
+  readonly userMenu = viewChild<Dropdown>('userMenu');
 
-  user = computed(() => this.authStore.user());
+  readonly user = computed(() => this.authStore.user());
 
   protected navItems: Route[] = [];
 
@@ -55,8 +59,9 @@ export class Header implements OnInit {
     if (!this.user()) {
       event.stopPropagation();
       event.preventDefault();
-
       this.router.navigateByUrl('/auth/register');
+    } else {
+      this.userMenu()?.toggleDropdown(event);
     }
   };
 

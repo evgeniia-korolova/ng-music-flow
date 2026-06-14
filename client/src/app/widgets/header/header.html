@@ -7,7 +7,6 @@
       </picture>
     </a>
     <app-navigation-bar [pathCollection]="navItems" />
-    <!-- <span class="spacer"></span> -->
 
     <div class="header-container__actions">
       <app-dropdown #userMenu alignment="right" class="register-button">
@@ -33,11 +32,9 @@
               <div
                 class="avatar-placeholder"
                 role="img"
-                alt="avatar"
-                viewBox="0 0 10 10"
-                aria-label="avatar placeholder"
+                [attr.aria-label]="user()?.username + ' profile placeholder'"
               >
-                <span class="avatar-text">
+                <span class="avatar-text" aria-hidden="true">
                   {{ user()?.username?.[0] }}
                 </span>
               </div>
@@ -45,52 +42,56 @@
           }
         </app-button>
         <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="user"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Profile
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="waveForm"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Your Library
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <a class="user-menu-item" [appDropdownClose]="userMenu">
-            <app-icon
-              icon="keySquare"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Change Password
-          </a>
-        </ng-template>
-        <ng-template #item>
-          <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
-            <app-icon
-              icon="logOut"
-              variant="fill"
-              style="font-size: 1.5rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-            Logout
-          </button>
+          <ul class="dropdown-list" role="menu">
+            <li role="none">
+              <a class="user-menu-item" appAutofocus [appDropdownClose]="userMenu" role="menuitem">
+                <app-icon
+                  icon="user"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Profile
+              </a>
+            </li>
+            <li role="none">
+              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+                <app-icon
+                  icon="waveForm"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Your Library
+              </a>
+            </li>
+            <li role="none">
+              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+                <app-icon
+                  icon="keySquare"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Change Password
+              </a>
+            </li>
+            <li role="none">
+              <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
+                <app-icon
+                  icon="logOut"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Logout
+              </button>
+            </li>
+          </ul>
         </ng-template>
       </app-dropdown>
       <div class="search-icon-container">

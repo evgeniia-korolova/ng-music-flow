@@ -7,10 +7,10 @@
 
 header {
   background: var(--color-bg-accent);
-  color: var(--color-text-on-bg);
-  //display: flex;
-  //justify-content: center;
-  height: var(--header-height);
+  color: var(--color-text-on-bg);  
+  height: var(--header-height);  
+  display: flex;
+  align-items: center;
 }
 
 .header-container {
@@ -19,9 +19,9 @@ header {
   width: 100%;
   max-width: var(--header-width);
   justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
+  align-items: center;  
   gap: 1.5rem;
+  padding: 0.5rem;
 
   --gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgba(0, 0, 0, 0.2) 65%);
   --purple-gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgb(169, 116, 204) 65%);
@@ -68,15 +68,14 @@ header {
   @media (max-width: 430px) {
     padding: 0.3rem;
     border-radius: 50%;
-    
-    picture img {     
-      width: 2rem; 
+
+    picture img {
+      width: 2rem;
       object-fit: cover;
       object-position: left center;
     }
   }
 }
-
 
 .header-container__actions {
   display: flex;

@@ -10,13 +10,14 @@
   </ul>
 
   <div class="nav-menu-mobile">
-    <app-dropdown #navigationBar>
+    <app-dropdown #navigationBar [blockScroll]="true">
       <app-button
         variant="outline"
         size="icon-cubic-md"
         trigger
         #trigger
         [aria-label]="navigationBar.isOpen() ? 'Close menu' : 'Open menu'"
+        (click)="navigationBar.toggleDropdown($event)"
       >
         <app-icon icon="menu" />
       </app-button>
@@ -29,6 +30,7 @@
               class="dropdown-link"
               routerLinkActive="active"
               [appDropdownClose]="navigationBar"
+              [appAutofocus]="$index === 0"
             >
               {{ route.title }}
             </a>

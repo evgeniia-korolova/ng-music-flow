@@ -157,7 +157,8 @@ export class AuthStore {
         loading: false,
         initialCheck: true,
         user: response.data?.user,
-        accessToken: response.data?.accessToken,
+        // accessToken: response.data?.accessToken,
+        ...(response.data?.accessToken ? { accessToken: response.data.accessToken } : {}),
         error: null,
       });
     } catch (err) {
@@ -177,7 +178,10 @@ export class AuthStore {
       return;
     }
 
-    this.updateState({ ...storedData });
+    this.updateState({
+      accessToken: storedData.token,
+      user: storedData.user,
+    });
     await this.retrieveUserInformation();
   }
 
