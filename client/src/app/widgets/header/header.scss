@@ -7,8 +7,8 @@
 
 header {
   background: var(--color-bg-accent);
-  color: var(--color-text-on-bg);  
-  height: var(--header-height);  
+  color: var(--color-text-on-bg);
+  height: var(--header-height);
   display: flex;
   align-items: center;
 }
@@ -19,14 +19,18 @@ header {
   width: 100%;
   max-width: var(--header-width);
   justify-content: space-between;
-  align-items: center;  
-  gap: 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
   padding: 0.5rem;
 
   --gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgba(0, 0, 0, 0.2) 65%);
   --purple-gradient-bg: linear-gradient(135deg, rgb(0, 228, 216) 35%, rgb(169, 116, 204) 65%);
   --purple-mask: rgb(117, 63, 153);
   --purple-accent: rgb(169, 116, 204);
+
+  @media (min-width: 460px) {
+    gap: 1.5rem;
+  }
 
   @media (min-width: 768px) {
     padding: 0.5rem 1rem;
@@ -83,6 +87,10 @@ header {
   gap: 0.5rem;
   margin-left: auto;
   height: 100%;
+
+  @media (max-width: 430px) {
+    gap: 0.35rem;
+  }
 }
 
 .user-menu-item {
@@ -95,7 +103,7 @@ header {
 }
 
 .register-button {
-  flex-shrink: 0;
+  flex-shrink: 0;  
 }
 
 .avatar {

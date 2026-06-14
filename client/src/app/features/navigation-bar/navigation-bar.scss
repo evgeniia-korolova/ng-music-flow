@@ -12,6 +12,10 @@
   align-items: center;
   height: 100%;
   width: 100%;
+
+  @media (max-width: 460px) {
+    width: 0;
+  }
 }
 
 .nav-links-desktop {
