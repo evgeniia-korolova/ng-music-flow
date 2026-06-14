@@ -12,6 +12,11 @@
   width: 100%;
 }
 
+// .header {
+//   max-width: 100vw;
+//   overflow-x: auto;
+// }
+
 .layout-toolbar--sticky {
   position: sticky;
   top: var(--header-height);

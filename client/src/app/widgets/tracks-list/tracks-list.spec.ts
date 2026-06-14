@@ -35,6 +35,7 @@ describe('TracksList', () => {
     playCount: 10,
     rating: 50,
     waveform: [2, 5, 4],
+    releasedate: '2014-10-23',
   };
 
   const mockIsLarge = signal(true);
@@ -77,7 +78,7 @@ describe('TracksList', () => {
   });
 
   it('should display dynamic title from provider', () => {
-    const titleEl = fixture.debugElement.query(By.css('h1')).nativeElement;
+    const titleEl = fixture.debugElement.query(By.css('h2')).nativeElement;
     expect(titleEl.textContent).toContain('Test Title');
   });
 
