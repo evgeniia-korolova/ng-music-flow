@@ -52,6 +52,11 @@
         transform: scale(1.05);
       }
     }
+
+    &:focus-within {
+      outline: 2px dotted var(--color-brand-active);
+      outline-offset: 2px;      
+    }
   }
 
   &__play-btn {
@@ -62,7 +67,7 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
     border: none;
-    outline: none;
+    outline: transparent;
     transition: opacity 0.2s ease-in-out;
 
     opacity: 0.5;
@@ -71,9 +76,7 @@
       opacity: 1;
     }
 
-    &:focus-visible {
-      outline: 2px solid var(--color-brand-active);
-    }
+    
   }
 
   &__info {
