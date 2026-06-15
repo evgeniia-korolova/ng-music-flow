@@ -13,7 +13,7 @@
         <app-button
           trigger
           #trigger
-          [size]="!user() ? 'md' : 'avatar'"
+          [size]="!user() ? 'sm' : 'avatar'"
           (click)="handleAuthButtonClick($event)"
         >
           @if (!user()) {
@@ -21,7 +21,7 @@
             <app-icon
               icon="logIn"
               variant="fill"
-              style="font-size: 1.5rem"
+              style="font-size: 1.2rem"
               primaryColor="var(--color-btn-default-border)"
               fillColor="white"
             />

@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLinkActive, RouterLink } from '@angular/router';
 import { TracksStore } from '../../entities/track/model/track.store';
 import { TRACK_DATA_PROVIDER } from '../../widgets/tracks-list/model/track-provider.token';
+import { DISCOVER_TABS } from './models/tabs.config';
+import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
 
 @Component({
   selector: 'app-discover',
@@ -17,4 +19,7 @@ import { TRACK_DATA_PROVIDER } from '../../widgets/tracks-list/model/track-provi
     },
   ],
 })
-export default class Discover {}
+export default class Discover {
+  protected readonly responsiveService = inject(ResponsiveService);
+  protected readonly discoverTabs = DISCOVER_TABS;
+}
