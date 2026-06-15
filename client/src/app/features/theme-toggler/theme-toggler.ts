@@ -5,10 +5,11 @@ import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.
 import { themeStates } from '../../shared/constants/theme-states';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { Button } from '../../shared/ui/button/button';
+import { AutofocusDirective } from '../../shared/directives/autofocus.directive';
 
 @Component({
   selector: 'app-theme-toggler',
-  imports: [Dropdown, DropdownCloseDirective, Icon, Button],
+  imports: [Dropdown, DropdownCloseDirective, Icon, Button, AutofocusDirective],
   templateUrl: './theme-toggler.html',
   styleUrl: './theme-toggler.scss',
 })
