@@ -1,3 +1,4 @@
+<h2 class="visually-hidden">Search Page</h2>
 <section class="search-page">
   <div class="search-page__sidebar">
     @if (responsiveService.isLarge()) {
@@ -29,14 +30,21 @@
   </div>
 
   <article class="search-page__content">
-    <h1 class="visually-hidden">Search Page</h1>
     <div>
       <app-tracks-list viewMode="search" />
     </div>
     @if (store.hasMore()) {
-      <app-button class="load-more-btn" (click)="store.loadMore()" [disabled]="store.isLoading()"
+      <app-button
+        class="load-more-btn"
+        (click)="store.loadMore()"
+        variant="default"
+        size="md"
+        [disabled]="store.isLoading()"
         >Load More</app-button
       >
     }
   </article>
+  @if (!isSidebarOpen()) {
+    <app-scroll-to-top />
+  }
 </section>

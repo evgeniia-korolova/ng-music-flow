@@ -6,6 +6,7 @@ import {
   input,
   OnDestroy,
   signal,
+  untracked,
 } from '@angular/core';
 import { SearchFilters } from '../../../features/ui/search-filters/search-filters';
 import { SearchStore } from '../model/search.store';
@@ -16,10 +17,11 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
 import { Button } from '../../../shared/ui/button/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ScrollToTop } from '../../../features/scroll-to-top/scroll-to-top';
 
 @Component({
   selector: 'app-search-page',
-  imports: [SearchFilters, TracksList, Icon, Button],
+  imports: [SearchFilters, TracksList, Icon, Button, ScrollToTop],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -81,12 +83,23 @@ export default class SearchPage implements OnDestroy {
 
     effect(() => {
       //this.store.filters();
+      // this.store.query();
+      // const offset = this.store.offset();
+      // if (offset !== 0) {
+      //   window.scrollTo({ top: 0, behavior: 'smooth' });
+      // }
+
+      this.store.filters.genres();
       this.store.query();
-      const offset = this.store.offset();
-      if (offset !== 0) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+
+      untracked(() => {
+        this.scrollToTop();
+      });
     });
+  }
+
+  private scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   toggleSidebar() {

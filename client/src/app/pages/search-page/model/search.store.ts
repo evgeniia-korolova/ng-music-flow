@@ -238,6 +238,19 @@ export const SearchStore = signalStore(
           },
         });
       },
+
+      resetFilters(): void {
+        patchState(store, {
+          filters: {
+            sortBy: 'popularity',
+            genres: [],
+            durationMin: 30,
+            durationMax: 600,
+            isAsc: true,
+          },
+          offset: 0,
+        });
+      },
     };
   }),
   withHooks({

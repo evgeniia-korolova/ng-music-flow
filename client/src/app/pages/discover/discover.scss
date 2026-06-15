@@ -2,6 +2,10 @@
   padding: 1rem;
   background: var(--color-bg);
   color: var(--color-text-on-bg);
+
+  @media (max-width: 460px) {
+    padding: 0.75rem 0.5rem;
+  }
 }
 
 .explore_list {
@@ -18,6 +22,7 @@
   font-size: clamp(1rem, 0.875rem + 0.555vi, 1.5rem);
   font-weight: 600;
   cursor: pointer;
+  border-radius: 1rem;
 }
 
 .explore__link.active-tab {

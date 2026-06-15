@@ -13,10 +13,11 @@ import { DurationPipe } from '../../../shared/ui/pipes/duration-pipe';
 import { SearchStore } from '../../../pages/search-page/model/search.store';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { SearchSortOrder } from '../../../pages/search-page/model/search.model';
+import { Button } from '../../../shared/ui/button/button';
 
 @Component({
   selector: 'app-search-filters',
-  imports: [ReactiveFormsModule, DurationPipe, Icon],
+  imports: [ReactiveFormsModule, DurationPipe, Icon, Button],
   templateUrl: './search-filters.html',
   styleUrl: './search-filters.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,5 +92,24 @@ export class SearchFilters implements OnInit {
     if (this.store.filters.sortBy() === targetSort) {
       this.store.toggleSortDirection();
     }
+  }
+
+  protected resetFilters(): void {
+    const clearedGenres = this.genresList.reduce(
+      (acc, genre) => {
+        acc[genre.id] = false;
+        return acc;
+      },
+      {} as Record<string, boolean>,
+    );
+
+    this.filterForm.patchValue({
+      genres: clearedGenres,
+      sortBy: 'popularity',
+      durationMin: 30,
+      durationMax: 600,
+    });
+
+    this.store.resetFilters();
   }
 }

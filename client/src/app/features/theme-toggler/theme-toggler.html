@@ -1,18 +1,38 @@
 <app-dropdown [alignment]="'right'" #themeDropdown [expandable]="false">
-  <app-button #trigger trigger class="text-primary" variant="outline" size="icon-cubic-sm">
+  <app-button
+    #trigger
+    trigger
+    class="text-primary"
+    variant="outline"
+    size="icon-cubic-sm"
+    role="combobox"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="themeDropdown.isOpen()"
+    [attr.aria-label]="'Current theme: ' + currentTheme() + '. Change theme'"
+    (click)="themeDropdown.toggleDropdown($event)"
+  >
     <app-icon [icon]="getIcon(currentTheme())" />
   </app-button>
-  @for (theme of themes; track theme) {
-    <ng-template #item>
-      <app-button
-        size="icon-cubic-sm"
-        item
-        class="text-primary"
-        (click)="changeTheme(theme)"
-        [appDropdownClose]="themeDropdown"
-      >
-        <app-icon [icon]="getIcon(theme)" />
-      </app-button>
-    </ng-template>
-  }
+  <ng-template #item>
+    <ul class="dropdown-list" role="listbox" [attr.aria-label]="'Theme choise'">
+      @for (theme of themes; track theme) {
+        <li role="none">
+          <app-button
+            size="icon-cubic-sm"
+            item
+            class="text-primary"
+            (click)="changeTheme(theme)"
+            [appDropdownClose]="themeDropdown"
+            role="option"
+            [attr.aria-selected]="currentTheme() === theme"
+            [attr.aria-label]="'Выбрать тему: ' + theme"
+            [appAutofocus]="$index === 0"
+          >
+            <app-icon [icon]="getIcon(theme)" />
+            <span class="visually-hidden">{{ theme }}</span>
+          </app-button>
+        </li>
+      }
+    </ul>
+  </ng-template>
 </app-dropdown>
