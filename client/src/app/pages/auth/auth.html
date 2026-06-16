@@ -3,3 +3,13 @@
     <router-outlet />
   </div>
 </div>
+
+<app-alert-message (actOnClose)="actOnClose()" [isOpen]="isOpen()">
+  <div class="message-container">
+    <h2 class="message-headline">
+      You have been successfully logged in. To gain full access to the site, please proceed with
+      Jamendo authentication.
+    </h2>
+    <app-button class="jamendo-button" (click)="connectJamendo()">Connect Jamendo</app-button>
+  </div>
+</app-alert-message>

@@ -31,21 +31,21 @@
     width: 90%;
     margin: 1rem;
   }
-}
 
-.alert-body {
-  flex-grow: 1;
-  color: white;
-  font-weight: 500;
-}
+  .alert-body {
+    flex-grow: 1;
+    color: white;
+    font-weight: 500;
+  }
 
-.alert-actions {
-  flex-shrink: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
+  .alert-actions {
+    flex-shrink: 0;
+    position: absolute;
+    right: 0.3rem;
+    top: 0.3rem;
 
-  app-button app-icon {
-    color: var(--color-text-danger);
+    app-button app-icon {
+      color: var(--color-text-danger);
+    }
   }
 }

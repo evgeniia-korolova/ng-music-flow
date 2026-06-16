@@ -151,6 +151,6 @@ export default class RegisterForm {
 
     this.generalError.set('');
 
-    this.router.navigateByUrl('/discover');
+    // this.router.navigateByUrl('/discover');
   }
 }

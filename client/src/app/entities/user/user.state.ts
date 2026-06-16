@@ -1,4 +1,4 @@
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { AuthResponse, UserProfile } from './user.model';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
@@ -45,6 +45,21 @@ export class AuthStore {
   readonly isSafeAuthenticated = computed(
     () => this.isUnsafeAuthenticated() && this.initialCheck(),
   );
+
+  readonly isJamendoAlertOpen = signal<boolean>(false);
+
+  constructor() {
+    effect(() => {
+      console.log(this.user());
+      if (this.isSafeAuthenticated() && this.user() && !this.user()!.jamendoId) {
+        this.isJamendoAlertOpen.set(true);
+      } else {
+        this.isJamendoAlertOpen.set(false);
+      }
+
+      console.log(this.isJamendoAlertOpen());
+    });
+  }
 
   async login(loginData: LoginData): Promise<void> {
     this.updateState({ loading: true, error: null });

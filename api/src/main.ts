@@ -28,7 +28,7 @@ async function bootstrap(): Promise<void> {
 
   const corsOrigin = isProduction
     ? process.env.HOSTED_CLIENT
-    : `localhost:${clientPort}`;
+    : `http://localhost:${clientPort}`;
 
   app.enableCors({
     origin: corsOrigin,

@@ -4,6 +4,8 @@ import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
 import { AuthStore } from '../../entities/user/user.state';
 import { AlertMessage } from '../../shared/ui/alert-message/alert-message';
+import { Button } from '../../shared/ui/button/button';
+import { environment } from '../../../environments/environment';
 
 export interface Submittable {
   submit: (data: LoginData | RegisterData) => Promise<void>;
@@ -11,29 +13,27 @@ export interface Submittable {
 
 @Component({
   selector: 'app-auth',
-  imports: [RouterOutlet, AlertMessage],
+  imports: [RouterOutlet, AlertMessage, Button],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
 export default class Auth {
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  authStore = inject(AuthStore);
+  readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
+  private readonly authStore = inject(AuthStore);
 
-  isOpen = signal(true);
+  isOpen = this.authStore.isJamendoAlertOpen;
   displayJamendoAlert = signal(false);
 
-  actOnSuccess = () => {
-    if (this.authStore.user()?.jamendoId) {
-      this.actOnClose();
-    } else {
-      this.displayJamendoAlert.set(true);
-    }
-  };
+  jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo`;
 
   actOnClose = () => {
     this.router.navigateByUrl('/discover');
   };
+
+  connectJamendo() {
+    globalThis.location.href = this.jamendoOAuth2Endpoint;
+  }
 
   mode = computed(() => {
     const childSnapshot = this.route.snapshot.firstChild;
