@@ -6,13 +6,18 @@ import { SearchBar } from '../../widgets/search-bar/search-bar';
 import { Breadcrumbs } from '../../widgets/breadcrumbs/breadcrumbs';
 import { SearchToggleService } from '../../features/search/services/search-toggle-service';
 import { GlobalPlayer } from '../../features/global-player/global-player';
+import { AudioPlayerService } from '../../shared/services/audio-player/audio-player-service';
 
 @Component({
   selector: 'app-main-layout',
   imports: [Header, Footer, RouterOutlet, SearchBar, Breadcrumbs, GlobalPlayer],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
+  host: {
+    '[class.player-is-open]': '!!playerService.currentTrack()',
+  },
 })
 export class MainLayout {
   protected readonly searchService = inject(SearchToggleService);
+  protected playerService = inject(AudioPlayerService);
 }
