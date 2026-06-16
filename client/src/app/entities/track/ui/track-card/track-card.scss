@@ -55,7 +55,7 @@
 
     &:focus-within {
       outline: 2px dotted var(--color-brand-active);
-      outline-offset: 2px;      
+      outline-offset: 2px;
     }
   }
 
@@ -75,8 +75,6 @@
     &.is-playing-now {
       opacity: 1;
     }
-
-    
   }
 
   &__info {

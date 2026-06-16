@@ -14,4 +14,12 @@
 On small screens (e.g., Galaxy S21 / 360px), the burger menu button was positioned incorrectly, and interactive buttons were overflowing the screen boundaries.
 Solution: Utilized the CSS order property to visually shift the burger menu to the far right on mobile viewports without duplicating HTML nodes or breaking semantic layout order.
 
+We often curse designers for their weird ideas but I highly appreciate their work. This week a lot of time is spent for styles. Design is not perfect but we tried 😁 Also a lot of header refactoring - DRY in templates, accessibility (not an expert in this fiels but remember of its importance)
+
 - **Time spent:** 3-6 hour per day - total about 20 hours
+
+- **Plans for the second week**
+
+- dive into Nestjs
+- substitute canActivate guard for canMatch
+- refactor Auth
