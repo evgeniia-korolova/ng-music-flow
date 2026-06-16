@@ -1,33 +1,17 @@
 <section class="explore">
   <nav class="explore_nav" aria-label="Music tabs">
     <ul class="explore_list">
-      <li class="explore_list__item">
-        <a
-          routerLink="popular"
-          routerLinkActive="active-tab"
-          class="explore__link"
-          ariaCurrentWhenActive="page"
-          >Popular Tracks</a
-        >
-      </li>
-      <li class="explore_list__item">
-        <a
-          routerLink="new"
-          routerLinkActive="active-tab"
-          class="explore__link"
-          ariaCurrentWhenActive="page"
-          >New Releases</a
-        >
-      </li>
-      <li class="explore_list__item">
-        <a
-          routerLink="genres"
-          routerLinkActive="active-tab"
-          class="explore__link"
-          ariaCurrentWhenActive="page"
-          >Genres</a
-        >
-      </li>
+      @for (tab of discoverTabs; track tab.title) {
+        <li class="explore_list__item">
+          <a
+            routerLink="{{ tab.path }}"
+            routerLinkActive="active-tab"
+            class="explore__link"
+            ariaCurrentWhenActive="page"
+            >{{ responsiveService.isSmall() && tab.shortTitle ? tab.shortTitle : tab.title }}</a
+          >
+        </li>
+      }
     </ul>
   </nav>
   <div class="explore__tabs-wrapper">

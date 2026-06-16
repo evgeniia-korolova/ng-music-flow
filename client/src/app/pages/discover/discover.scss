@@ -11,6 +11,10 @@
 .explore_list {
   display: flex;
   list-style: none;
+
+  @media (max-width: 972px) {
+    justify-content: center;
+  }
 }
 
 .explore__link {
@@ -23,10 +27,15 @@
   font-weight: 600;
   cursor: pointer;
   border-radius: 1rem;
+
+  &:focus-visible {
+    outline: 2px dotted var(--color-brand-active);
+    outline-offset: 2px;
+  }
 }
 
 .explore__link.active-tab {
   border-radius: 1rem;
   background: var(--color-bg-accent);
-  color: var(--color-on-bg-accent);
+  color: var(--color-brand-active);
 }
