@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity/user.entity';
 import { RegisterDto } from 'src/auth/DTOs/RegisterDto';
 import { ApiException } from 'src/common/exceptions/api.exception';
+import { UpdateResult } from 'typeorm/browser';
 
 @Injectable()
 export class UsersService {
@@ -66,6 +67,17 @@ export class UsersService {
     });
 
     return await this.userRepository.save(newUser);
+  }
+
+  async findById(userId: string): Promise<UserEntity | null> {
+    return await this.userRepository.findOneBy({ id: userId });
+  }
+
+  async update(
+    userId: string,
+    updateInfo: Partial<UserEntity>,
+  ): Promise<UpdateResult> {
+    return await this.userRepository.update(userId, updateInfo);
   }
 
   async findByEmailWithPassword(email: string): Promise<UserEntity | null> {

@@ -138,6 +138,7 @@ export default class RegisterForm {
           }
           case 'AUTH.EMAIL.TAKEN': {
             this.registeredEmails.update((val) => [...val, formData.email]);
+            break;
           }
         }
 

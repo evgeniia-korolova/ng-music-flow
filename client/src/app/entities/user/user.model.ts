@@ -4,7 +4,7 @@ export interface UserProfile {
   id: string;
   email: string;
   username: string;
-  jamendoActive: boolean;
+  jamendoId?: string;
   userInformation?: UserInformation;
 }
 

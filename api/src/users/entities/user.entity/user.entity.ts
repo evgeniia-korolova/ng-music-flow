@@ -24,4 +24,13 @@ export class UserEntity {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @Column({ unique: true, nullable: true })
+  jamendoId?: string;
+
+  @Column({ select: false, nullable: true })
+  jamendoAccessToken?: string;
+
+  @Column({ select: false, nullable: true })
+  jamendoRefreshToken?: string;
 }
