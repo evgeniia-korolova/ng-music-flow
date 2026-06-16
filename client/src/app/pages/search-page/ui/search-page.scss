@@ -8,14 +8,14 @@
   display: flex;
   width: 100%;
   min-height: var(--content-height);
-  gap: 2rem;
+  // row-gap: 2rem;
   padding-block: 1.5rem;
   padding-inline: 4rem 1.5rem;
   box-sizing: border-box;
   background-color: var(--color-bg-surface);
 
   @media (max-width: 460px) {
-    padding-inline: 4rem 0rem;
+    padding-inline: 4rem 1rem;
   }
 
   &__content {

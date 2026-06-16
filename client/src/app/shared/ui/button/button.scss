@@ -180,7 +180,13 @@
   height: 3.2rem;
   padding: 0.65rem;
 }
-
+@media (width < 768px) {
+  [class*='icon-'][class$='-lg'] {
+    font-size: 1.6rem;
+    width: 2.8rem;
+    height: 2.8rem;
+  }
+}
 .avatar {
   width: 3rem;
   height: 3rem;

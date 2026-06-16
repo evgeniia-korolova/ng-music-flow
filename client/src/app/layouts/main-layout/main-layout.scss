@@ -39,3 +39,16 @@
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
+:host.player-is-open {
+  padding-bottom: 155px;
+}
+@media (width < 768px) {
+  :host.player-is-open {
+    padding-bottom: 194px;
+  }
+}
+@media (width < 447px) {
+  :host.player-is-open {
+    padding-bottom: 262px;
+  }
+}
