@@ -76,14 +76,22 @@ export default class RegisterForm {
     });
 
     required(schema.password, { message: 'Password is required' });
-    minLength(schema.password, 8, { message: 'Must be at least 8 letters' });
-    maxLength(schema.password, 24, { message: 'Must be at most 24 letters' });
-    pattern(schema.password, /.*[A-Z].*/, { message: 'Must include uppercase letter' });
-    pattern(schema.password, /.*[a-z].*/, { message: 'Must include lowercase letter' });
-    pattern(schema.password, /.*\d.*/, { message: 'Must include number' });
-    pattern(schema.password, /.*[@$!%*?&].*/, { message: 'Must include special character' });
+    //minLength(schema.password, 8, { message: 'Must be at least 8 letters' });
+    //maxLength(schema.password, 24, { message: 'Must be at most 24 letters' });
+    // pattern(schema.password, /.*[A-Z].*/, { message: 'Must include uppercase letter' });
+    // pattern(schema.password, /.*[a-z].*/, { message: 'Must include lowercase letter' });
+    // pattern(schema.password, /.*\d.*/, { message: 'Must include number' });
+    // pattern(schema.password, /.*[@$!%*?&].*/, { message: 'Must include special character' });
     pattern(schema.password, /^\S+$/, { message: 'Must not include spaces' });
 
+    pattern(
+      schema.password,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d&#64;$!%*?&]{8,24}$/,
+      {
+        message:
+          '8-24 chars, with uppercase, lowercase, number and special char, must not include spaces',
+      },
+    );
     required(schema.confirmPassword, { message: 'Retype your password' });
     validate(schema.confirmPassword, (context) => {
       const password = context.valueOf(schema.password);
@@ -151,5 +159,17 @@ export default class RegisterForm {
     this.generalError.set('');
 
     this.router.navigateByUrl('/discover');
+  }
+
+  onClose() {
+    this.router.navigateByUrl('/discover');
+  }
+
+  canDeactivate(): boolean {
+    const data = this.registerForm().value();
+    if (data.email || data.username || data.password) {
+      return confirm('You have unsaved changes. Do you really want to leave?');
+    }
+    return true;
   }
 }

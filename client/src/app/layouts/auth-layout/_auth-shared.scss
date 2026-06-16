@@ -1,5 +1,6 @@
 .auth-form {
   display: flex;
+  position: relative;
 
   flex-direction: column;
 
@@ -117,5 +118,17 @@
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+.close-auth-btn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  cursor: pointer;
+  transform: scale(1);
+
+  &:hover {
+    transform: scale(1.3);
   }
 }

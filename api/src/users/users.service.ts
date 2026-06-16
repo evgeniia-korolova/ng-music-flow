@@ -17,15 +17,13 @@ export class UsersService {
     const { email, username, password, confirmPassword } = registerDto;
 
     if (password !== confirmPassword) {
-      if (password !== confirmPassword) {
-        throw new ApiException(
-          {
-            code: 'AUTH.PASSWORD.MISMATCH',
-            message: 'Passwords do not match',
-          },
-          HttpStatus.BAD_REQUEST,
-        );
-      }
+      throw new ApiException(
+        {
+          code: 'AUTH.PASSWORD.MISMATCH',
+          message: 'Passwords do not match',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const userByEmail = await this.userRepository.findOneBy({ email });

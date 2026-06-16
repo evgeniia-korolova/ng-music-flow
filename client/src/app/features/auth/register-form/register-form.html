@@ -4,8 +4,12 @@
   (submit)="$event.preventDefault(); onSubmit()"
   novalidate
 >
+  <button type="button" class="close-auth-btn" (click)="onClose()" aria-label="Close">
+    <app-icon icon="x" />
+  </button>
+
   <div class="auth-page-header">
-    <h3>Join now!</h3>
+    <h3>Join now! Register</h3>
   </div>
 
   <div class="auth-page-main">

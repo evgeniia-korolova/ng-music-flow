@@ -64,29 +64,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/album-profile/album-profile').then((m) => m.AlbumProfile),
       },
-      {
-        path: 'auth',
-        loadComponent: () => import('./pages/auth/auth'),
-        children: [
-          {
-            path: 'login',
-            title: 'Sign In',
-            loadComponent: () => import('./features/auth/login-form/login-form'),
-            data: { mode: 'login' },
-          },
-          {
-            path: 'register',
-            title: 'Sign Up',
-            loadComponent: () => import('./features/auth/register-form/register-form'),
-            data: { mode: 'register' },
-          },
-          {
-            path: '',
-            redirectTo: 'login',
-            pathMatch: 'full',
-          },
-        ],
-      },
+
       {
         path: 'about',
         loadComponent: () => import('./pages/about/ui/about'),
@@ -99,6 +77,29 @@ export const routes: Routes = [
         title: 'Library',
         data: { displayOnNavbar: true },
         canActivate: [authGuard],
+      },
+    ],
+  },
+  {
+    path: 'auth',
+    loadComponent: () => import('./layouts/auth-layout/auth'),
+    children: [
+      {
+        path: 'login',
+        title: 'Sign In',
+        loadComponent: () => import('./features/auth/login-form/login-form'),
+        data: { mode: 'login' },
+      },
+      {
+        path: 'register',
+        title: 'Sign Up',
+        loadComponent: () => import('./features/auth/register-form/register-form'),
+        data: { mode: 'register' },
+      },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full',
       },
     ],
   },
