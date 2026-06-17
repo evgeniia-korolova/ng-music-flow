@@ -19,6 +19,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { type Response } from 'express';
+import { JamendoOAuthGuard } from './guards/jamendo.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -39,7 +40,7 @@ export class AuthController {
   }
 
   @Get('jamendo')
-  @UseGuards(AuthGuard('jamendo'))
+  @UseGuards(JamendoOAuthGuard)
   jamendoAuth(): void {
     // empty on purpose
   }
@@ -51,10 +52,10 @@ export class AuthController {
     @Res() res: Response,
   ): void {
     const isProduction =
-      this.configService.get<string>('ENVIRONMENT') === 'development';
+      this.configService.get<string>('ENVIRONMENT') === 'production';
     const frontendUrl = isProduction
       ? this.configService.getOrThrow<string>('HOSTED_CLIENT')
-      : `localhost:${this.configService.getOrThrow<string>('CLIENT_PORT')}`;
+      : `http://localhost:${this.configService.getOrThrow<string>('CLIENT_PORT')}`;
     res.redirect(`${frontendUrl}`);
   }
 }

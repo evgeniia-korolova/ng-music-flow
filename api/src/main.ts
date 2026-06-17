@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ApiResponseInterceptor } from './common/interceptors/api-response/api.response.interceptor';
 import { ApiExceptionFilter } from './common/filters/api-exception/api.exception.filter';
-
 import * as dotenv from 'dotenv';
 import * as path from 'node:path';
 
@@ -41,6 +40,13 @@ async function bootstrap(): Promise<void> {
   app.useGlobalInterceptors(new ApiResponseInterceptor());
 
   app.useGlobalFilters(new ApiExceptionFilter());
+
+  const jwtSecret = process.env['JWT_SECRET'];
+
+  if (!jwtSecret) {
+    console.error('JWT Secret is missing');
+    return;
+  }
 
   await app.listen(apiPort);
   logger.log(`Application is running on: http://localhost:${apiPort}`);

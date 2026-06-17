@@ -25,14 +25,15 @@ export default class Auth {
   isOpen = this.authStore.isJamendoAlertOpen;
   displayJamendoAlert = signal(false);
 
-  jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo`;
+  jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo/`;
 
   actOnClose = () => {
     this.router.navigateByUrl('/discover');
   };
 
   connectJamendo() {
-    globalThis.location.href = this.jamendoOAuth2Endpoint;
+    const currentToken = this.authStore.token();
+    globalThis.location.href = `${this.jamendoOAuth2Endpoint}?state=${currentToken}`;
   }
 
   mode = computed(() => {
