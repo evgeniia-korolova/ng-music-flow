@@ -1,8 +1,8 @@
 @for (breadcrumb of currentBreadcrumbs.breadcrumbs(); track breadcrumb.url; let isLast = $last) {
   @if (!isLast) {
-    <a [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</a>
-    <span> / </span>
+    <a [routerLink]="breadcrumb.url" class="breadcrumbs__link">{{ breadcrumb.label }}</a>
+    <span>/</span>
   } @else {
-    <span>{{ breadcrumb.label }}</span>
+    <span class="breadcrumbs__span">{{ breadcrumb.label }}</span>
   }
 }

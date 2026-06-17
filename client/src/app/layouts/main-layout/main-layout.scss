@@ -6,12 +6,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: start;
+  background-color: var(--color-bg);
 }
 
 :host > * {
   width: 100%;
 }
-
+.layout-toolbar {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: 0.9375rem;
+}
 // .layout-toolbar--sticky {
 //   position: sticky;
 //   top: var(--header-height);
