@@ -23,7 +23,7 @@ export class BreadcrumbsService {
   }
   private buildBreadcrumbs(
     route: ActivatedRouteSnapshot,
-    url: string = '',
+    url = '',
     breadcrumbs: Breadcrumb[] = [],
   ): Breadcrumb[] {
     const path = route.url.map((segment) => segment.path).join('/');
