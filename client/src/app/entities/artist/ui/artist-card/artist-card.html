@@ -1,13 +1,13 @@
 @if (isLink()) {
   <a
-    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-[var(--color-bg-surface)] shadow-lg"
+    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-(--color-bg-surface) shadow-lg"
     [routerLink]="['/artists', artist().id]"
   >
     <ng-container *ngTemplateOutlet="cardContent"></ng-container>
   </a>
 } @else {
   <article
-    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-[var(--color-bg-surface)] shadow-lg"
+    class="artist-card group flex h-full flex-col overflow-hidden rounded-lg bg-(--color-bg-surface) shadow-lg"
   >
     <ng-container *ngTemplateOutlet="cardContent"></ng-container>
   </article>

@@ -70,6 +70,6 @@ export default class LoginForm {
 
     this.generalError.set('');
 
-    this.router.navigateByUrl('/discover');
+    // this.router.navigateByUrl('/discover');
   }
 }

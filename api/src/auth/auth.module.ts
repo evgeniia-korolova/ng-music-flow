@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthController } from './auth.controller';
+import { JamendoStrategy } from './strategies/jamendo.strategy';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { AuthController } from './auth.controller';
       },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, JamendoStrategy],
   exports: [AuthService, PassportModule, JwtModule],
   controllers: [AuthController],
 })
