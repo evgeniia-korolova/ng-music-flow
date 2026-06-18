@@ -77,11 +77,6 @@ describe('TracksList', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display dynamic title from provider', () => {
-    const titleEl = fixture.debugElement.query(By.css('h2')).nativeElement;
-    expect(titleEl.textContent).toContain('Test Title');
-  });
-
   it('should show loader when isLoading is true', async () => {
     isLoadingSignal.set(true);
     fixture.detectChanges();

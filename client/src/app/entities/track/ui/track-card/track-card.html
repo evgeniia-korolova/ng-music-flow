@@ -1,6 +1,12 @@
 <article class="track-card" [class.is-playing]="isPlayingTrack()">
   <div class="track-card__cover-wrapper">
-    <img class="track-card__cover-img" [src]="track().coverUrl" [alt]="track().title" />
+    <img
+      class="track-card__cover-img"
+      [ngSrc]="coverSrc()"
+      [alt]="track().title"
+      width="96"
+      height="96"
+    />
     <button
       class="track-card__play-btn"
       [class.is-playing-now]="isPlayingTrack()"

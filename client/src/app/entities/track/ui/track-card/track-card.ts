@@ -6,11 +6,19 @@ import { RouterLink } from '@angular/router';
 import { CompactNumberPipe } from '../../../../shared/ui/pipes/compact-number-pipe';
 import { DurationPipe } from '../../../../shared/ui/pipes/duration-pipe';
 import { Icon } from '../../../../shared/ui/icon/icon.component';
-import { TitleCasePipe } from '@angular/common';
+import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-track-card',
-  imports: [RouterLink, CompactNumberPipe, DurationPipe, Icon, TitleCasePipe, TrackWaveform],
+  imports: [
+    RouterLink,
+    CompactNumberPipe,
+    DurationPipe,
+    Icon,
+    TitleCasePipe,
+    TrackWaveform,
+    NgOptimizedImage,
+  ],
   templateUrl: './track-card.html',
   styleUrl: './track-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,4 +47,11 @@ export class TrackCard {
   play(track: Track): void {
     this.playerService.playTrack(track, this.playlistContext());
   }
+
+  coverSrc = computed(() => {
+    const url = this.track().coverUrl;
+    if (!url) return '';
+
+    return url.replace('width=300', 'width=100');
+  });
 }
