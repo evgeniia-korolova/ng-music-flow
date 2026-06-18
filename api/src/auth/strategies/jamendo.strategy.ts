@@ -72,7 +72,6 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
             refreshToken,
           );
         } else {
-          console.log('linking a user', jamendoId);
           await this.authService.linkJamendoAccount(
             decodedUser,
             jamendoId,
@@ -89,7 +88,6 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
           jamendoId,
         };
 
-        console.log(refinedUser);
         return refinedUser;
       } catch {
         throw new UnauthorizedException(
