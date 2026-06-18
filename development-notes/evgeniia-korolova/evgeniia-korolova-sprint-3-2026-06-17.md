@@ -17,6 +17,7 @@ Much time was spent on understanding Layout shift culprits principles. CLS manif
 - Significant loading time of tabs heading (were computed in the store) - solution: show headings on the upper level depending on route data
 
 - removed lazy loading from the first tab
+- add meta-description to index.html for better CEO
 
 - **Time spent:** 3-6 hour per day - total about 10 hours
 
