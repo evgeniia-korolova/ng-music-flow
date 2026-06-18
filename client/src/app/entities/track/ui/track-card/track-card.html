@@ -47,7 +47,10 @@
     </div>
   }
 
-  <div class="flex flex-none flex-col items-center gap-4 md:flex-row">
+  <div
+    class="flex flex-none flex-col items-center gap-4 md:flex-row"
+    [class.hidden-info]="!showExtraInfo()"
+  >
     <span class="font-mono text-xs"> {{ track().playCount | compactNumberPipe }} plays </span>
 
     <span class="mr-2 font-mono text-xs">

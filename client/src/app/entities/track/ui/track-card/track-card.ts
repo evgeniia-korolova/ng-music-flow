@@ -21,6 +21,7 @@ export class TrackCard {
   readonly isPlaying = this.playerService.isPlaying;
   readonly showWave = input.required<boolean>();
   readonly playlistContext = input.required<Track[]>();
+  readonly showExtraInfo = input<boolean>(true);
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {
