@@ -41,4 +41,18 @@
   width: 60%;
   border: 2px solid rgba(0, 0, 0, 0.1);
   border-radius: 0.6rem;
+
+  background-color: #bef264;
+}
+
+a {
+  display: inline;
+  padding: 0;
+  background: none;
+  transition: color 0.15s ease;
+  text-decoration: underline;
+  
+  &:hover {
+    color: #bef264;
+  }
 }

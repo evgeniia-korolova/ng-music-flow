@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
@@ -23,7 +23,6 @@ export default class Auth {
   private readonly authStore = inject(AuthStore);
 
   isOpen = this.authStore.isJamendoAlertOpen;
-  displayJamendoAlert = signal(false);
 
   jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo/`;
 
