@@ -64,6 +64,7 @@ export class AuthService {
         username: user.username,
         roles: user.roles,
         createdAt: user.createdAt,
+        jamendoId: user.jamendoId,
       },
     };
   }

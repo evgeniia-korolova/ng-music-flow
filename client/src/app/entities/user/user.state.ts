@@ -50,14 +50,11 @@ export class AuthStore {
 
   constructor() {
     effect(() => {
-      console.log(this.user());
       if (this.isSafeAuthenticated() && this.user() && !this.user()!.jamendoId) {
         this.isJamendoAlertOpen.set(true);
       } else {
         this.isJamendoAlertOpen.set(false);
       }
-
-      console.log(this.isJamendoAlertOpen());
     });
   }
 
@@ -85,6 +82,8 @@ export class AuthStore {
         accessToken: response.data?.accessToken,
         error: null,
       });
+
+      console.log(response.data.user, this.user(), this.user() === response.data.user);
 
       this.saveTokenToLocalStorage(response.data?.accessToken);
     } catch (err) {
