@@ -144,23 +144,32 @@ export class AuthStore {
     this.updateState({ loading: true, error: null });
 
     try {
-      const response = await firstValueFrom(
-        this.http.get<AuthResponse>(`${environment.appApiUrl}/users/info`),
+      const user = await firstValueFrom(
+        this.http.get<UserProfile>(`${environment.appApiUrl}/users/info`),
       );
 
-      if (response.error) {
-        this.logout();
-        return;
+      if (user) {
+        this.updateState({
+          loading: false,
+          initialCheck: true,
+          user: user,
+          error: null,
+        });
       }
 
-      this.updateState({
-        loading: false,
-        initialCheck: true,
-        user: response.data?.user,
-        // accessToken: response.data?.accessToken,
-        ...(response.data?.accessToken ? { accessToken: response.data.accessToken } : {}),
-        error: null,
-      });
+      // if (response.error) {
+      //   this.logout();
+      //   return;
+      // }
+
+      // this.updateState({
+      //   loading: false,
+      //   initialCheck: true,
+      //   user: response.data?.user,
+      //   // accessToken: response.data?.accessToken,
+      //   ...(response.data?.accessToken ? { accessToken: response.data.accessToken } : {}),
+      //   error: null,
+      // });
     } catch (err) {
       this.logout();
       this.updateState({
