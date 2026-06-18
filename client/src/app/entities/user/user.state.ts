@@ -41,9 +41,12 @@ export class AuthStore {
   readonly initialCheck = computed(() => this.state().initialCheck);
   readonly error = computed(() => this.state().error);
 
-  readonly isUnsafeAuthenticated = computed(() => !!this.state().accessToken);
+  readonly isUnsafeAuthenticated = computed(() => !!this.state().user);
   readonly isSafeAuthenticated = computed(
     () => this.isUnsafeAuthenticated() && this.initialCheck(),
+  );
+  readonly isNotSyncedToJamendo = computed(
+    () => !!this.state().user && !this.state().user?.jamendoId,
   );
 
   readonly isJamendoAlertOpen = signal<boolean>(false);

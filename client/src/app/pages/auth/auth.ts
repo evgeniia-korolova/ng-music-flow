@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
@@ -6,6 +6,7 @@ import { AuthStore } from '../../entities/user/user.state';
 import { AlertMessage } from '../../shared/ui/alert-message/alert-message';
 import { Button } from '../../shared/ui/button/button';
 import { environment } from '../../../environments/environment';
+import { connectToJamendo } from '../../shared/utils/jamendo';
 
 export interface Submittable {
   submit: (data: LoginData | RegisterData) => Promise<void>;
@@ -32,11 +33,7 @@ export default class Auth {
 
   connectJamendo() {
     const currentToken = this.authStore.token();
-    globalThis.location.href = `${this.jamendoOAuth2Endpoint}?state=${currentToken}`;
-  }
 
-  mode = computed(() => {
-    const childSnapshot = this.route.snapshot.firstChild;
-    return childSnapshot?.data['mode'] ?? 'login';
-  });
+    connectToJamendo(currentToken);
+  }
 }

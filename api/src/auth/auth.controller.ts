@@ -21,7 +21,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { type Response } from 'express';
 import { JamendoOAuthGuard } from './guards/jamendo.guard';
-import { DatabaseError } from 'src/common/interfaces/database.error';
+import { ApiException } from 'src/common/exceptions/api.exception';
+import { ApiErrorPayload } from 'src/common/interfaces/api.error';
 
 @Controller('auth')
 export class AuthController {
@@ -72,15 +73,21 @@ export class AuthController {
 
       if (!canActivate || !req.user) {
         return res.redirect(
-          `${frontendUrl}/auth/jamendo-result?error=AUTH.JAMENDO.FAILED`,
+          `${frontendUrl}/auth/jamendo?status=AUTH.JAMENDO.FAILED`,
         );
       }
 
-      return res.redirect(`${frontendUrl}/auth/jamendo`);
+      return res.redirect(`${frontendUrl}/auth/jamendo?status=SUCCESS`);
     } catch (err: unknown) {
-      const errorCode = (err as DatabaseError).code ?? 'AUTH.JAMENDO.FAILED';
+      if (err instanceof ApiException) {
+        const errorCode = (err.getResponse() as ApiErrorPayload).code;
 
-      return res.redirect(`${frontendUrl}/auth/jamendo?error=${errorCode}`);
+        return res.redirect(`${frontendUrl}/auth/jamendo?status=${errorCode}`);
+      }
+
+      return res.redirect(
+        `${frontendUrl}/auth/jamendo?status=AUTH.JAMENDO.FAILED`,
+      );
     }
   }
 }
