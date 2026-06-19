@@ -36,7 +36,7 @@ export default class Jamendo implements OnDestroy {
     if (this.status()?.toUpperCase() === 'SUCCESS') {
       return {
         title: 'Success!',
-        body: 'You have successfully synced to Jamendo account. Now you have full access to our App!',
+        body: `You have successfully synced to Jamendo account. Redirecting to Discovery in ${this.countdown()}s...`,
         button: 'Navigate to Discovery',
         actOnClick: () => this.router.navigateByUrl('/Discovery'),
       };
