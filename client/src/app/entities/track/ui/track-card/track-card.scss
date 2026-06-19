@@ -44,12 +44,21 @@
       height: 3rem;
     }
 
-    &:hover {
-      .track-card__play-btn:not(.is-playing-now) {
-        opacity: 1;
+    @media (hover: hover) {
+      &:hover {
+        .track-card__play-btn:not(.is-playing-now) {
+          opacity: 1;
+          cursor: pointer;
+        }
+        .track-card__cover-img {
+          transform: scale(1.05);
+        }
       }
+    }
+
+    &:active {
       .track-card__cover-img {
-        transform: scale(1.05);
+        transform: scale(0.96);
       }
     }
 

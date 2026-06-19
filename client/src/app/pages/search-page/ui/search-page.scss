@@ -24,7 +24,6 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    // gap: 1.5rem;
   }
 }
 
@@ -118,13 +117,13 @@
   padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .mobile-filters {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 }
 

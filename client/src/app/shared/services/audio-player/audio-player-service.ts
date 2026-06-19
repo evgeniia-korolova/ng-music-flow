@@ -17,8 +17,10 @@ export class AudioPlayerService {
 
   readonly queue = signal<Track[]>([]);
 
-  readonly volume = signal<number>(0.3);
+  readonly volume = signal<number>(0.7);
   private preMuteVolume = 0.7;
+
+  readonly isMinimized = signal<boolean>(false);
 
   readonly currentTrackIndex = computed(() => {
     const track = this.currentTrack();
@@ -46,6 +48,18 @@ export class AudioPlayerService {
 
   constructor() {
     this.initializeAudioEvents();
+  }
+
+  minimize(): void {
+    this.isMinimized.set(true);
+  }
+
+  maximize(): void {
+    this.isMinimized.set(false);
+  }
+
+  toggleLayout(): void {
+    this.isMinimized.update((state) => !state);
   }
 
   playTrack(track: Track, customQueue?: Track[]): void {

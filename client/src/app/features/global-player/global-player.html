@@ -81,20 +81,32 @@
           <app-icon icon="playlist-music" />
         </button>
 
-        <div class="global-player__volume">
-          <button (click)="playerService.muteToggle()" class="player-btn player-btn--icon">
-            <app-icon [icon]="playerService.volume() === 0 ? 'volume-off' : 'volume-high'" />
+        @if (responsiveService.isLarge()) {
+          <div class="global-player__volume">
+            <button (click)="playerService.muteToggle()" class="player-btn player-btn--icon">
+              <app-icon [icon]="playerService.volume() === 0 ? 'volume-off' : 'volume-high'" />
+            </button>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="1"
+              [value]="playerService.volume()"
+              (input)="onVolumeChange($event)"
+            />
+          </div>
+        }
+
+        @if (isMobileOrTablet()) {
+          <button
+            class="player-btn player-btn--minimize"
+            (click)="playerService.minimize()"
+            appTooltip="Minimize Player"
+          >
+            <app-icon icon="arrow-up" />
           </button>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value="1"
-            [value]="playerService.volume()"
-            (input)="onVolumeChange($event)"
-          />
-        </div>
+        }
       </div>
     </div>
 
@@ -125,4 +137,24 @@
       </div>
     </div>
   </section>
+
+  @if (isMobileOrTablet() && isPlayerMinimized()) {
+    <div class="player-mini-widget">
+      @if (isPlaying()) {
+        <div class="widget-pulse"></div>
+        <div class="widget-pulse delay-1"></div>
+      }
+
+      <button
+        class="widget-main-btn"
+        (click)="handleWidgetClick()"
+        [style.background-image]="'url(' + track.coverUrl + ')'"
+        [appTooltip]="'Expand Player'"
+      >
+        <div class="widget-icon-overlay">
+          <app-icon [icon]="isPlaying() ? 'pause' : 'play'" />
+        </div>
+      </button>
+    </div>
+  }
 }

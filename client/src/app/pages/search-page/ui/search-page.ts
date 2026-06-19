@@ -18,6 +18,7 @@ import { Button } from '../../../shared/ui/button/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { ScrollToTop } from '../../../features/scroll-to-top/scroll-to-top';
+import { AudioPlayerService } from '../../../shared/services/audio-player/audio-player-service';
 
 @Component({
   selector: 'app-search-page',
@@ -38,8 +39,10 @@ export default class SearchPage implements OnDestroy {
   private location = inject(Location);
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
+  protected playerService = inject(AudioPlayerService);
 
   protected isSidebarOpen = signal(false);
+  private playerStateBeforeFilters = false;
 
   readonly tags = input<string | undefined>();
   readonly sortBy = input<string | undefined>();
@@ -82,13 +85,6 @@ export default class SearchPage implements OnDestroy {
     });
 
     effect(() => {
-      //this.store.filters();
-      // this.store.query();
-      // const offset = this.store.offset();
-      // if (offset !== 0) {
-      //   window.scrollTo({ top: 0, behavior: 'smooth' });
-      // }
-
       this.store.filters.genres();
       this.store.query();
 
@@ -102,8 +98,30 @@ export default class SearchPage implements OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
+  // toggleSidebar() {
+  //   this.isSidebarOpen.update((state) => !state);
+  // }
+
   toggleSidebar() {
-    this.isSidebarOpen.update((state) => !state);
+    // 1. Переключаем шторку фильтров
+    this.isSidebarOpen.update((state) => {
+      const nextState = !state;
+
+      // 2. Управляем плеером в зависимости от того, ОТКРЫВАЕМ мы или ЗАКРЫВАЕМ фильтры
+      if (nextState) {
+        // Мы ОТКРЫВАЕМ фильтры:
+        // Запоминаем текущее состояние плеера (был ли он свернут)
+        this.playerStateBeforeFilters = this.playerService.isMinimized();
+        // Насильно сворачиваем плеер в кнопку, чтобы освободить весь экран
+        this.playerService.minimize();
+      } else {
+        // Мы ЗАКРЫВАЕМ фильтры:
+        // Возвращаем плеер строго в то состояние, в котором он был ДО открытия фильтров
+        this.playerService.isMinimized.set(this.playerStateBeforeFilters);
+      }
+
+      return nextState;
+    });
   }
 
   ngOnDestroy(): void {
