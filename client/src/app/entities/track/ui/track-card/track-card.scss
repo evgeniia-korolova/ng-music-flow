@@ -1,5 +1,6 @@
 :host {
-  display: block;
+  display: flex;
+  width: 100%;
 }
 
 .track-card {
@@ -14,6 +15,10 @@
   transition: all 0.2s ease-in-out;
   background-color: var(--color-bg);
   color: var(--color-text-on-bg);
+
+  @media (max-width: 460px) {
+    padding: 0.75rem 0.5rem;
+  }
 
   &:hover {
     background: var(--color-bg-accent);
@@ -34,14 +39,38 @@
     background-color: var(--color-bg-surface);
     color: var(--text-on-bg);
 
-    &:hover {
-      .track-card__play-btn:not(.is-playing-now) {
-        opacity: 1;
-      }
-      .track-card__cover-img {
-        transform: scale(1.05);
+    @media (max-width: 460px) {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        .track-card__play-btn:not(.is-playing-now) {
+          opacity: 1;
+          cursor: pointer;
+        }
+        .track-card__cover-img {
+          transform: scale(1.05);
+        }
       }
     }
+
+    &:active {
+      .track-card__cover-img {
+        transform: scale(0.96);
+      }
+    }
+
+    &:focus-within {
+      outline: 2px dotted var(--color-brand-active);
+      outline-offset: 2px;
+    }
+  }
+
+  &__cover-img {
+    width: 96px;
+    height: 96px;
   }
 
   &__play-btn {
@@ -52,17 +81,13 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
     border: none;
-    outline: none;
+    outline: transparent;
     transition: opacity 0.2s ease-in-out;
 
     opacity: 0.5;
 
     &.is-playing-now {
       opacity: 1;
-    }
-
-    &:focus-visible {
-      outline: 2px solid var(--color-brand-active);
     }
   }
 
@@ -151,11 +176,15 @@
 
 @media (max-width: 440px) {
   .track-card {
-    // padding: 0.75rem 0rem;
-
     &__info {
       width: 8rem;
       text-align: center;
     }
+  }
+}
+
+@media (max-width: 430px) {
+  .hidden-info {
+    display: none;
   }
 }

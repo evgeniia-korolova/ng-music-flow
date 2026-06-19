@@ -3,6 +3,7 @@ import { MainLayout } from './layouts/main-layout/main-layout';
 import { authGuard } from './shared/guards/auth.guard';
 import { guestGuard } from './shared/guards/guest.guard';
 import { jamendoGuard } from './shared/guards/jamendo-auth.guard';
+import DiscoverTabsSwitcher from './widgets/discover-tabs-switcher/discover-tabs-switcher';
 
 export const routes: Routes = [
   {
@@ -22,19 +23,20 @@ export const routes: Routes = [
           },
           {
             path: 'popular',
-            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
-            data: { order: 'popularity_total', pageTitle: 'Popular Tracks' },
+            component: DiscoverTabsSwitcher,
+            data: { order: 'popularity_total', pageTitle: 'Popular Tracks', skipBreadcrumb: true },
             title: 'Popular Tracks',
           },
           {
             path: 'new',
             loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
-            data: { order: 'releasedate_desc', pageTitle: 'New Releases' },
+            data: { order: 'releasedate_desc', pageTitle: 'New Releases', skipBreadcrumb: true },
             title: 'New Releases',
           },
           {
             path: 'genres',
             loadComponent: () => import('./widgets/genres/genres').then((m) => m.Genres),
+            data: { skipBreadcrumb: true, preload: true },
             title: 'Genres',
           },
         ],
@@ -59,12 +61,15 @@ export const routes: Routes = [
         path: 'artists/:artistId',
         loadComponent: () =>
           import('./pages/artist-profile/artist-profile').then((m) => m.ArtistProfile),
-        title: 'ArtistProfile',
+        title: 'Artist Profile',
+        data: { breadcrumb: 'Artist Profile', parentLabel: 'Artists', parentUrl: '/artists' },
       },
       {
         path: 'albums/:albumId',
         loadComponent: () =>
           import('./pages/album-profile/album-profile').then((m) => m.AlbumProfile),
+        title: 'Album',
+        data: { breadcrumb: 'Album', parentLabel: 'Artists', parentUrl: '/artists' },
       },
       {
         path: 'auth',

@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  gap: 0.5rem;
+  padding-block: 0.4375rem;
+  font-size: 0.875rem;
+}
+.breadcrumbs__link {
+  @media (any-hover: hover) {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+.breadcrumbs__span {
+  color: var(--color-text-muted);
+}

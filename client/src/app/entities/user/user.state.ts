@@ -191,7 +191,10 @@ export class AuthStore {
       return;
     }
 
-    this.updateState({ ...storedData });
+    this.updateState({
+      accessToken: storedData.token,
+      user: storedData.user,
+    });
     await this.retrieveUserInformation();
   }
 

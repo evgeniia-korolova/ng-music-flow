@@ -28,7 +28,6 @@
     "swiper": "^12.2.0",
     "tailwindcss": "^4.3.0",
     "tslib": "^2.3.0",
-    "wavesurfer.js": "^7.12.6",
     "zone.js": "^0.16.2"
   },
   "devDependencies": {
