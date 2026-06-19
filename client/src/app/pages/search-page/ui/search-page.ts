@@ -2,11 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  ElementRef,
   inject,
   input,
   OnDestroy,
   signal,
   untracked,
+  viewChild,
 } from '@angular/core';
 import { SearchFilters } from '../../../features/ui/search-filters/search-filters';
 import { SearchStore } from '../model/search.store';
@@ -40,6 +42,8 @@ export default class SearchPage implements OnDestroy {
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
   protected playerService = inject(AudioPlayerService);
+
+  private readonly tracksContent = viewChild<ElementRef<HTMLElement>>('tracksContent');
 
   protected isSidebarOpen = signal(false);
   private playerStateBeforeFilters = false;
@@ -95,28 +99,22 @@ export default class SearchPage implements OnDestroy {
   }
 
   private scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const element = this.tracksContent()?.nativeElement;
+
+    if (element && this.responsiveService.isLarge()) {
+      element.scrollIntoView({ behavior: 'auto', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
   }
 
-  // toggleSidebar() {
-  //   this.isSidebarOpen.update((state) => !state);
-  // }
-
   toggleSidebar() {
-    // 1. Переключаем шторку фильтров
     this.isSidebarOpen.update((state) => {
       const nextState = !state;
-
-      // 2. Управляем плеером в зависимости от того, ОТКРЫВАЕМ мы или ЗАКРЫВАЕМ фильтры
       if (nextState) {
-        // Мы ОТКРЫВАЕМ фильтры:
-        // Запоминаем текущее состояние плеера (был ли он свернут)
         this.playerStateBeforeFilters = this.playerService.isMinimized();
-        // Насильно сворачиваем плеер в кнопку, чтобы освободить весь экран
         this.playerService.minimize();
       } else {
-        // Мы ЗАКРЫВАЕМ фильтры:
-        // Возвращаем плеер строго в то состояние, в котором он был ДО открытия фильтров
         this.playerService.isMinimized.set(this.playerStateBeforeFilters);
       }
 
