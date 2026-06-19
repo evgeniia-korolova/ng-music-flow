@@ -8,6 +8,7 @@ import { UserEntity } from 'src/users/entities/user.entity/user.entity';
 import { LoginDto } from './DTOs/LoginDto';
 import { TokenPayload } from './interfaces/token-payload';
 import { AuthResponse } from './interfaces/authorization';
+import { DatabaseError } from 'src/common/interfaces/database.error';
 
 @Injectable()
 export class AuthService {
@@ -106,10 +107,34 @@ export class AuthService {
     accessToken: string,
     refreshToken: string,
   ): Promise<void> {
-    await this.users.update(user.id, {
-      jamendoId: newJamendoId,
-      jamendoAccessToken: accessToken,
-      jamendoRefreshToken: refreshToken,
-    });
+    try {
+      await this.users.update(user.id, {
+        jamendoId: newJamendoId,
+        jamendoAccessToken: accessToken,
+        jamendoRefreshToken: refreshToken,
+      });
+    } catch (err: unknown) {
+      const dbError = err as DatabaseError;
+
+      if (dbError.code === '23505') {
+        throw new ApiException(
+          {
+            message:
+              'This Jamendo account is already linked to another user profile.',
+            code: 'AUTH.JAMENDO.CONFLICT',
+          },
+          HttpStatus.CONFLICT,
+        );
+      }
+
+      throw new ApiException(
+        {
+          message:
+            'An unexpected database error occurred during account linkage.',
+          code: 'AUTH.DATABASE.ERROR',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

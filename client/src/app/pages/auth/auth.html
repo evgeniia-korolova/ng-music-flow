@@ -7,8 +7,13 @@
 <app-alert-message (actOnClose)="actOnClose()" [isOpen]="isOpen()">
   <div class="message-container">
     <h2 class="message-headline">
-      You have been successfully logged in. To gain full access to the site, please proceed with
-      Jamendo authentication.
+      You have been successfully logged in. To gain full access to the site, you will need to
+      connect your Jamendo account.
+      <br />
+      <br />
+
+      Please sign up on <a href="https://www.jamendo.com/start">Jamendo</a> and then push the button
+      below!
     </h2>
     <app-button class="jamendo-button" (click)="connectJamendo()">Connect Jamendo</app-button>
   </div>
