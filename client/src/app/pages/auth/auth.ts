@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { LoginData } from '../../features/auth/login-form/login-form';
 import { RegisterData } from '../../features/auth/register-form/register-form';
 import { AuthStore } from '../../entities/user/user.state';
@@ -19,11 +19,12 @@ export interface Submittable {
   styleUrl: './auth.scss',
 })
 export default class Auth {
-  readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
   private readonly authStore = inject(AuthStore);
 
-  isOpen = this.authStore.isJamendoAlertOpen;
+  isOpen = computed(
+    () => this.authStore.isNotSyncedToJamendo() && !this.router.url.includes('/jamendo'),
+  );
 
   jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo/`;
 
