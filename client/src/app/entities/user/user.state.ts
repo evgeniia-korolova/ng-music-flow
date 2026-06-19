@@ -86,8 +86,6 @@ export class AuthStore {
         error: null,
       });
 
-      console.log(response.data.user, this.user(), this.user() === response.data.user);
-
       this.saveTokenToLocalStorage(response.data?.accessToken);
     } catch (err) {
       this.updateState({
@@ -162,7 +160,7 @@ export class AuthStore {
 
     try {
       const response = await firstValueFrom(
-        this.http.get<AuthResponse>(`${environment.appApiUrl}/users/info`),
+        this.http.get<ApiResponse<UserProfile>>(`${environment.appApiUrl}/users/info`),
       );
 
       if (response.error) {
@@ -173,8 +171,7 @@ export class AuthStore {
       this.updateState({
         loading: false,
         initialCheck: true,
-        user: response.data?.user,
-        accessToken: response.data?.accessToken,
+        user: response.data,
         error: null,
       });
     } catch (err) {
@@ -202,13 +199,13 @@ export class AuthStore {
     this.state.update((current) => ({ ...current, ...partialState }));
   }
 
-  private retrieveTokenFromLocalStorage(): { token: string; user: UserProfile } | null {
+  private retrieveTokenFromLocalStorage(): { accessToken: string; user: UserProfile } | null {
     const data = localStorage.getItem(TOKEN_KEY);
     if (!data) return null;
 
     try {
       const parsedData = jwtDecode<UserProfile>(data);
-      return { token: data, user: parsedData };
+      return { accessToken: data, user: parsedData };
     } catch {
       return null;
     }

@@ -103,8 +103,6 @@ export default class Jamendo implements OnDestroy {
   connectJamendo = () => {
     const token = this.authStore.token();
 
-    console.log(this.authStore.user(), this.authStore.isNotSyncedToJamendo());
-
     connectToJamendo(token);
   };
 
