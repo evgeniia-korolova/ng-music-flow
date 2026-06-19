@@ -8,6 +8,8 @@
 
 - optimized track-cards images, track-list layout and headings for better LCP and CLS
 
+- refactor player layout: when user opens filters on search-page the palyer is minimized to a small widget, closing filters restore the player. Also user can minimaze and restore the size clicking on button
+
 **Problems & SolutionsIssue**:
 
 Track-cards on screens under 380px - I should decide on whether to make columns or to partially hide some info. Preferred to hide play count and duration
@@ -18,6 +20,7 @@ Much time was spent on understanding Layout shift culprits principles. CLS manif
 
 - removed lazy loading from the first tab
 - add meta-description to index.html for better CEO
+- scrollToTop on search-page - separated scroll of sidebar and content (not perfect, but much better)
 
 - **Time spent:** 3-6 hour per day - total about 10 hours
 

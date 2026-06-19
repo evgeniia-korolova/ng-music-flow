@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Footer } from '../../widgets/footer/footer';
 import { Header } from '../../widgets/header/header';
@@ -14,10 +14,18 @@ import { AudioPlayerService } from '../../shared/services/audio-player/audio-pla
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss',
   host: {
-    '[class.player-is-open]': '!!playerService.currentTrack()',
+    //'[class.player-is-open]': '!!playerService.currentTrack()',
+    '[class.player-is-open]': 'isPlayerExpanded()',
   },
 })
 export class MainLayout {
   protected readonly searchService = inject(SearchToggleService);
   protected playerService = inject(AudioPlayerService);
+
+  readonly isPlayerExpanded = computed(() => {
+    const hasTrack = !!this.playerService.currentTrack();
+    const isMinimized = this.playerService.isMinimized();
+
+    return hasTrack && !isMinimized;
+  });
 }

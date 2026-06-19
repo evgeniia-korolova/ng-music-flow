@@ -24,13 +24,28 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    // gap: 1.5rem;
   }
 }
 
 .search-page__sidebar {
   display: contents;
   background: var(--color-bg-surface);
+
+  @media (min-width: 1024px) {
+    display: block;
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+
+    height: calc(100vh - var(--header-height) - 3rem);
+    width: 300px;
+    flex-shrink: 0;
+
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
+  }
 }
 
 .floating-filter-btn {
@@ -118,13 +133,13 @@
   padding: 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .mobile-filters {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
 }
 

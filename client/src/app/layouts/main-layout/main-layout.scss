@@ -17,43 +17,25 @@
   margin: 0 auto;
   padding-inline: 0.9375rem;
 }
-// .layout-toolbar--sticky {
-//   position: sticky;
-//   top: var(--header-height);
-//   z-index: 95 !important;
-//   isolation: isolate;
-//   background: var(--color-bg-accent);
-//   color: var(--color-text-on-bg);
-//   border-top: 2px solid var(--color-bg-surface);
-//   display: grid;
-//   grid-template-columns: 1fr;
-//   align-items: center;
-//   gap: 1rem;
-//   padding: 0.5rem 1rem;
-// }
 
-// // временные стили
-// .breadcrumbs {
-//   padding: 10px 40px 10px 38px;
-//   font-size: 0.95rem;
-//   border: 1px solid transparent;
-// }
-
-@media (min-width: 768px) {
-  // .layout-toolbar--sticky {
-  //   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  // }
-}
 :host.player-is-open {
-  padding-bottom: 155px;
+  padding-bottom: 144px;
 }
-@media (width < 768px) {
+
+@media (width < 1024px) {
   :host.player-is-open {
-    padding-bottom: 194px;
+    padding-bottom: 128px;
   }
 }
+
+@media (width < 768px) {
+  :host.player-is-open {
+    padding-bottom: 112px;
+  }
+}
+
 @media (width < 447px) {
   :host.player-is-open {
-    padding-bottom: 262px;
+    padding-bottom: 104px;
   }
 }

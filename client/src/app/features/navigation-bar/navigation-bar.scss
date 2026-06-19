@@ -3,7 +3,7 @@
   flex: 1;
   height: 100%;
 
-   --color-decor: #6d36a0;  
+  --color-decor: #6d36a0;
   --color-bg-accent: #5757f117;
 
   @media (max-width: 768px) {
@@ -51,15 +51,14 @@
   transition: all 0.2s ease-in-out;
   position: relative;
   //min-width: 140px;
-  text-underline-offset: .75rem;      
+  text-underline-offset: 0.75rem;
   text-decoration-skip-ink: auto;
-  
 
   &:hover {
     // background-color: var(--color-bg-player);
     // color: var(--color-text-on-bg);
     text-decoration: underline;
-    text-decoration-color: var(--color-bg-player); 
+    text-decoration-color: var(--color-bg-player);
   }
 
   &.active {
