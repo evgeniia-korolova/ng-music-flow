@@ -192,7 +192,7 @@ export class AuthStore {
     }
 
     this.updateState({
-      accessToken: storedData.token,
+      accessToken: storedData.accessToken,
       user: storedData.user,
     });
     await this.retrieveUserInformation();
