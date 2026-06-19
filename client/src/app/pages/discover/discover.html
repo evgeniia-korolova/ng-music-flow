@@ -15,6 +15,9 @@
     </ul>
   </nav>
   <div class="explore__tabs-wrapper">
+    @if (activeRouteTitle()) {
+      <h2 class="mb-4 text-2xl font-bold capitalize">{{ activeRouteTitle() }}</h2>
+    }
     <router-outlet />
   </div>
 </section>

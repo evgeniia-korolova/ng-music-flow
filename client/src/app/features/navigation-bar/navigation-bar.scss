@@ -3,7 +3,7 @@
   flex: 1;
   height: 100%;
 
-  --color-brand-active: #6d36a0;
+   --color-decor: #6d36a0;  
   --color-bg-accent: #5757f117;
 
   @media (max-width: 768px) {
@@ -44,20 +44,26 @@
   justify-content: center;
   height: 100%;
   padding: 0.5rem 1.25rem;
-  text-decoration: none;
-  color: var(--color-text-muted);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  color: var(--color-text-on-bg);
   font-weight: 600;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.2s ease-in-out;
   position: relative;
   //min-width: 140px;
+  text-underline-offset: .75rem;      
+  text-decoration-skip-ink: auto;
+  
 
   &:hover {
-    background-color: var(--color-bg-accent);
-    color: var(--color-text-on-bg);
+    // background-color: var(--color-bg-player);
+    // color: var(--color-text-on-bg);
+    text-decoration: underline;
+    text-decoration-color: var(--color-bg-player); 
   }
 
   &.active {
-    color: var(--color-text-on-bg);
+    color: var(--color-brand-active);
     background-color: rgba(109, 54, 160, 0.12);
     box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.4);
 
@@ -70,8 +76,8 @@
       height: 14px;
       background: repeating-linear-gradient(
         90deg,
-        var(--color-brand-active) 0px,
-        var(--color-brand-active) 3px,
+        var(--color-decor) 0px,
+        var(--color-decor) 3px,
         transparent 3px,
         transparent 6px
       );

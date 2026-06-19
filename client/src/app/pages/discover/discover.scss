@@ -11,6 +11,7 @@
 .explore_list {
   display: flex;
   list-style: none;
+  margin-bottom: 2rem;
 
   @media (max-width: 972px) {
     justify-content: center;

@@ -84,13 +84,13 @@ header {
 .header-container__actions {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   margin-left: auto;
   height: 100%;
 
-  @media (max-width: 430px) {
-    gap: 0.35rem;
-  }
+  // @media (max-width: 430px) {
+  //   gap: 0.8rem;
+  // }
 
   @media (max-width: 767px) {
     width: 100%;

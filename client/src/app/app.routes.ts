@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { authGuard } from './shared/guards/auth.guard';
+import DiscoverTabsSwitcher from './widgets/discover-tabs-switcher/discover-tabs-switcher';
 
 export const routes: Routes = [
   {
@@ -20,7 +21,7 @@ export const routes: Routes = [
           },
           {
             path: 'popular',
-            loadComponent: () => import('./widgets/discover-tabs-switcher/discover-tabs-switcher'),
+            component: DiscoverTabsSwitcher,
             data: { order: 'popularity_total', pageTitle: 'Popular Tracks', skipBreadcrumb: true },
             title: 'Popular Tracks',
           },
@@ -33,7 +34,7 @@ export const routes: Routes = [
           {
             path: 'genres',
             loadComponent: () => import('./widgets/genres/genres').then((m) => m.Genres),
-            data: { skipBreadcrumb: true },
+            data: { skipBreadcrumb: true, preload: true },
             title: 'Genres',
           },
         ],
