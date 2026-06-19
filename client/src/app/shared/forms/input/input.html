@@ -22,6 +22,7 @@
         class="input"
         [id]="inputId"
         [placeholder]="placeHolder()"
+        autocomplete="current-value"
         #inputElement
       />
       @if (inputType() === 'password') {
