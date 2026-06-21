@@ -6,6 +6,7 @@ import { DataModule } from './data/data.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
+import { LibraryModule } from './library/library.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { CommonModule } from './common/common.module';
     }),
     UsersModule,
     CommonModule,
+    LibraryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
