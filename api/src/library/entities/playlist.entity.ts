@@ -19,7 +19,7 @@ export class PlaylistEntity {
   @Column()
   userId!: string;
 
-  @Column()
+  @Column({ unique: true })
   name!: string;
 
   @Column({ nullable: true })
