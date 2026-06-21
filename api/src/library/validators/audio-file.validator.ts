@@ -1,5 +1,5 @@
 import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
-import { NestMulterFile } from '../DTOs/trackDto';
+import { NestMulterFile } from '../DTOs/track.dto';
 import { validateMagicBytes } from 'src/common/utils/validate-audio';
 
 interface FileValidatorOptions {

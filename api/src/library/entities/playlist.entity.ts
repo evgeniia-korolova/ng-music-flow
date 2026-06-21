@@ -9,6 +9,7 @@ import {
 export interface PlaylistTrackReference {
   trackId: string;
   origin: 'JAMENDO' | 'LOCAL';
+  order: number;
 }
 
 @Entity('playlists')
@@ -27,6 +28,12 @@ export class PlaylistEntity {
 
   @Column('jsonb', { default: [] })
   tracks!: PlaylistTrackReference[];
+
+  @Column({ type: 'int', default: 0 })
+  totalDuration!: number;
+
+  @Column({ type: 'int', default: 0 })
+  trackCount!: number;
 
   @CreateDateColumn()
   createdAt!: Date;

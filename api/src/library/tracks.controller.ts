@@ -17,11 +17,11 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TracksService } from './tracks.service';
-import { TrackUploadDto, type NestMulterFile } from '../library/DTOs/trackDto';
-import { LocalTrack } from '../library/models/track.model';
+import { TrackUploadDto, type NestMulterFile } from './DTOs/track.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { type AuthenticatedRequest } from 'src/auth/interfaces/authorization';
 import { AudioFileValidator } from './validators/audio-file.validator';
+import { Track } from './models/track.model';
 
 @Controller('tracks')
 @UseGuards(JwtAuthGuard)
@@ -35,7 +35,7 @@ export class TracksController {
     @UploadedFile(new AudioFileValidator({ maxSize: 30 * 1024 * 1024 }))
     file: NestMulterFile,
     @Body() uploadDto: TrackUploadDto,
-  ): Promise<LocalTrack> {
+  ): Promise<Track> {
     return this.tracksService.uploadAndCreate({
       ...uploadDto,
       userId: req.user.id,
@@ -49,7 +49,7 @@ export class TracksController {
     @Query('page', new ParseIntPipe({ optional: true })) page?: number,
     @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
   ): Promise<{
-    tracks: LocalTrack[];
+    tracks: Track[];
     total: number;
     page: number;
     limit: number;

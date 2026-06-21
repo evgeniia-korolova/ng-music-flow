@@ -9,11 +9,11 @@ import { Repository } from 'typeorm';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { TrackEntity } from './entities/track.entity';
 import { SUPABASE_CLIENT } from 'src/common/constants';
-import { TrackUploadDto, NestMulterFile } from '../library/DTOs/trackDto';
+import { TrackUploadDto, NestMulterFile } from './DTOs/track.dto';
 import { randomUUID } from 'node:crypto';
 import * as musicMeta from 'music-metadata';
-import { LocalTrack } from '../library/models/track.model';
 import decode from 'audio-decode';
+import { Track } from './models/track.model';
 
 @Injectable()
 export class TracksService {
@@ -31,7 +31,7 @@ export class TracksService {
 
   async uploadAndCreate(
     payload: TrackUploadDto & { userId: string; file: NestMulterFile },
-  ): Promise<LocalTrack> {
+  ): Promise<Track> {
     const { userId, title, artist, genre, file } = payload;
 
     let duration = 0;
@@ -96,7 +96,7 @@ export class TracksService {
     page = 1,
     limit = 20,
   ): Promise<{
-    tracks: LocalTrack[];
+    tracks: Track[];
     total: number;
     page: number;
     limit: number;
@@ -193,7 +193,7 @@ export class TracksService {
     }
   }
 
-  private mapToModel(entity: TrackEntity): LocalTrack {
+  private mapToModel(entity: TrackEntity): Track {
     let waveform: number[] = [];
 
     if (Array.isArray(entity.waveform)) {
@@ -206,12 +206,22 @@ export class TracksService {
       id: entity.id,
       userId: entity.userId,
       title: entity.title,
-      artist: entity.artist,
+      artist: {
+        id: '',
+        name: entity.artist,
+      },
       genre: entity.genre,
       audioUrl: entity.url,
       duration: entity.duration,
       releasedate: entity.createdAt.toISOString().split('T')[0],
       waveform,
+      album: {
+        id: '',
+        name: '',
+      },
+      coverUrl: '',
+      playCount: 0,
+      rating: 0,
     };
   }
 }

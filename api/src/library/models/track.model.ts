@@ -1,11 +1,21 @@
-export interface LocalTrack {
+export interface Track {
   id: string;
-  userId: string;
   title: string;
-  artist: string;
-  genre: string;
-  audioUrl: string;
   duration: number;
-  releasedate: string;
+  artist: {
+    id: string;
+    name: string;
+  };
+  album: {
+    id: string;
+    name: string;
+  };
+  coverUrl: string;
+  audioUrl: string;
+  playCount: number;
+  rating: number;
   waveform: number[];
+  releasedate: string;
+  genre?: string;
+  userId?: string;
 }
