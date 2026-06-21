@@ -6,13 +6,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export interface PlaylistTrackReference {
-  trackId: string;
-  origin: 'JAMENDO' | 'LOCAL';
-}
-
-@Entity('playlists')
-export class Playlist {
+@Entity('tracks')
+export class TrackEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -20,13 +15,16 @@ export class Playlist {
   userId!: string;
 
   @Column()
-  name!: string;
+  title!: string;
 
-  @Column({ nullable: true })
-  description!: string;
+  @Column()
+  artist!: string;
 
-  @Column('jsonb', { default: [] })
-  tracks!: PlaylistTrackReference[];
+  @Column()
+  genre!: string;
+
+  @Column()
+  url!: string;
 
   @CreateDateColumn()
   createdAt!: Date;
