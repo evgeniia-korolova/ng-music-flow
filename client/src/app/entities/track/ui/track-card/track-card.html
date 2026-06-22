@@ -4,8 +4,9 @@
       class="track-card__cover-img"
       [ngSrc]="coverSrc()"
       [alt]="track().title"
-      width="96"
-      height="96"
+      width="64"
+      height="64"
+      [priority]="priority()"
     />
     <button
       class="track-card__play-btn"

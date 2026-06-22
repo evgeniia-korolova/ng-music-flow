@@ -18,6 +18,7 @@
             [showWave]="showWave()"
             [playlistContext]="provider.tracks()"
             [showExtraInfo]="false"
+            [priority]="$index < 3"
           />
         </li>
       } @placeholder (minimum 500ms) {
