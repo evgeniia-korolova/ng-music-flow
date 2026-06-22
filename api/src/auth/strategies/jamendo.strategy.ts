@@ -72,7 +72,6 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
             refreshToken,
           );
         } else {
-          console.log('linking a user', jamendoId);
           await this.authService.linkJamendoAccount(
             decodedUser,
             jamendoId,
@@ -89,7 +88,6 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
           jamendoId,
         };
 
-        console.log(refinedUser);
         return refinedUser;
       } catch {
         throw new UnauthorizedException(
@@ -113,7 +111,9 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
     return `${baseUrl}/auth/jamendo/callback`;
   }
 
-  private async fetchJamendoProfile(accessToken: string): Promise<JamendoUser> {
+  protected async fetchJamendoProfile(
+    accessToken: string,
+  ): Promise<JamendoUser> {
     const clientId = this.configService.getOrThrow<string>('JAMENDO_CLIENT_ID');
     const url = `https://api.jamendo.com/v3.0/users?client_id=${clientId}&access_token=${accessToken}&format=json`;
 
