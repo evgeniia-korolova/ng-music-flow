@@ -2,10 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   effect,
+  ElementRef,
   inject,
   input,
   OnDestroy,
   signal,
+  untracked,
+  viewChild,
 } from '@angular/core';
 import { SearchFilters } from '../../../features/ui/search-filters/search-filters';
 import { SearchStore } from '../model/search.store';
@@ -16,10 +19,12 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
 import { Button } from '../../../shared/ui/button/button';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { ScrollToTop } from '../../../features/scroll-to-top/scroll-to-top';
+import { AudioPlayerService } from '../../../shared/services/audio-player/audio-player-service';
 
 @Component({
   selector: 'app-search-page',
-  imports: [SearchFilters, TracksList, Icon, Button],
+  imports: [SearchFilters, TracksList, Icon, Button, ScrollToTop],
   templateUrl: './search-page.html',
   styleUrl: './search-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,8 +41,12 @@ export default class SearchPage implements OnDestroy {
   private location = inject(Location);
   protected readonly store = inject(SearchStore);
   protected readonly responsiveService = inject(ResponsiveService);
+  protected playerService = inject(AudioPlayerService);
+
+  private readonly tracksContent = viewChild<ElementRef<HTMLElement>>('tracksContent');
 
   protected isSidebarOpen = signal(false);
+  private playerStateBeforeFilters = false;
 
   readonly tags = input<string | undefined>();
   readonly sortBy = input<string | undefined>();
@@ -80,17 +89,37 @@ export default class SearchPage implements OnDestroy {
     });
 
     effect(() => {
-      //this.store.filters();
+      this.store.filters.genres();
       this.store.query();
-      const offset = this.store.offset();
-      if (offset !== 0) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+
+      untracked(() => {
+        this.scrollToTop();
+      });
     });
   }
 
+  private scrollToTop() {
+    const element = this.tracksContent()?.nativeElement;
+
+    if (element && this.responsiveService.isLarge()) {
+      element.scrollIntoView({ behavior: 'auto', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }
+
   toggleSidebar() {
-    this.isSidebarOpen.update((state) => !state);
+    this.isSidebarOpen.update((state) => {
+      const nextState = !state;
+      if (nextState) {
+        this.playerStateBeforeFilters = this.playerService.isMinimized();
+        this.playerService.minimize();
+      } else {
+        this.playerService.isMinimized.set(this.playerStateBeforeFilters);
+      }
+
+      return nextState;
+    });
   }
 
   ngOnDestroy(): void {

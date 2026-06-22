@@ -1,0 +1,17 @@
+@if (isOpen()) {
+  <button class="alert-backdrop" (click)="actOnClose.emit()">
+    <button class="alert-container" (click)="$event.stopPropagation()">
+      <div class="alert-body">
+        <ng-content />
+      </div>
+
+      @if (dismissible()) {
+        <div class="alert-actions">
+          <app-button variant="ghost" size="icon-rounded-sm" (click)="actOnClose.emit()">
+            <app-icon icon="x" />
+          </app-button>
+        </div>
+      }
+    </button>
+  </button>
+}

@@ -13,7 +13,11 @@
   </div>
   <div class="artist-profile__track">
     @for (item of artistStore.tracks(); track $index) {
-      <app-track-card [track]="item" [showWave]="false"></app-track-card>
+      <app-track-card
+        [track]="item"
+        [showWave]="false"
+        [playlistContext]="artistStore.tracks()"
+      ></app-track-card>
     }
     @if (artistStore.currentArtist() && artistStore.hasMoreTracks()) {
       <div class="artist-profile__action">
@@ -22,8 +26,4 @@
     }
   </div>
 </div>
-@if (isScrollButtonVisible()) {
-  <div class="scroll-to-top-wrapper">
-    <app-button size="icon-rounded-lg" (click)="scrollToTop()">&uarr;</app-button>
-  </div>
-}
+<app-scroll-to-top></app-scroll-to-top>

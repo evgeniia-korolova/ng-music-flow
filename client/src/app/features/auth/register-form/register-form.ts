@@ -138,6 +138,7 @@ export default class RegisterForm {
           }
           case 'AUTH.EMAIL.TAKEN': {
             this.registeredEmails.update((val) => [...val, formData.email]);
+            break;
           }
         }
 
@@ -150,6 +151,8 @@ export default class RegisterForm {
 
     this.generalError.set('');
 
-    this.router.navigateByUrl('/discover');
+    if (this.store.user()?.jamendoId) {
+      this.router.navigateByUrl('/discover');
+    }
   }
 }

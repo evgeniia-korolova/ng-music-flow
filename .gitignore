@@ -10,6 +10,7 @@ node_modules/
 *.sln
 *.sw?
 .env
+.env.my
 !.env.example
 
 npm-debug.log*

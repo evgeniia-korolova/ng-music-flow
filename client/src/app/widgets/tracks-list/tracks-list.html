@@ -1,5 +1,5 @@
-<div class="py-4 md:px-4">
-  <h1 class="mb-4 text-2xl font-bold">{{ provider.listTitle() }}</h1>
+<div class="py-4 lg:px-4">
+  <!-- <h2 class="mb-4 text-2xl font-bold capitalize">popular tracks</h2> -->
 
   @if (provider.isLoading()) {
     <p class="text-accent animate-pulse">Loading tracks...</p>
@@ -9,25 +9,31 @@
     <p class="text-red-500">{{ provider.error() }}</p>
   }
 
-  <ul class="m-0 flex list-none flex-col justify-center gap-3 p-0" #listContainer>
+  <ul class="m-0 flex min-h-[400px] list-none flex-col gap-3 p-0" #listContainer>
     @for (track of provider.tracks(); track track.id) {
       @defer (on viewport) {
-        <li class="block w-full" #item [attr.data-track-id]="track.id">
-          <app-track-card [track]="track" [showWave]="showWave()" />
+        <li class="block min-h-[135px] w-full" #item [attr.data-track-id]="track.id">
+          <app-track-card
+            [track]="track"
+            [showWave]="showWave()"
+            [playlistContext]="provider.tracks()"
+            [showExtraInfo]="false"
+            [priority]="$index < 3"
+          />
         </li>
       } @placeholder (minimum 500ms) {
-        <div
-          class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
+        <li
+          class="bg-accent box-border min-h-[135px] w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
         >
           Loading...
-        </div>
+        </li>
       }
     } @empty {
-      <div
+      <li
         class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
       >
         No tracks found...
-      </div>
+      </li>
     }
   </ul>
 </div>

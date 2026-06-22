@@ -35,6 +35,7 @@ describe('TracksList', () => {
     playCount: 10,
     rating: 50,
     waveform: [2, 5, 4],
+    releasedate: '2014-10-23',
   };
 
   const mockIsLarge = signal(true);
@@ -74,11 +75,6 @@ describe('TracksList', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should display dynamic title from provider', () => {
-    const titleEl = fixture.debugElement.query(By.css('h1')).nativeElement;
-    expect(titleEl.textContent).toContain('Test Title');
   });
 
   it('should show loader when isLoading is true', async () => {

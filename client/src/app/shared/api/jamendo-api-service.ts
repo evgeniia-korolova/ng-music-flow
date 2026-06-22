@@ -17,12 +17,25 @@ export class JamendoApiService {
         ...(this.clientId ? { client_id: this.clientId } : {}),
         format: 'json',
         ...params,
-        featured: 'true',
+        // featured: 'true',
       },
     });
 
     return this.http.get<JamendoResponse<T>>(`${this.baseUrl}/${endpoint}/`, {
       params: httpParams,
     });
+  }
+
+  redirectToAuth(): void {
+    const jamendoAuthUrl = `${environment.appApiUrl}/auth/jamendo`;
+
+    const params = new URLSearchParams({
+      client_id: this.clientId,
+      redirect_uri: jamendoAuthUrl,
+      response_type: 'code',
+      scope: 'music profile',
+    });
+
+    globalThis.location.href = `${jamendoAuthUrl}?${params.toString()}`;
   }
 }

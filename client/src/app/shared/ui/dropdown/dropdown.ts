@@ -6,7 +6,6 @@ import {
   DOCUMENT,
   effect,
   ElementRef,
-  HostListener,
   inject,
   input,
   Renderer2,
@@ -15,6 +14,7 @@ import {
 } from '@angular/core';
 import { Icon } from '../icon/icon.component';
 import { Button } from '../button/button';
+import { fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-dropdown',
@@ -28,23 +28,32 @@ export class Dropdown {
   private readonly document = inject(DOCUMENT);
   private readonly renderer = inject(Renderer2);
 
-  expandable = input(true);
-  alignment = input<'left' | 'right'>('left');
+  readonly expandable = input(true);
+  readonly alignment = input<'left' | 'right'>('left');
+  readonly blockScroll = input(false);
 
-  isOpen = signal(false);
+  readonly isOpen = signal(false);
+
+  readonly triggerButton = contentChild('trigger', { read: ElementRef });
+  readonly dropdownItems = contentChildren<TemplateRef<unknown>>('item');
 
   constructor() {
     effect((onCleanup) => {
-      const el = this.triggerButton()?.nativeElement;
+      const trigger = this.triggerButton()?.nativeElement;
       const body = this.document.body;
+      const open = this.isOpen();
 
-      if (!el) return;
+      if (!trigger) return;
 
-      if (this.isOpen()) {
-        el.dataset['active'] = 'true';
-        this.renderer.addClass(body, 'overflow-hidden');
+      if (open) {
+        trigger.dataset['active'] = 'true';
+        trigger.setAttribute('aria-expanded', 'true');
+        if (this.blockScroll()) {
+          this.renderer.addClass(body, 'overflow-hidden');
+        }
       } else {
-        delete el.dataset['active'];
+        delete trigger.dataset['active'];
+        trigger.setAttribute('aria-expanded', 'false');
         this.renderer.removeClass(body, 'overflow-hidden');
       }
 
@@ -52,27 +61,70 @@ export class Dropdown {
         this.renderer.removeClass(body, 'overflow-hidden');
       });
     });
+
+    effect((onCleanup) => {
+      if (!this.isOpen()) return;
+
+      const clickSub = fromEvent<MouseEvent>(this.document, 'click').subscribe((event) => {
+        const target = event.target as HTMLElement;
+        const clickedInside = this.el.nativeElement.contains(target);
+
+        if (!clickedInside) {
+          this.isOpen.set(false);
+        }
+      });
+
+      const keySub = fromEvent<KeyboardEvent>(this.document, 'keydown').subscribe((event) => {
+        if (event.key === 'Escape') {
+          this.isOpen.set(false);
+          this.triggerButton()?.nativeElement.focus();
+        }
+
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          this.navigateItems(event.key);
+        }
+      });
+
+      onCleanup(() => {
+        clickSub.unsubscribe();
+        keySub.unsubscribe();
+      });
+    });
   }
 
-  triggerButton = contentChild('trigger', { read: ElementRef });
-  dropdownItems = contentChildren<TemplateRef<unknown>>('item');
+  toggleDropdown(event: Event): void {
+    event.stopPropagation();
+    this.isOpen.update((prev) => !prev);
 
-  @HostListener('document:click', ['$event'])
-  handleClick(event: Event) {
-    const clickedElement = event.target as HTMLElement;
-    const triggerEl = this.triggerButton()?.nativeElement;
+    // Если открыли, можно программно сфокусировать первый элемент (для этого пригодится твоя директива)
+    // if (this.isOpen()) {
+    //   setTimeout(() => this.focusFirstItem(), 0);
+    // }
+  }
 
-    const clickedTrigger =
-      triggerEl && (triggerEl === clickedElement || triggerEl.contains(clickedElement));
-    const clickedInsideDropdown = this.el.nativeElement.contains(clickedElement);
+  private focusFirstItem(): void {
+    const listElement = this.el.nativeElement.querySelector('.dropdown-list');
+    const firstInteractive = listElement?.querySelector('a, button') as HTMLElement;
+    firstInteractive?.focus();
+  }
 
-    if (clickedTrigger) {
-      this.isOpen.update((prev) => !prev);
-      return;
+  private navigateItems(key: 'ArrowDown' | 'ArrowUp'): void {
+    const listElement = this.el.nativeElement.querySelector('.dropdown-list');
+    if (!listElement) return;
+
+    const focusable = Array.from(listElement.querySelectorAll('a, button')) as HTMLElement[];
+    if (focusable.length === 0) return;
+
+    const currentFocused = this.document.activeElement as HTMLElement;
+    let index = focusable.indexOf(currentFocused);
+
+    if (key === 'ArrowDown') {
+      index = (index + 1) % focusable.length;
+    } else {
+      index = (index - 1 + focusable.length) % focusable.length;
     }
 
-    if (!clickedInsideDropdown) {
-      this.isOpen.update(() => false);
-    }
+    focusable[index]?.focus();
   }
 }

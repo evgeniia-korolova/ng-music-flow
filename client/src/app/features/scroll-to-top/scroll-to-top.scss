@@ -1,0 +1,11 @@
+.scroll-to-top-wrapper {
+  position: fixed;
+  bottom: 4rem;
+  right: 2rem;
+  z-index: 50;
+}
+@media (width < 768px) {
+  .scroll-to-top-wrapper {
+    bottom: 2rem;
+  }
+}

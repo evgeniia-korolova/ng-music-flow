@@ -1,6 +1,13 @@
 <article class="track-card" [class.is-playing]="isPlayingTrack()">
   <div class="track-card__cover-wrapper">
-    <img class="track-card__cover-img" [src]="track().coverUrl" [alt]="track().title" />
+    <img
+      class="track-card__cover-img"
+      [ngSrc]="coverSrc()"
+      [alt]="track().title"
+      width="64"
+      height="64"
+      [priority]="priority()"
+    />
     <button
       class="track-card__play-btn"
       [class.is-playing-now]="isPlayingTrack()"
@@ -16,9 +23,9 @@
   </div>
 
   <div class="track-card__info">
-    <h3 class="track-card__title">
+    <div class="track-card__title">
       {{ track().title | titlecase }}
-    </h3>
+    </div>
     <a [routerLink]="['/artists', track().artist.id]" class="track-card__meta">
       {{ track().artist.name }}
     </a>
@@ -30,7 +37,7 @@
         </a>
       </p>
     }
-    <p>{{ track().releasedate }}</p>
+    <p class="track-card__meta">{{ track().releasedate }}</p>
   </div>
 
   @if (showWave()) {
@@ -47,7 +54,10 @@
     </div>
   }
 
-  <div class="flex flex-none flex-col items-center gap-4 md:flex-row">
+  <div
+    class="flex flex-none flex-col items-center gap-4 md:flex-row"
+    [class.hidden-info]="!showExtraInfo()"
+  >
     <span class="font-mono text-xs"> {{ track().playCount | compactNumberPipe }} plays </span>
 
     <span class="mr-2 font-mono text-xs">

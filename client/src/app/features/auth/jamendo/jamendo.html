@@ -1,0 +1,15 @@
+<div class="jamendo-card">
+  <header class="jamendo-card__header">
+    <h1 class="jamendo-card__title">{{ message().title }}</h1>
+  </header>
+
+  <div class="jamendo-card__body">
+    <p class="jamendo-card__text">{{ message().body }}</p>
+  </div>
+
+  <footer class="jamendo-card__footer">
+    <app-button (click)="message().actOnClick()" class="jamendo-card__btn">
+      {{ message().button }}
+    </app-button>
+  </footer>
+</div>

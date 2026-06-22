@@ -9,13 +9,13 @@ type IconVariant = 'outline' | 'fill';
   standalone: true,
   imports: [],
   template: `
-    <div class="icon-container" [class.is-filled]="variant() === 'fill'">
+    <div class="icon-container" [class.is-filled]="variant() === 'fill'" aria-hidden="true">
       <div class="icon-embed" [innerHTML]="rawSvgContent()"></div>
     </div>
   `,
   styleUrl: './icon.component.scss',
   host: {
-    role: 'icon',
+    role: 'img',
     '[attr.aria-label]': 'icon()',
     '[style.--icon-primary]': 'primaryColor()',
     '[style.--icon-secondary]': 'secondaryColor()',

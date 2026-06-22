@@ -1,0 +1,51 @@
+.alert-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+}
+
+.alert-container {
+  position: relative;
+  min-width: 300px;
+  max-width: 90%;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  z-index: 201;
+
+  background-color: color-mix(in srgb, var(--color-btn-default-bg) 70%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-btn-default-border);
+  box-shadow: var(--shadow-md);
+
+  @media (max-width: 767.9px) {
+    width: 90%;
+    margin: 1rem;
+  }
+
+  .alert-body {
+    flex-grow: 1;
+    color: white;
+    font-weight: 500;
+  }
+
+  .alert-actions {
+    flex-shrink: 0;
+    position: absolute;
+    right: 0.3rem;
+    top: 0.3rem;
+
+    app-button app-icon {
+      color: var(--color-text-danger);
+    }
+  }
+}

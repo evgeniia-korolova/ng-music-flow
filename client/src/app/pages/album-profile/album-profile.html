@@ -11,8 +11,13 @@
     </div>
     <div class="album-profile__tracks">
       @for (item of album.tracks; track item.id) {
-        <app-track-card [track]="item" [showWave]="false"></app-track-card>
+        <app-track-card
+          [track]="item"
+          [showWave]="false"
+          [playlistContext]="album.tracks"
+        ></app-track-card>
       }
     </div>
   }
 </div>
+<app-scroll-to-top></app-scroll-to-top>

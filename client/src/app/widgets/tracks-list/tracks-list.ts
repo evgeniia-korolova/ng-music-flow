@@ -33,23 +33,4 @@ export default class TracksList {
       return false;
     },
   });
-
-  // private observer = new IntersectionObserver((entries) => {
-  //   const current = new Set(this.visibleIds());
-
-  //   for (const entry of entries) {
-  //     const el = entry.target as HTMLElement;
-  //     const id = Number(el.dataset['trackId']);
-
-  //     if (entry.isIntersecting) {
-  //       current.add(id);
-  //     } else {
-  //       current.delete(id);
-  //     }
-  //   }
-
-  //   this.visibleIds.set(current);
-  // }, {
-  //   threshold: 0.1,
-  // });
 }
