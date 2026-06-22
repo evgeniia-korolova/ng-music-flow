@@ -8,10 +8,18 @@
   <form [formGroup]="playlistForm" class="playlists-form" (ngSubmit)="onSubmit()">
     <div class="playlists-form__line">
       <label for="title" class="playlists-form__label">List title</label>
-      <input type="text" formControlName="title" id="title" />
+      <input
+        type="text"
+        formControlName="title"
+        id="title"
+        [class.error]="playlistForm.controls.title.invalid && playlistForm.controls.title.touched"
+      />
+      @if (playlistForm.controls.title.invalid && playlistForm.controls.title.touched) {
+        <div class="playlists-form__error">Title is required</div>
+      }
     </div>
     <div class="playlists-form__line">
-      <label for="description" class="playlists-form__label">Description</label>
+      <label for="descr" class="playlists-form__label">Description</label>
       <textarea formControlName="description" id="descr"></textarea>
     </div>
     <div class="playlists-form__line">
@@ -29,10 +37,12 @@
     </div>
     <div class="playlists-form__tracks-list">
       @for (track of selectedTracks(); track track.id) {
-        <app-track-card [track]="track" [showWave]="false" [playlistContext]="selectedTracks()">
-          <app-button slot-actions size="icon-rounded-md" (click)="removeTrack(track.id)"
-            ><app-icon icon="x"></app-icon></app-button
-        ></app-track-card>
+        <div class="playlists-form__track-chip">
+          {{ track.title }} - {{ track.artist.name }}
+          <app-button size="icon-rounded-sm" (click)="removeTrack(track.id)"
+            ><app-icon icon="x"></app-icon
+          ></app-button>
+        </div>
       }
     </div>
     <div class="playlists-form__line">

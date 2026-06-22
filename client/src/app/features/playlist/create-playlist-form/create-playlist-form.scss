@@ -1,0 +1,132 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+.playlists-form {
+  &__wrapper {
+    width: clamp(340px, 90%, 680px);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 10px 15px -3px rgba(0, 0, 0, 0.08),
+      0 20px 25px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 600;
+    column-gap: 1.25rem;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+  @media (width < 768px) {
+    &__header {
+      font-size: 1.625rem;
+    }
+  }
+  &__title {
+  }
+
+  &__line {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    width: 100%;
+    font-size: 14px;
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 2px solid var(--color-btn-default-border);
+      outline: 2px dashed transparent;
+      border-radius: 0.25rem;
+      background-color: transparent;
+      outline-offset: 2px;
+      padding: 1em 2.5rem 1em 0.5rem;
+      transition: all 0.3s ease;
+      &:focus-within {
+        outline-color: var(--color-btn-default-border);
+      }
+      &.error {
+        border-color: var(--color-border-danger);
+
+        &:focus-within {
+          outline-color: var(--color-border-danger);
+        }
+      }
+    }
+    textarea {
+      resize: vertical;
+      min-height: fit-content;
+    }
+    select {
+      text-overflow: ellipsis;
+      cursor: pointer;
+      overflow: hidden;
+      white-space: nowrap;
+      appearance: none;
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1.2rem;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    }
+    &:has(.error) {
+      .input-label {
+        color: var(--color-text-danger);
+      }
+    }
+    &:last-child {
+      flex-direction: row;
+      // justify-content: flex-end;
+      justify-content: center;
+      column-gap: 20px;
+      app-button {
+        width: 9.375rem;
+      }
+    }
+  }
+
+  &__label {
+    font-weight: 600;
+  }
+
+  &__select-group {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    app-button {
+      width: max-content;
+    }
+  }
+
+  &__list {
+  }
+
+  &__list-item {
+    background-color: var(--color-bg-surface);
+  }
+  &__track-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    &:not(:last-child) {
+      margin-bottom: 20px;
+    }
+  }
+  &__tracks-list {
+    margin-bottom: 1.5rem;
+  }
+  &__error {
+    color: red;
+  }
+}
