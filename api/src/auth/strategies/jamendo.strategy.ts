@@ -7,6 +7,7 @@ import { AuthenticatedRequest } from '../interfaces/authorization';
 import { JamendoUser } from '../interfaces/jamendo';
 import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../interfaces/token-payload';
+import { ApiException } from 'src/common/exceptions/api.exception';
 
 @Injectable()
 export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
@@ -89,7 +90,11 @@ export class JamendoStrategy extends PassportStrategy(Strategy, 'jamendo') {
         };
 
         return refinedUser;
-      } catch {
+      } catch (err) {
+        if (err instanceof ApiException) {
+          throw err;
+        }
+
         throw new UnauthorizedException(
           'Provided fallback URL token is invalid.',
         );

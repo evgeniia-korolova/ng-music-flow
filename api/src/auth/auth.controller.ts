@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  ExecutionContext,
   Get,
   HttpCode,
   HttpStatus,
@@ -20,6 +21,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
 import { type Response } from 'express';
 import { JamendoOAuthGuard } from './guards/jamendo.guard';
+import { ApiException } from 'src/common/exceptions/api.exception';
+import { ApiErrorPayload } from 'src/common/interfaces/api.error';
 
 @Controller('auth')
 export class AuthController {
@@ -46,16 +49,45 @@ export class AuthController {
   }
 
   @Get('jamendo/callback')
-  @UseGuards(AuthGuard('jamendo'))
-  jamendoCallback(
+  async jamendoCallback(
     @Req() req: AuthenticatedRequest,
     @Res() res: Response,
-  ): void {
+  ): Promise<void> {
     const isProduction =
       this.configService.get<string>('ENVIRONMENT') === 'production';
     const frontendUrl = isProduction
       ? this.configService.getOrThrow<string>('HOSTED_CLIENT')
       : `http://localhost:${this.configService.getOrThrow<string>('CLIENT_PORT')}`;
-    res.redirect(`${frontendUrl}`);
+
+    const guard = new (AuthGuard('jamendo'))();
+
+    try {
+      const context = {
+        switchToHttp: () => ({
+          getRequest: (): AuthenticatedRequest => req,
+          getResponse: (): Response => res,
+        }),
+      } as unknown as ExecutionContext;
+
+      const canActivate = await guard.canActivate(context);
+
+      if (!canActivate || !req.user) {
+        return res.redirect(
+          `${frontendUrl}/auth/jamendo?status=AUTH.JAMENDO.FAILED`,
+        );
+      }
+
+      return res.redirect(`${frontendUrl}/auth/jamendo?status=SUCCESS`);
+    } catch (err: unknown) {
+      if (err instanceof ApiException) {
+        const errorCode = (err.getResponse() as ApiErrorPayload).code;
+
+        return res.redirect(`${frontendUrl}/auth/jamendo?status=${errorCode}`);
+      }
+
+      return res.redirect(
+        `${frontendUrl}/auth/jamendo?status=AUTH.JAMENDO.FAILED`,
+      );
+    }
   }
 }
