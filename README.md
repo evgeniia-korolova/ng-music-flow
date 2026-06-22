@@ -31,6 +31,7 @@ Signals are used as the primary reactive mechanism across the application.
 - **Testing:** Vitest + Playwright (Browser Mode)
 - **Automation:** Husky, Lint-staged, Semantic Release
 - **API:** [Jamendo API](https://jamendo.com)
+- **Authorization:** for reading, **OAuth2** for write methods
 
 ## ✨ Features
 
@@ -41,6 +42,7 @@ Signals are used as the primary reactive mechanism across the application.
 - Responsive UI
 - Advanced filtering and search
 - Modern Angular Signals-based architecture
+- Nest.js and Supabase for backend
 
 ## 📸 Screenshots
 
@@ -51,6 +53,34 @@ Signals are used as the primary reactive mechanism across the application.
 ### Artists Page
 
 ![Artists Page](./client/public/screenshots/artists-page.png)
+
+### Search Page
+
+![Search Page](./client/public/screenshots/search-page.png)
+
+### About Page
+
+![Search Page](./client/public/screenshots/about-page.png)
+
+### Auth Page
+
+![Search Page](./client/public/screenshots/auth-page.png)
+
+### Album Page
+
+![Search Page](./client/public/screenshots/album-page.png)
+
+### Artist-profile Page
+
+![Search Page](./client/public/screenshots/artist-profile.png)
+
+### Global Player
+
+![Search Page](./client/public/screenshots/global-player.png)
+
+### Global Player Widget for tablets and mobiles
+
+![Search Page](./client/public/screenshots/global-player-widget.png)
 
 ## Development server
 

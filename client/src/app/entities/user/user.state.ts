@@ -50,14 +50,11 @@ export class AuthStore {
 
   constructor() {
     effect(() => {
-      console.log(this.user());
       if (this.isSafeAuthenticated() && this.user() && !this.user()!.jamendoId) {
         this.isJamendoAlertOpen.set(true);
       } else {
         this.isJamendoAlertOpen.set(false);
       }
-
-      console.log(this.isJamendoAlertOpen());
     });
   }
 
