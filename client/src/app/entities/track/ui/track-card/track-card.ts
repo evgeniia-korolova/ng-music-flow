@@ -31,6 +31,8 @@ export class TrackCard {
   readonly playlistContext = input.required<Track[]>();
   readonly showExtraInfo = input<boolean>(true);
 
+  readonly priority = input<boolean>(false);
+
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {
       return 0;

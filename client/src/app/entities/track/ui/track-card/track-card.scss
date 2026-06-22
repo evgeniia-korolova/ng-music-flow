@@ -38,6 +38,8 @@
     border-radius: 0.375rem;
     background-color: var(--color-bg-surface);
     color: var(--text-on-bg);
+    flex-shrink: 0;
+    overflow: hidden;
 
     @media (max-width: 460px) {
       width: 3rem;
@@ -69,8 +71,11 @@
   }
 
   &__cover-img {
-    width: 96px;
-    height: 96px;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+    object-fit: cover;
+    flex-shrink: 0;
   }
 
   &__play-btn {
