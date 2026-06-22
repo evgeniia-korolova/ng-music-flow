@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from './layouts/main-layout/main-layout';
 import { authGuard } from './shared/guards/auth.guard';
+import { guestGuard } from './shared/guards/guest.guard';
+import { jamendoGuard } from './shared/guards/jamendo-auth.guard';
 
 export const routes: Routes = [
   {
@@ -78,13 +80,19 @@ export const routes: Routes = [
             path: 'login',
             title: 'Sign In',
             loadComponent: () => import('./features/auth/login-form/login-form'),
-            data: { mode: 'login' },
+            canActivate: [guestGuard],
           },
           {
             path: 'register',
             title: 'Sign Up',
             loadComponent: () => import('./features/auth/register-form/register-form'),
-            data: { mode: 'register' },
+            canActivate: [guestGuard],
+          },
+          {
+            path: 'jamendo',
+            title: 'Sync to Jamendo',
+            loadComponent: () => import('./features/auth/jamendo/jamendo'),
+            canActivate: [jamendoGuard],
           },
           {
             path: '',

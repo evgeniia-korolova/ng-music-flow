@@ -151,6 +151,8 @@ export default class RegisterForm {
 
     this.generalError.set('');
 
-    // this.router.navigateByUrl('/discover');
+    if (this.store.user()?.jamendoId) {
+      this.router.navigateByUrl('/discover');
+    }
   }
 }
