@@ -1,7 +1,28 @@
 <div class="playlists__container">
   <aside class="playlists__aside" aria-label="User playlists">
     <h2 class="playlists__title">My playlists</h2>
-    <app-button (click)="openCreateForm()">Create playlist</app-button>
+    <app-button class="playlists__create-btn" (click)="openCreateForm()"
+      >Create playlist</app-button
+    >
+    <ul class="playlists__list">
+      @for (list of playlists(); track list.title) {
+        <li
+          class="playlists__list-item"
+          (click)="saveCurrentList.set(list)"
+          tabindex="0"
+          (keydown.enter)="saveCurrentList.set(list)"
+        >
+          <span>{{ list.title }}</span>
+          <app-button
+            variant="ghost"
+            type="button"
+            size="icon-rounded-sm"
+            (click)="deletePlaylist(list); $event.stopPropagation()"
+            ><app-icon icon="x"></app-icon
+          ></app-button>
+        </li>
+      }
+    </ul>
   </aside>
   <section class="playlists__content content-playlists" aria-live="polite">
     @if (isFormShow()) {

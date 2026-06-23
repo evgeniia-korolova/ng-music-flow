@@ -39,6 +39,9 @@ export class CreatePlaylistForm implements OnInit {
     const tracksList = this.selectedTracks();
 
     this.savedPlayList.emit({ title, descr, tracksList });
+    this.playlistForm.reset();
+    this.selectedTracks.set([]);
+    this.closeForm();
   }
   closeForm() {
     this.cancelForm.emit();
