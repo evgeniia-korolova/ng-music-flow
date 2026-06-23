@@ -1,7 +1,7 @@
 <div class="playlists-form__wrapper">
   <div class="playlists-form__header">
     <h3 class="playlists-form__title">Create List</h3>
-    <app-button type="button" size="icon-rounded-md" (click)="closeForm()">
+    <app-button type="button" size="icon-rounded-md" (click)="closeForm()" aria-label="Close form">
       <app-icon icon="x"></app-icon>
     </app-button>
   </div>
@@ -14,9 +14,10 @@
         formControlName="title"
         id="title"
         [class.error]="playlistForm.controls.title.invalid && playlistForm.controls.title.touched"
+        aria-describedby="title-error"
       />
       @if (playlistForm.controls.title.invalid && playlistForm.controls.title.touched) {
-        <div class="playlists-form__error">Title is required</div>
+        <div class="playlists-form__error" id="title-error">Title is required</div>
       }
     </div>
     <div class="playlists-form__line">
@@ -53,7 +54,11 @@
       @for (track of selectedTracks(); track track.id) {
         <div class="playlists-form__track-chip">
           {{ track.title }} - {{ track.artist.name }}
-          <app-button type="button" size="icon-rounded-sm" (click)="removeTrack(track.id)"
+          <app-button
+            type="button"
+            size="icon-rounded-sm"
+            (click)="removeTrack(track.id)"
+            aria-label="Remove track {{ track.title }}"
             ><app-icon icon="x"></app-icon
           ></app-button>
         </div>

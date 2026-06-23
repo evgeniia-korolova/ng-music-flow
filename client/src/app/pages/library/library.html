@@ -11,6 +11,8 @@
           (click)="saveCurrentList.set(list)"
           tabindex="0"
           (keydown.enter)="saveCurrentList.set(list)"
+          (keydown.space)="saveCurrentList.set(list)"
+          role="button"
         >
           <span>{{ list.title }}</span>
           <app-button
@@ -18,6 +20,7 @@
             type="button"
             size="icon-rounded-sm"
             (click)="deletePlaylist(list); $event.stopPropagation()"
+            aria-label="Delete playlist"
             ><app-icon icon="x"></app-icon
           ></app-button>
         </li>
