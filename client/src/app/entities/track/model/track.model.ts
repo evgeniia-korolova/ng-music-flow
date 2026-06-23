@@ -23,6 +23,7 @@ export interface Track {
   id: string;
   title: string;
   duration: number;
+  origin?: string;
   artist: {
     id: string;
     name: string;
