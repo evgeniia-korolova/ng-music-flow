@@ -19,3 +19,8 @@
   flex-direction: column;
   row-gap: 10px;
 }
+.album-controls {
+  display: flex;
+  justify-content: flex-end;
+  text-align: right;
+}
