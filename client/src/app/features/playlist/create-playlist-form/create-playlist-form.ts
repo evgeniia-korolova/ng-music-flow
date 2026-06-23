@@ -4,7 +4,6 @@ import { Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
-import { TrackCard } from '../../../entities/track/ui/track-card/track-card';
 
 export interface TrackList {
   title: string;
@@ -14,7 +13,7 @@ export interface TrackList {
 
 @Component({
   selector: 'app-create-playlist-form',
-  imports: [ReactiveFormsModule, Button, Icon, TrackCard],
+  imports: [ReactiveFormsModule, Button, Icon],
   providers: [TracksStore],
   templateUrl: './create-playlist-form.html',
   styleUrl: './create-playlist-form.scss',

@@ -24,16 +24,23 @@
     </div>
     <div class="playlists-form__line">
       <label for="trackSelect" class="playlists-form__label">Choose track</label>
-      <div class="playlists-form__select-group">
-        <select #trackSelect id="trackSelect" class="playlists-form__list">
-          @for (track of tracksStore.tracks(); track track.id) {
-            <option [value]="track.id" class="playlists-form__list-item">
-              {{ track.title }} - {{ track.artist.name }}
-            </option>
-          }
-        </select>
-        <app-button size="sm" (click)="onAddTrack(trackSelect.value)">Add track</app-button>
-      </div>
+      @defer (when tracksStore.tracks().length>0) {
+        <div class="playlists-form__select-group">
+          <select #trackSelect id="trackSelect" class="playlists-form__list">
+            @for (track of tracksStore.tracks(); track track.id) {
+              <option [value]="track.id" class="playlists-form__list-item">
+                {{ track.title }} - {{ track.artist.name }}
+              </option>
+            }
+          </select>
+          <app-button size="sm" (click)="onAddTrack(trackSelect.value)">Add track</app-button>
+        </div>
+      } @placeholder (minimum 500ms) {
+        <div class="playlists-form__select-group">
+          <select class="playlists-form__list"></select>
+          <app-button size="sm" [disabled]="true">Loading...</app-button>
+        </div>
+      }
     </div>
     <div class="playlists-form__tracks-list">
       @for (track of selectedTracks(); track track.id) {
