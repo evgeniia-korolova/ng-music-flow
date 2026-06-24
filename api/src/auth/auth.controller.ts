@@ -10,8 +10,8 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { RegisterDto } from './DTOs/RegisterDto';
-import { LoginDto } from './DTOs/LoginDto';
+import { RegisterDto } from './DTOs/register.dto';
+import { LoginDto } from './DTOs/login.dto';
 import { AuthService } from './auth.service';
 import {
   type AuthenticatedRequest,

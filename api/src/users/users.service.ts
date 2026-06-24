@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity/user.entity';
-import { RegisterDto } from 'src/auth/DTOs/RegisterDto';
+import { RegisterDto } from 'src/auth/DTOs/register.dto';
 import { ApiException } from 'src/common/exceptions/api.exception';
 import { UpdateResult } from 'typeorm/browser';
 
