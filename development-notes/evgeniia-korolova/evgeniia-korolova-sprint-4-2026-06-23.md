@@ -5,9 +5,10 @@
 **What I did:**
 
 - update Node.js in ci-pipeline.yml and release.yml, add token for semantic release
+- implement 4 variants of track-history: httpResource, rxResource, SignalStore, Signal State Object just to show the ways to manage data to team-mates
 
 **Problems & SolutionsIssue**:
 
-- **Time spent:** 4-8 hour per day - total about \_\_\_ hours
+- **Time spent:** 4-8 hour per day - total about 12 hours
 
 - **Plans for the second week**

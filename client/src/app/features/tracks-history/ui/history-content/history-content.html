@@ -1,0 +1,9 @@
+<div class="history-page">
+  <div class="history-page-header">
+    <h3>{{ historyService.listTitle() }}</h3>
+
+    <input type="date" (change)="onDateChange($event)" class="date-picker" />
+  </div>
+
+  <app-tracks-list [viewMode]="'tabs'"></app-tracks-list>
+</div>
