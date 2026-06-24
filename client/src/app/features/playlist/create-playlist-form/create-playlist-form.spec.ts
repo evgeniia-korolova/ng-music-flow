@@ -4,6 +4,7 @@ import { CreatePlaylistForm } from './create-playlist-form';
 import { signal } from '@angular/core';
 import { TracksStore } from '../../../entities/track/model/track.store';
 import { Track } from '../../../entities/track/model/track.model';
+import { TrackList } from '../../../entities/playlist/model/playlist.model';
 const mockTrackStore = {
   tracks: signal([]),
   loadTracks: () => {
@@ -39,6 +40,16 @@ describe('CreatePlaylistForm', () => {
     component.playlistForm.setValue({ title: 'My list', description: 'My desc' });
     component.selectedTracks.set([{ id: '1' } as unknown as Track]);
     component.onSubmit();
+    const { id, ...playlist } = emittedData as TrackList;
+
+    expect(typeof id).toBe('string');
+    expect(id.length).toBeGreaterThan(0);
+
+    expect(playlist).toEqual({
+      title: 'My list',
+      descr: 'My desc',
+      tracksList: [{ id: '1' } as Track],
+    });
     expect(emittedData).toEqual({
       title: 'My list',
       descr: 'My desc',
