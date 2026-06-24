@@ -1,0 +1,28 @@
+<aside class="aisde-library" aria-label="User playlists">
+  <h2 class="aisde-library__title">My playlists</h2>
+  <app-button class="aisde-library__create-btn" (click)="openUserForm.emit()"
+    >Create playlist</app-button
+  >
+  <ul class="aisde-library__list">
+    @for (list of playlists(); track list.title) {
+      <li
+        class="aisde-library__item"
+        (click)="checkedUserList.emit(list)"
+        tabindex="0"
+        (keydown.enter)="checkedUserList.emit(list)"
+        (keydown.space)="checkedUserList.emit(list)"
+        role="button"
+      >
+        <span>{{ list.title }}</span>
+        <app-button
+          variant="ghost"
+          type="button"
+          size="icon-rounded-sm"
+          (click)="deleteUserList.emit(list); $event.stopPropagation()"
+          aria-label="Delete playlist"
+          ><app-icon icon="x"></app-icon
+        ></app-button>
+      </li>
+    }
+  </ul>
+</aside>

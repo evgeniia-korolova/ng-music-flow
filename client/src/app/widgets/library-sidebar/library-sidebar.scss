@@ -1,0 +1,45 @@
+.aisde-library {
+  border-right: 1px solid var(--color-bg-accent);
+  padding-right: 20px;
+  overflow-y: auto;
+  height: 100%;
+  @media (width < 768px) {
+    height: auto;
+    border-right: none;
+    padding-right: 0px;
+    overflow-y: visible;
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 26px;
+    margin-bottom: 24px;
+  }
+
+  &__create-btn {
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    span {
+      color: var(--color-brand-active);
+      cursor: pointer;
+      @media (any-hover: hover) {
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

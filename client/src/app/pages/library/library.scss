@@ -10,27 +10,9 @@
     @media (width < 768px) {
       grid-template-columns: 1fr;
       height: auto;
-      padding: 35px 15px;
+      padding: 10px 15px;
+      gap: 10px;
     }
-  }
-
-  &__aside {
-    border-right: 1px solid var(--color-bg-accent);
-    padding-right: 20px;
-    overflow-y: auto;
-    height: 100%;
-    @media (width < 768px) {
-      height: auto;
-      border-right: none;
-      padding-right: 0px;
-      overflow-y: visible;
-    }
-  }
-
-  &__title {
-    font-weight: 600;
-    font-size: 26px;
-    margin-bottom: 24px;
   }
 
   &__content {
@@ -41,27 +23,30 @@
       overflow-y: visible;
     }
   }
-  &__create-btn {
-    &:not(:last-child) {
-      margin-bottom: 24px;
-    }
+  &__menu-btn {
+    display: none;
+    position: relative;
+    z-index: 100;
   }
-  &__list-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 20px;
-    span {
-      color: var(--color-brand-active);
-      cursor: pointer;
-      @media (any-hover: hover) {
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-    &:not(:last-child) {
-      margin-bottom: 10px;
-    }
+}
+@media (width < 768px) {
+  .playlists__menu-btn {
+    display: block;
+  }
+  app-library-sidebar {
+    text-align: center;
+    padding: 30px 15px 100px;
+    position: fixed;
+    top: 4.5rem;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 99;
+    left: -100%;
+    transition: left 0.3s ease;
+    background-color: var(--color-bg);
+  }
+  app-library-sidebar.is-open {
+    left: 0;
   }
 }
