@@ -4,7 +4,7 @@ import { Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
-import { TrackList } from '../../../entities/playlist/model/playlist.model';
+import { LibraryTrackList } from '../../../entities/playlist/model/playlist.model';
 
 @Component({
   selector: 'app-create-playlist-form',
@@ -18,9 +18,13 @@ export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly selectedTracks = signal<Track[]>([]);
   readonly cancelForm = output<void>();
-  readonly savedPlayList = output<TrackList>();
+  readonly savedPlayList = output<LibraryTrackList>();
   playlistForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20),
+    ]),
     description: new FormControl(''),
   });
   ngOnInit(): void {

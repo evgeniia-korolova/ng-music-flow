@@ -3,7 +3,7 @@ import { CreatePlaylistForm } from '../../features/playlist/create-playlist-form
 import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
-import { TrackList } from '../../entities/playlist/model/playlist.model';
+import { LibraryTrackList } from '../../entities/playlist/model/playlist.model';
 
 @Component({
   selector: 'app-library',
@@ -13,9 +13,9 @@ import { TrackList } from '../../entities/playlist/model/playlist.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Library {
-  readonly playlists = signal<TrackList[]>([]);
+  readonly playlists = signal<LibraryTrackList[]>([]);
   readonly isFormShow = signal<boolean>(false);
-  readonly saveCurrentList = signal<TrackList | null>(null);
+  readonly saveCurrentList = signal<LibraryTrackList | null>(null);
   readonly isSideBarOpen = signal<boolean>(false);
 
   openCreateForm() {
@@ -23,10 +23,10 @@ export default class Library {
     this.saveCurrentList.set(null);
   }
 
-  onCreatePlayList(playlist: TrackList) {
+  onCreatePlayList(playlist: LibraryTrackList) {
     this.playlists.update((data) => [...data, playlist]);
   }
-  deletePlaylist(playlistToDelete: TrackList) {
+  deletePlaylist(playlistToDelete: LibraryTrackList) {
     this.playlists.update((data) => data.filter((item) => item.title !== playlistToDelete.title));
     if (this.saveCurrentList()?.title === playlistToDelete.title) {
       this.saveCurrentList.set(null);

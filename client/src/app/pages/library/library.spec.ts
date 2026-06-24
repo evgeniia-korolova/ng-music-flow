@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import Library from './library';
-import { TrackList } from '../../entities/playlist/model/playlist.model';
+import { LibraryTrackList } from '../../entities/playlist/model/playlist.model';
 
 describe('Library', () => {
   let component: Library;
@@ -21,11 +21,11 @@ describe('Library', () => {
     expect(component).toBeTruthy();
   });
   it('should add playlist to the list', () => {
-    component.onCreatePlayList({ title: 'Rock' } as unknown as TrackList);
+    component.onCreatePlayList({ title: 'Rock' } as unknown as LibraryTrackList);
     expect(component.playlists().length).toEqual(1);
   });
   it('should delete playlist and clear current view', () => {
-    const fakeList = { title: 'Pop' } as unknown as TrackList;
+    const fakeList = { title: 'Pop' } as unknown as LibraryTrackList;
     component.playlists.set([fakeList]);
     component.saveCurrentList.set(fakeList);
     component.deletePlaylist(fakeList);
