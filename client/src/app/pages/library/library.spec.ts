@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import Library from './library';
-import { TrackList } from '../../features/playlist/create-playlist-form/create-playlist-form';
+import { TrackList } from '../../entities/playlist/model/playlist.model';
 
 describe('Library', () => {
   let component: Library;

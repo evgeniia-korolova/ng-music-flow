@@ -1,13 +1,15 @@
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
-import { TrackList } from '../../features/playlist/create-playlist-form/create-playlist-form';
+import { RouterLink } from '@angular/router';
+import { TrackList } from '../../entities/playlist/model/playlist.model';
 
 @Component({
   selector: 'app-library-sidebar',
-  imports: [Button, Icon],
+  imports: [Button, Icon, RouterLink],
   templateUrl: './library-sidebar.html',
   styleUrl: './library-sidebar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LibrarySidebar {
   readonly playlists = input.required<TrackList[]>();

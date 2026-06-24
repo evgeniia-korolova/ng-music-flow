@@ -1,17 +1,16 @@
-import { Component, signal } from '@angular/core';
-import {
-  CreatePlaylistForm,
-  TrackList,
-} from '../../features/playlist/create-playlist-form/create-playlist-form';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { CreatePlaylistForm } from '../../features/playlist/create-playlist-form/create-playlist-form';
 import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
+import { TrackList } from '../../entities/playlist/model/playlist.model';
 
 @Component({
   selector: 'app-library',
   imports: [CreatePlaylistForm, LibrarySidebar, Button, Icon],
   templateUrl: './library.html',
   styleUrl: './library.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Library {
   readonly playlists = signal<TrackList[]>([]);
