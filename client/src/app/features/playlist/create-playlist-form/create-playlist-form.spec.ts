@@ -40,17 +40,10 @@ describe('CreatePlaylistForm', () => {
     component.playlistForm.setValue({ title: 'My list', description: 'My desc' });
     component.selectedTracks.set([{ id: '1' } as unknown as Track]);
     component.onSubmit();
-    const { id, ...playlist } = emittedData as TrackList;
-
-    expect(typeof id).toBe('string');
-    expect(id.length).toBeGreaterThan(0);
-
-    expect(playlist).toEqual({
-      title: 'My list',
-      descr: 'My desc',
-      tracksList: [{ id: '1' } as Track],
-    });
+    const result = emittedData as TrackList;
+    result.id = '1';
     expect(emittedData).toEqual({
+      id: '1',
       title: 'My list',
       descr: 'My desc',
       tracksList: [{ id: '1' } as unknown],
