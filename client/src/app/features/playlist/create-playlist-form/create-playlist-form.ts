@@ -1,15 +1,10 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
-
-export interface TrackList {
-  title: string;
-  descr: string;
-  tracksList: Track[];
-}
+import { LibraryTrackList } from '../../../entities/playlist/model/playlist.model';
 
 @Component({
   selector: 'app-create-playlist-form',
@@ -17,14 +12,19 @@ export interface TrackList {
   providers: [TracksStore],
   templateUrl: './create-playlist-form.html',
   styleUrl: './create-playlist-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly selectedTracks = signal<Track[]>([]);
   readonly cancelForm = output<void>();
-  readonly savedPlayList = output<TrackList>();
+  readonly savedPlayList = output<LibraryTrackList>();
   playlistForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20),
+    ]),
     description: new FormControl(''),
   });
   ngOnInit(): void {
@@ -34,11 +34,12 @@ export class CreatePlaylistForm implements OnInit {
     });
   }
   onSubmit() {
+    const id = Date.now().toString();
     const title = this.playlistForm.value.title ?? '';
     const descr = this.playlistForm.value.description ?? '';
     const tracksList = this.selectedTracks();
 
-    this.savedPlayList.emit({ title, descr, tracksList });
+    this.savedPlayList.emit({ id, title, descr, tracksList });
     this.playlistForm.reset();
     this.selectedTracks.set([]);
     this.closeForm();

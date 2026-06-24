@@ -1,0 +1,27 @@
+<aside class="aside-library" aria-label="User playlists">
+  <h2 class="aside-library__title">My playlists</h2>
+  <app-button class="aside-library__create-btn" (click)="openUserForm.emit()"
+    >Create playlist</app-button
+  >
+  <ul class="aside-library__list">
+    @for (list of playlists(); track list.title) {
+      <li class="aside-library__item">
+        <a
+          class="aside-library__link"
+          [routerLink]="['playlists', list.title]"
+          routerLinkActive="active-tab"
+        >
+          {{ list.title }}
+        </a>
+        <app-button
+          variant="ghost"
+          type="button"
+          size="icon-rounded-sm"
+          (click)="deleteUserList.emit(list); $event.stopPropagation(); $event.preventDefault()"
+          aria-label="Delete playlist"
+          ><app-icon icon="x"></app-icon
+        ></app-button>
+      </li>
+    }
+  </ul>
+</aside>
