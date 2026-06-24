@@ -13,6 +13,7 @@ describe('LibrarySidebar', () => {
 
     fixture = TestBed.createComponent(LibrarySidebar);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('playlists', []);
     fixture.detectChanges();
   });
 
