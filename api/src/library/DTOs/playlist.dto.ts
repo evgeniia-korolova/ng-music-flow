@@ -40,7 +40,7 @@ export class CreatePlaylistDto {
   tracks!: TrackOrderPayloadDto[];
 }
 
-export class UpdatePlaylistTracksDto {
+export class UpdatePlaylistDto {
   @IsOptional()
   @IsString()
   name?: string;
@@ -53,5 +53,5 @@ export class UpdatePlaylistTracksDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TrackOrderPayloadDto)
-  sortedTracks?: TrackOrderPayloadDto[];
+  tracks?: TrackOrderPayloadDto[];
 }

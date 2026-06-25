@@ -56,7 +56,7 @@ export class TracksController {
   }> {
     const userId = req.user.id;
 
-    return this.tracksService.getUserTracks(userId, page ?? 1, limit ?? 20);
+    return this.tracksService.getLocalTracks(userId, page ?? 1, limit ?? 20);
   }
 
   @Get('titles')
@@ -65,7 +65,7 @@ export class TracksController {
   ): Promise<Array<{ id: string; title: string }>> {
     const userId = req.user.id;
 
-    return this.tracksService.getUserTrackTitles(userId);
+    return this.tracksService.getLocalTrackTitles(userId);
   }
 
   @Delete(':id')
