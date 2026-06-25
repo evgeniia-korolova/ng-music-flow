@@ -109,9 +109,10 @@ export const routes: Routes = [
       },
       {
         path: 'library',
-        loadComponent: () => import('./pages/library/library'),
+        //loadComponent: () => import('./pages/library/library'),
         title: 'Library',
         data: { displayOnNavbar: true },
+        loadChildren: () => import('./pages/library/library.routes').then((m) => m.LIBRARY_ROUTES),
         canActivate: [authGuard],
       },
     ],

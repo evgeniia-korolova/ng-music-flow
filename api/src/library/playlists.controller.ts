@@ -31,7 +31,10 @@ export class PlaylistsController {
     @Req() req: AuthenticatedRequest,
     @Body() createPlaylistDto: CreatePlaylistDto,
   ): Promise<PlaylistModel> {
-    return this.playlistsService.createPlaylist(req.user.id, createPlaylistDto);
+    return await this.playlistsService.createPlaylist(
+      req.user.id,
+      createPlaylistDto,
+    );
   }
 
   @Get()

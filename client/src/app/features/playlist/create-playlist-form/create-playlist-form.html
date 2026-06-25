@@ -7,25 +7,25 @@
   </div>
   <form [formGroup]="playlistForm" class="playlists-form" (ngSubmit)="onSubmit()">
     <div class="playlists-form__line">
-      <label for="title" class="playlists-form__label">List title</label>
+      <label for="name" class="playlists-form__label">List title</label>
       <input
         type="text"
         placeholder="List title..."
-        formControlName="title"
-        id="title"
-        [class.error]="playlistForm.controls.title.invalid && playlistForm.controls.title.touched"
+        formControlName="name"
+        id="name"
+        [class.error]="playlistForm.controls.name.invalid && playlistForm.controls.name.touched"
         aria-describedby="title-error"
       />
-      @if (playlistForm.controls.title.invalid && playlistForm.controls.title.touched) {
+      @if (playlistForm.controls.name.invalid && playlistForm.controls.name.touched) {
         <div class="playlists-form__error" id="title-error">Title is required</div>
       }
     </div>
     <div class="playlists-form__line">
-      <label for="descr" class="playlists-form__label">Description</label>
+      <label for="description" class="playlists-form__label">Description</label>
       <textarea
         placeholder="List description..."
         formControlName="description"
-        id="descr"
+        id="description"
       ></textarea>
     </div>
     <div class="playlists-form__line">

@@ -72,7 +72,6 @@ export class TrackHistoryService {
     effect(() => {
       const track = this.playerService.currentTrack();
       const isPlaying = this.playerService.isPlaying();
-
       if (track && isPlaying && track.id !== this.lastTrackIdSaved) {
         this.lastTrackIdSaved = track.id;
         void this.trackPlayed(track);

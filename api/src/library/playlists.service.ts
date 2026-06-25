@@ -66,15 +66,31 @@ export class PlaylistsService {
     return this.mapToPlaylistModel(playlist);
   }
 
+  // async getAllUserPlaylists(userId: string): Promise<PlaylistModel[]> {
+  //   const playlists = await this.playlistRepository.find({
+  //     where: { userId },
+  //     order: { createdAt: 'DESC' },
+  //   });
+
+  //   return Promise.all(
+  //     playlists.map((playlist) => this.mapToPlaylistModel(playlist)),
+  //   );
+  // }
+
   async getAllUserPlaylists(userId: string): Promise<PlaylistModel[]> {
     const playlists = await this.playlistRepository.find({
       where: { userId },
       order: { createdAt: 'DESC' },
     });
 
-    return Promise.all(
-      playlists.map((playlist) => this.mapToPlaylistModel(playlist)),
-    );
+    const sortedPlaylists: PlaylistModel[] = [];
+
+    for (const playlist of playlists) {
+      const mapped = await this.mapToPlaylistModel(playlist);
+      sortedPlaylists.push(mapped);
+    }
+
+    return sortedPlaylists;
   }
 
   async updatePlaylist(
