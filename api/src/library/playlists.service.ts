@@ -16,21 +16,17 @@ import {
   PlaylistModel,
   PlaylistTrack,
 } from './models/playlist.model';
-import { ConfigService } from '@nestjs/config';
-import { JamendoResponse } from 'src/jamendo/jamendo/jamendo-client';
-import { JamendoTrackDto } from './DTOs/track.dto';
-import { mapJamendoToTrack } from 'src/common/utils/mappings';
 import { TracksService } from './tracks.service';
-import { Track } from './models/track.model';
 import { ApiException } from 'src/common/exceptions/api.exception';
+import { JamendoService } from 'src/jamendo/jamendo.service';
 
 @Injectable()
 export class PlaylistsService {
   constructor(
     @InjectRepository(PlaylistEntity)
     private readonly playlistRepository: Repository<PlaylistEntity>,
-    private readonly configService: ConfigService,
     private readonly tracksService: TracksService,
+    private readonly jamendoService: JamendoService,
   ) {}
 
   async createPlaylist(
@@ -165,7 +161,9 @@ export class PlaylistsService {
             ? { ref, duration: track.duration, valid: true }
             : { ref, duration: 0, valid: false };
         } else {
-          const jamendoTrack = await this.fetchJamendo(ref.trackId);
+          const jamendoTrack = await this.jamendoService.getTrackById(
+            ref.trackId,
+          );
           return jamendoTrack
             ? { ref, duration: jamendoTrack.duration, valid: true }
             : { ref, duration: 0, valid: false };
@@ -235,22 +233,10 @@ export class PlaylistsService {
     };
   }
 
-  private async fetchJamendo(trackId: string): Promise<Track | null> {
-    try {
-      const res = await fetch(
-        `${this.configService.getOrThrow<string>('JAMENDO_BASE_URL')}/tracks/?id=${trackId}&format=json`,
-      );
-      const data = (await res.json()) as JamendoResponse<JamendoTrackDto>;
-      return data.results?.[0] ? mapJamendoToTrack(data.results[0]) : null;
-    } catch {
-      return null;
-    }
-  }
-
   private async getJamendoTrack(
     ref: PlaylistTrackReference,
   ): Promise<PlaylistTrack | PlaylistTrackReference> {
-    const track = await this.fetchJamendo(ref.trackId);
+    const track = await this.jamendoService.getTrackById(ref.trackId);
     return track ? { origin: 'JAMENDO', orderId: ref.order, track } : ref;
   }
 }

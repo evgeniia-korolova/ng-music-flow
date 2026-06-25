@@ -1,3 +1,4 @@
+import { HistoryEntity } from 'src/library/entities/history.entity';
 import { PlaylistEntity } from 'src/library/entities/playlist.entity';
 import { TrackEntity } from 'src/library/entities/track.entity';
 import {
@@ -42,4 +43,7 @@ export class UserEntity {
 
   @OneToMany(() => PlaylistEntity, (playlist) => playlist.user)
   playlists!: PlaylistEntity[];
+
+  @OneToMany(() => HistoryEntity, (history) => history.userId)
+  listeningHistory!: HistoryEntity[];
 }
