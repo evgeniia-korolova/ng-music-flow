@@ -1,9 +1,12 @@
+import { UserEntity } from 'src/users/entities/user.entity/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 
 export interface PlaylistTrackReference {
@@ -19,6 +22,12 @@ export class PlaylistEntity {
 
   @Column()
   userId!: string;
+
+  @ManyToOne(() => UserEntity, (user) => user.playlists, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
+  user!: UserEntity;
 
   @Column({ unique: true })
   name!: string;
