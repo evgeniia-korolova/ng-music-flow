@@ -56,7 +56,7 @@ export class PlaylistsController {
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updatePlaylistTracksDto: UpdatePlaylistTracksDto,
   ): Promise<PlaylistModel> {
-    return this.playlistsService.updatePlaylist(
+    return await this.playlistsService.updatePlaylist(
       req.user.id,
       id,
       updatePlaylistTracksDto,

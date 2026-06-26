@@ -53,5 +53,5 @@ export class UpdatePlaylistTracksDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => TrackOrderPayloadDto)
-  sortedTracks?: TrackOrderPayloadDto[];
+  tracks?: TrackOrderPayloadDto[];
 }

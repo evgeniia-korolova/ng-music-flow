@@ -1,6 +1,13 @@
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { Track } from '../../../entities/track/model/track.model';
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
@@ -28,6 +35,12 @@ export interface GetPlaylistsResponseDto {
   error: string | null;
 }
 
+export interface UpdatePlaylistTracksDto {
+  name?: string;
+  description?: string;
+  tracks?: { trackId: string; origin: 'JAMENDO' | 'LOCAL'; order: number }[];
+}
+
 export interface PlaylistsState {
   playlists: LibraryPlaylist[];
   isLoading: boolean;
@@ -43,6 +56,12 @@ const initialState: PlaylistsState = {
 export const PlaylistsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+
+  withComputed((store) => ({
+    getPlaylistByName: computed(() => (name: string) => {
+      return store.playlists().find((p) => p.name === name);
+    }),
+  })),
 
   withMethods((store, http = inject(HttpClient)) => {
     const apiAddr = `${environment.appApiUrl}/playlists`;
@@ -95,6 +114,7 @@ export const PlaylistsStore = signalStore(
             id: p.id,
             name: p.name,
             description: p.description || '',
+            createdAt: p.createdAt,
             tracks: p.tracks ? p.tracks.map((t: PlaylistTrackDto) => t.track) : [],
           }));
 
@@ -124,6 +144,67 @@ export const PlaylistsStore = signalStore(
         } catch (err) {
           console.error('Failed to delete playlist from NestJS:', err);
           patchState(store, { error: 'Failed to delete playlist', isLoading: false });
+        }
+      },
+
+      async updatePlaylist(
+        playlistId: string | undefined,
+        updatedData: { name?: string; description?: string; tracks?: Track[] },
+      ): Promise<void> {
+        if (!playlistId) return;
+
+        const currentPlaylist = store.playlists().find((p) => p.id === playlistId);
+        if (!currentPlaylist) return;
+
+        patchState(store, { isLoading: true, error: null });
+
+        // Собираем тело запроса строго по контракту коллеги
+        const patchPayload: UpdatePlaylistTracksDto = {};
+
+        if (updatedData.name && updatedData.name !== currentPlaylist.name) {
+          patchPayload.name = updatedData.name;
+        }
+
+        if (
+          updatedData.description !== undefined &&
+          updatedData.description !== currentPlaylist.description
+        ) {
+          patchPayload.description = updatedData.description;
+        }
+
+        // Присваиваем массив строго в ключ tracks!
+        if (updatedData.tracks) {
+          patchPayload.tracks = updatedData.tracks.map((track: Track, index: number) => ({
+            trackId: track.id,
+            origin: (track.origin || 'JAMENDO') as 'JAMENDO' | 'LOCAL',
+            order: index + 1,
+          }));
+        }
+
+        try {
+          const response = await firstValueFrom(
+            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, patchPayload),
+          );
+
+          const updatedPlaylist: LibraryPlaylist = {
+            id: response.id,
+            name: response.name,
+            description: response.description || '',
+            createdAt: response.createdAt,
+            tracks:
+              updatedData.tracks ||
+              (response.tracks ? response.tracks.map((t: PlaylistTrackDto) => t.track) : []),
+          };
+
+          patchState(store, (state) => ({
+            playlists: state.playlists.map((p) => (p.id === playlistId ? updatedPlaylist : p)),
+            isLoading: false,
+          }));
+
+          console.log(`Плейлист успешно сохранен с полем tracks!`);
+        } catch (err) {
+          console.error('Failed to update playlist in NestJS:', err);
+          patchState(store, { error: 'Не удалось обновить плейлист', isLoading: false });
         }
       },
     };

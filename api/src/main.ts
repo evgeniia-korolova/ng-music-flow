@@ -20,6 +20,17 @@ async function bootstrap(): Promise<void> {
 
   const app = await NestFactory.create(AppModule);
 
+  // app.use((req, res, next) => {
+  //   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  //   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  //   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+
+  //   if (req.method === 'OPTIONS') {
+  //     return res.status(200).send();
+  //   }
+  //   next();
+  // });
+
   const isProduction = process.env.ENVIRONMENT === 'production';
 
   const apiPort = process.env.API_PORT ?? 3000;

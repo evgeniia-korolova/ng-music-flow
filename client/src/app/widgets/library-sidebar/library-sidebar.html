@@ -17,10 +17,22 @@
           >
             {{ list.name }}
           </a>
+
           <app-button
             variant="ghost"
             type="button"
             size="icon-rounded-sm"
+            [appTooltip]="'Edit playlist'"
+            [routerLink]="['playlists/edit', list.id]"
+            aria-label="Delete playlist"
+            ><app-icon icon="edit"></app-icon
+          ></app-button>
+
+          <app-button
+            variant="ghost"
+            type="button"
+            size="icon-rounded-sm"
+            [appTooltip]="'Delete playlist'"
             (click)="deleteUserList.emit(list); $event.stopPropagation(); $event.preventDefault()"
             aria-label="Delete playlist"
             ><app-icon icon="x"></app-icon

@@ -2,13 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  contentChild,
   inject,
   input,
   linkedSignal,
   output,
   signal,
-  TemplateRef,
 } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Track } from '../../entities/track/model/track.model';
@@ -29,13 +27,12 @@ export class DragDropList {
 
   public readonly viewMode = signal<'tabs' | 'search' | 'slider'>('search');
 
-  public readonly showWave = computed<boolean>(() => {
+  public readonly isEditMode = input<boolean>(false);
+
+  public readonly showWave = linkedSignal<boolean>(() => {
     if (this.screen.isLarge()) return true;
     return false;
   });
-
-  public readonly itemTemplate =
-    contentChild<TemplateRef<{ $implicit: Track; index: number }>>('itemTemplate');
 
   public readonly currentTracks = linkedSignal<Track[], Track[]>({
     source: () => this.tracks(),

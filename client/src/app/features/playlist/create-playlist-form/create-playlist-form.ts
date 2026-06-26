@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
@@ -22,7 +31,10 @@ export class CreatePlaylistForm implements OnInit {
   private readonly router = inject(Router);
   readonly selectedTracks = signal<Track[]>([]);
   readonly cancelForm = output<void>();
-  readonly savedPlayList = output<LibraryPlaylist>();
+  //readonly savedPlayList = output<LibraryPlaylist>();
+
+  public readonly playlistId = input<string>();
+  public readonly isEditMode = computed(() => !!this.playlistId());
 
   playlistForm = new FormGroup({
     name: new FormControl('', [
@@ -40,30 +52,53 @@ export class CreatePlaylistForm implements OnInit {
     });
 
     this.playlistsStore.loadPlaylists();
+
+    if (this.isEditMode()) {
+      const currentPlaylist = this.playlistsStore
+        .playlists()
+        .find((p) => p.id === this.playlistId());
+
+      if (currentPlaylist) {
+        this.playlistForm.setValue({
+          name: currentPlaylist.name,
+          description: currentPlaylist.description || '',
+        });
+        this.selectedTracks.set(currentPlaylist.tracks);
+      }
+    }
   }
 
   onSubmit() {
     if (this.playlistForm.invalid || this.selectedTracks().length === 0) return;
 
-    const playlistPayload: LibraryPlaylist = {
-      name: this.playlistForm.controls.name.value ?? '',
-      description: this.playlistForm.controls.description.value ?? '',
-      tracks: this.selectedTracks(),
-    };
+    if (this.isEditMode()) {
+      const playlistPayload: LibraryPlaylist = {
+        name: this.playlistForm.controls.name.value ?? '',
+        description: this.playlistForm.controls.description.value ?? '',
+        tracks: this.selectedTracks(),
+      };
 
-    // const name = this.playlistForm.value.name ?? '';
-    // const description = this.playlistForm.value.description ?? '';
-    // const tracks = this.selectedTracks();
+      this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
+        this.playlistForm.reset();
+        this.selectedTracks.set([]);
+        void this.router.navigate(['/library/playlists', playlistPayload.name]);
+      });
+    } else {
+      const playlistPayload: LibraryPlaylist = {
+        name: this.playlistForm.controls.name.value ?? '',
+        description: this.playlistForm.controls.description.value ?? '',
+        tracks: this.selectedTracks(),
+      };
 
-    this.playlistsStore
-      .createPlaylist(playlistPayload)
-      .then(() => {
-        console.log('Playlist created');
-        this.router.navigate(['/library/custom-tracks']);
-      })
-      .catch((err) => console.error('Failed to save:', err));
+      this.playlistsStore
+        .createPlaylist(playlistPayload)
+        .then(() => {
+          console.log('Playlist created');
+          this.router.navigate(['/library/custom-tracks']);
+        })
+        .catch((err) => console.error('Failed to save:', err));
+    }
 
-    // this.savedPlayList.emit({ name, description, tracks });
     this.playlistForm.reset();
     this.selectedTracks.set([]);
 

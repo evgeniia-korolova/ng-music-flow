@@ -109,9 +109,9 @@ export class PlaylistsService {
     if (dto.name) playlist.name = dto.name;
     if (dto.description) playlist.description = dto.description;
 
-    if (dto.sortedTracks) {
+    if (dto.tracks) {
       const { updatedTracks, trackCount, totalDuration } =
-        await this.processTracksAndCalculateMetrics(dto.sortedTracks);
+        await this.processTracksAndCalculateMetrics(dto.tracks);
 
       playlist.tracks = updatedTracks;
       playlist.trackCount = trackCount;
@@ -232,7 +232,7 @@ export class PlaylistsService {
         if (fullTrack) {
           hydratedTracks.push({
             origin: 'LOCAL',
-            orderId: trackRef.order,
+            order: trackRef.order,
             track: {
               id: fullTrack.id,
               title: fullTrack.title,
@@ -260,7 +260,7 @@ export class PlaylistsService {
       } else {
         hydratedTracks.push({
           origin: 'JAMENDO',
-          orderId: trackRef.order,
+          order: trackRef.order,
           track: {
             id: trackRef.trackId,
             title: 'Jamendo Stream Track',

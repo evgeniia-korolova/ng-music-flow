@@ -1,0 +1,40 @@
+<div class="playlist-view-layout">
+  @if (activePlaylist(); as playlist) {
+    <app-drag-drop-list #trackList [tracks]="playlist.tracks">
+      <div slot-header class="playlist-info-header">
+        <div class="header-info">
+          <h2 class="playlist-info-header__title">{{ playlist.name }}</h2>
+          @if (playlist.createdAt) {
+            <span class="playlist-info-header__date">
+              📅 Created: {{ playlist.createdAt | date: 'dd.MM.yyyy' }}
+            </span>
+          }
+          @if (playlist.description) {
+            <p class="playlist-info-header__descr">{{ playlist.description }}</p>
+          }
+        </div>
+
+        @if (isEditing()) {
+          <div class="header-actions">
+            <span class="playlist-info-header__status-badge">⚡ Editing mode</span>
+            <app-button variant="ghost" size="sm" (click)="onAddTrackClick()">
+              ➕ Add Track
+            </app-button>
+            <app-button variant="ghost" size="sm" (click)="onSaveChangesClick(playlist.id)">
+              💾 Save Changes
+            </app-button>
+            <app-button
+              variant="ghost"
+              size="sm"
+              [routerLink]="['/library/playlists', playlist.name]"
+            >
+              Cancel
+            </app-button>
+          </div>
+        }
+      </div>
+    </app-drag-drop-list>
+  } @else {
+    <p>Playlist not found</p>
+  }
+</div>
