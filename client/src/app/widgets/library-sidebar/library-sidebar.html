@@ -4,15 +4,15 @@
   <nav class="aside-library__nav" aria-label="Library navigation">
     <ul class="aside-library__list">
       <li class="aside-library__item system-tab">
-        <a class="aside-library__link" routerLink="history" routerLinkActive="active-tab">
+        <a class="aside-library__link" routerLink="/library/history" routerLinkActive="active-tab">
           🕒 Recently Played
         </a>
       </li>
-      @for (list of playlists(); track list.name) {
+      @for (list of playlists(); track list.id) {
         <li class="aside-library__item">
           <a
             class="aside-library__link"
-            [routerLink]="['playlists', list.name]"
+            [routerLink]="['/library/playlists', list.id]"
             routerLinkActive="active-tab"
           >
             {{ list.name }}
@@ -23,8 +23,8 @@
             type="button"
             size="icon-rounded-sm"
             [appTooltip]="'Edit playlist'"
-            [routerLink]="['playlists/edit', list.id]"
-            aria-label="Delete playlist"
+            [routerLink]="['/library/playlists/edit', list.id]"
+            aria-label="Edit playlist"
             ><app-icon icon="edit"></app-icon
           ></app-button>
 
@@ -41,7 +41,11 @@
       }
 
       <li class="aside-library__item system-tab">
-        <a class="aside-library__link" routerLink="custom-tracks" routerLinkActive="active-tab">
+        <a
+          class="aside-library__link"
+          routerLink="/library/custom-tracks"
+          routerLinkActive="active-tab"
+        >
           🎵 User's Tracks
         </a>
       </li>

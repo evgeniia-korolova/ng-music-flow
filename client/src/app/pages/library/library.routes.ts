@@ -31,17 +31,17 @@ export const LIBRARY_ROUTES: Routes = [
           ),
       },
       {
+        path: 'playlists/:playlistId',
+        loadComponent: () =>
+          import('../../pages/library/ui/playlist-view-page/playlist-view-page').then(
+            (m) => m.PlaylistViewPage,
+          ),
+      },
+      {
         path: 'playlists/edit/:playlistId',
         loadComponent: () =>
           import('../../features/playlist/create-playlist-form/create-playlist-form').then(
             (m) => m.CreatePlaylistForm,
-          ),
-      },
-      {
-        path: 'playlists/:name',
-        loadComponent: () =>
-          import('../../pages/library/ui/playlist-view-page/playlist-view-page').then(
-            (m) => m.PlaylistViewPage,
           ),
       },
     ],

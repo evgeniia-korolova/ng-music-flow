@@ -81,7 +81,7 @@ export class CreatePlaylistForm implements OnInit {
       this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
         this.playlistForm.reset();
         this.selectedTracks.set([]);
-        void this.router.navigate(['/library/playlists', playlistPayload.name]);
+        this.router.navigate(['/library/playlists', this.playlistId()]);
       });
     } else {
       const playlistPayload: LibraryPlaylist = {
@@ -94,7 +94,7 @@ export class CreatePlaylistForm implements OnInit {
         .createPlaylist(playlistPayload)
         .then(() => {
           console.log('Playlist created');
-          this.router.navigate(['/library/custom-tracks']);
+          this.router.navigate(['/library/playlists', this.playlistId()]);
         })
         .catch((err) => console.error('Failed to save:', err));
     }

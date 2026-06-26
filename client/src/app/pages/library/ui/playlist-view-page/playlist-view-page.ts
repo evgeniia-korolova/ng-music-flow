@@ -12,15 +12,19 @@ import { RouterLink } from '@angular/router';
   styleUrl: './playlist-view-page.scss',
 })
 export class PlaylistViewPage {
-  public readonly playlistsStore = inject(PlaylistsStore);
+  protected readonly playlistsStore = inject(PlaylistsStore);
 
-  public readonly name = input.required<string>();
+  protected readonly playlistId = input.required<string>();
 
-  public readonly edit = input<string>('false');
-  public readonly isEditing = computed(() => this.edit() === 'true');
+  protected readonly edit = input<string>('false');
+  protected readonly isEditing = computed(() => this.edit() === 'true');
 
   public readonly activePlaylist = computed(() => {
-    return this.playlistsStore.playlists().find((p) => p.name === this.name());
+    const id = this.playlistId();
+    const list = this.playlistsStore.playlists();
+    // Ищем совпадение по UUID
+    return list.find((p) => p.id === id) ?? null;
+    // return this.playlistsStore.playlists().find((p) => p.id === this.playlistId());
   });
 
   onAddTrackClick() {
