@@ -2,6 +2,7 @@
   <app-library-sidebar
     [playlists]="playlistsStore.playlists()"
     (checkedUserList)="saveCurrentList.set($event)"
+    (deleteUserList)="deletePlaylist($event)"
     [class.is-open]="isSideBarOpen()"
   ></app-library-sidebar>
   <app-button

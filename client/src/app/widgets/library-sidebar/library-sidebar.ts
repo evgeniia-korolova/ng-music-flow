@@ -13,7 +13,7 @@ import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
 })
 export class LibrarySidebar {
   readonly playlists = input.required<LibraryPlaylist[]>();
-  readonly openUserForm = output();
+  //readonly openUserForm = output();
   readonly checkedUserList = output<LibraryPlaylist>();
   readonly deleteUserList = output<LibraryPlaylist>();
 }

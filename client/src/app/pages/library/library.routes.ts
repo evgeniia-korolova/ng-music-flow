@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const LIBRARY_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./library').then((m) => m.default), // или m.LibraryComponent в зависимости от твоего экспорта
+    loadComponent: () => import('./library').then((m) => m.default),
     children: [
       {
         path: '',

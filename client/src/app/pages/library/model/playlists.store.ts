@@ -104,6 +104,28 @@ export const PlaylistsStore = signalStore(
           patchState(store, { error: 'Failed to load playlists', isLoading: false });
         }
       },
+
+      async deletePlaylist(playlistId: string): Promise<void> {
+        if (!playlistId) {
+          console.warn('failed delete playlist: ID is not defined');
+          return;
+        }
+        patchState(store, { isLoading: true, error: null });
+
+        try {
+          await firstValueFrom(http.delete<void>(`${apiAddr}/${playlistId}`));
+
+          patchState(store, (state) => ({
+            playlists: state.playlists.filter((p) => p.id !== playlistId),
+            isLoading: false,
+          }));
+
+          console.log(`Playlist с ID ${playlistId} deleted!`);
+        } catch (err) {
+          console.error('Failed to delete playlist from NestJS:', err);
+          patchState(store, { error: 'Failed to delete playlist', isLoading: false });
+        }
+      },
     };
   }),
 
