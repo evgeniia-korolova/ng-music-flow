@@ -4,10 +4,11 @@ import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { LibraryTrackList } from '../../entities/playlist/model/playlist.model';
+import { UploadTrackForm } from '../../features/upload-track-form/upload-track-form';
 
 @Component({
   selector: 'app-library',
-  imports: [CreatePlaylistForm, LibrarySidebar, Button, Icon],
+  imports: [CreatePlaylistForm, LibrarySidebar, Button, Icon, UploadTrackForm],
   templateUrl: './library.html',
   styleUrl: './library.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

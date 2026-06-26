@@ -6,7 +6,7 @@
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 30px;
-    height: calc(100vh - 175px);
+    min-height: calc(100vh - 175px);
     @media (width < 768px) {
       grid-template-columns: 1fr;
       height: auto;
