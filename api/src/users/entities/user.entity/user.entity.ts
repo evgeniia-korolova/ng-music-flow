@@ -44,6 +44,6 @@ export class UserEntity {
   @OneToMany(() => PlaylistEntity, (playlist) => playlist.user)
   playlists!: PlaylistEntity[];
 
-  @OneToMany(() => HistoryEntity, (history) => history.userId)
+  @OneToMany(() => HistoryEntity, (history) => history.user)
   listeningHistory!: HistoryEntity[];
 }
