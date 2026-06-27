@@ -10,6 +10,8 @@ export interface PlaylistTrackReference {
   trackId: string;
   origin: 'JAMENDO' | 'LOCAL';
   order: number;
+  coverUrl?: string;
+  waveform?: number[];
 }
 
 @Entity('playlists')

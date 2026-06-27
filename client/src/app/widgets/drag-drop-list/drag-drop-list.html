@@ -10,7 +10,12 @@
   <div cdkDropList (cdkDropListDropped)="drop($event)" class="track-drop-list">
     @for (track of currentTracks(); track track.id; let index = $index) {
       <div cdkDrag class="track-drag-box">
-        <app-track-card [track]="track" [showWave]="showWave()" [playlistContext]="tracks()">
+        <app-track-card
+          [track]="track"
+          [showWave]="showWave()"
+          [playlistContext]="tracks()"
+          [priority]="$index < 3"
+        >
           <ng-container slot-actions>
             <!-- Если включен режим редактирования, покажем крестик -->
             @if (isEditMode()) {

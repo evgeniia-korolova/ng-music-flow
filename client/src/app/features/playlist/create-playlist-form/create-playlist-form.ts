@@ -13,7 +13,6 @@ import { Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
-import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model';
 import { Router } from '@angular/router';
 import { PlaylistsStore } from '../../../pages/library/model/playlists.store';
 
@@ -31,7 +30,6 @@ export class CreatePlaylistForm implements OnInit {
   private readonly router = inject(Router);
   readonly selectedTracks = signal<Track[]>([]);
   readonly cancelForm = output<void>();
-  //readonly savedPlayList = output<LibraryPlaylist>();
 
   public readonly playlistId = input<string>();
   public readonly isEditMode = computed(() => !!this.playlistId());
@@ -70,44 +68,55 @@ export class CreatePlaylistForm implements OnInit {
 
   onSubmit() {
     if (this.playlistForm.invalid || this.selectedTracks().length === 0) return;
+    const formValues = this.playlistForm.getRawValue();
 
     if (this.isEditMode()) {
-      const playlistPayload: LibraryPlaylist = {
-        name: this.playlistForm.controls.name.value ?? '',
-        description: this.playlistForm.controls.description.value ?? '',
+      const playlistPayload = {
+        name: formValues.name ?? '',
+        description: formValues.description ?? '',
         tracks: this.selectedTracks(),
       };
-
       this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
         this.playlistForm.reset();
         this.selectedTracks.set([]);
-        this.router.navigate(['/library/playlists', this.playlistId()]);
+        void this.router.navigate(['/library/playlists', this.playlistId()]);
+        this.closeForm();
       });
     } else {
-      const playlistPayload: LibraryPlaylist = {
-        name: this.playlistForm.controls.name.value ?? '',
-        description: this.playlistForm.controls.description.value ?? '',
+      const playlistPayload = {
+        name: formValues.name ?? '',
+        description: formValues.description ?? '',
         tracks: this.selectedTracks(),
       };
 
       this.playlistsStore
         .createPlaylist(playlistPayload)
         .then(() => {
-          console.log('Playlist created');
-          this.router.navigate(['/library/playlists', this.playlistId()]);
+          const updatedLists = this.playlistsStore.playlists();
+          const freshPlaylist = updatedLists[0];
+
+          if (freshPlaylist && freshPlaylist.id) {
+            console.log('New route:', freshPlaylist.id);
+
+            this.playlistForm.reset();
+            this.selectedTracks.set([]);
+
+            void this.router.navigate(['/library/playlists', freshPlaylist.id]);
+          } else {
+            void this.router.navigate(['/library/custom-tracks']);
+          }
         })
-        .catch((err) => console.error('Failed to save:', err));
+        .catch((err) => console.error('Ошибка создания:', err));
     }
-
-    this.playlistForm.reset();
-    this.selectedTracks.set([]);
-
-    this.closeForm();
   }
 
-  closeForm() {
-    //this.cancelForm.emit();
-    this.router.navigate(['/library/custom-tracks']);
+  closeForm(): void {
+    // if (this.isEditMode()) {
+    //   void this.router.navigate(['/library/playlists', this.playlistId()]);
+    // } else {
+    //   void this.router.navigate(['/library/custom-tracks']);
+    // }
+    this.router.navigate(['/library/playlists', this.playlistId()]);
   }
 
   onAddTrack(trackId: string) {

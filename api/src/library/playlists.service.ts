@@ -148,6 +148,8 @@ export class PlaylistsService {
       trackId: string;
       origin: 'JAMENDO' | 'LOCAL';
       order: number;
+      coverUrl?: string;
+      waveform?: number[];
     }[],
   ): Promise<{
     updatedTracks: PlaylistTrackReference[];
@@ -184,6 +186,8 @@ export class PlaylistsService {
           trackId: track.trackId,
           origin: track.origin,
           order: track.order,
+          coverUrl: track.coverUrl || '/images/track-placeholder.jpg',
+          waveform: track.waveform || [],
         };
       },
     );
@@ -246,13 +250,11 @@ export class PlaylistsService {
                 name: 'Single',
               },
               genre: fullTrack.genre,
-              coverUrl: 'assets/images/default-cover.png',
+              coverUrl: fullTrack.coverUrl || '/images/track-placeholder.jpg',
               audioUrl: fullTrack.url,
               playCount: 0,
               rating: 0,
-              waveform: Array.isArray(fullTrack.waveform)
-                ? fullTrack.waveform
-                : (fullTrack.waveform as string).split(',').map(Number),
+              waveform: fullTrack.waveform || [],
               releasedate: fullTrack.createdAt.toISOString().split('T')[0],
             },
           });
@@ -268,11 +270,11 @@ export class PlaylistsService {
             artist: { id: 'external-artist-id', name: 'Jamendo Artist' },
             album: { id: 'external-album-id', name: 'Jamendo Album' },
             genre: 'External Stream',
-            coverUrl: 'assets/images/default-jamendo-cover.png',
+            coverUrl: trackRef.coverUrl || '/images/track-placeholder.jpg',
             audioUrl: `https://api.jamendo.com/v3.0/tracks/file/?id=${trackRef.trackId}&action=stream`,
             playCount: 0,
             rating: 0,
-            waveform: [],
+            waveform: trackRef.waveform || [],
             releasedate: new Date().toISOString().split('T')[0],
           },
         });

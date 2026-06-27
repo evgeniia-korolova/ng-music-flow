@@ -16,7 +16,7 @@ import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model
 export interface PlaylistTrackDto {
   track: Track;
   origin: 'JAMENDO' | 'LOCAL';
-  orderId: number;
+  order: number;
 }
 
 export interface PlaylistResponseDto {
@@ -38,7 +38,13 @@ export interface GetPlaylistsResponseDto {
 export interface UpdatePlaylistTracksDto {
   name?: string;
   description?: string;
-  tracks?: { trackId: string; origin: 'JAMENDO' | 'LOCAL'; order: number }[];
+  tracks?: {
+    trackId: string;
+    origin: 'JAMENDO' | 'LOCAL';
+    order: number;
+    coverUrl?: string;
+    waveform?: number[];
+  }[];
 }
 
 export interface PlaylistsState {
@@ -77,13 +83,32 @@ export const PlaylistsStore = signalStore(
             trackId: track.id,
             origin: track.origin || 'JAMENDO',
             order: index + 1,
+            coverUrl: track.coverUrl || '/images/track-placeholder.jpg',
+            waveform: track.waveform || [],
           })),
         };
 
         try {
-          const savedPlaylist = await firstValueFrom(
-            http.post<LibraryPlaylist>(apiAddr, createPayload),
+          const responseDto = await firstValueFrom(
+            http.post<PlaylistResponseDto>(apiAddr, createPayload),
           );
+
+          const savedPlaylist: LibraryPlaylist = {
+            id: responseDto.id,
+            name: responseDto.name,
+            description: responseDto.description || '',
+            createdAt: responseDto.createdAt,
+
+            tracks: responseDto.tracks
+              ? responseDto.tracks.map((t) => ({
+                  ...t.track,
+                  coverUrl: t.track.coverUrl,
+                  waveform: t.track.waveform || [],
+                  origin: t.origin,
+                  order: t.order,
+                }))
+              : [],
+          };
 
           patchState(store, (state) => ({
             playlists: [...state.playlists, savedPlaylist],
@@ -115,7 +140,20 @@ export const PlaylistsStore = signalStore(
             name: p.name,
             description: p.description || '',
             createdAt: p.createdAt,
-            tracks: p.tracks ? p.tracks.map((t: PlaylistTrackDto) => t.track) : [],
+
+            tracks: p.tracks
+              ? p.tracks.map((t: PlaylistTrackDto) => {
+                  const rawTrack = t.track;
+
+                  return {
+                    ...rawTrack,
+                    coverUrl: rawTrack.coverUrl,
+                    waveform: rawTrack.waveform || [],
+                    origin: t.origin,
+                    order: t.order,
+                  };
+                })
+              : [],
           }));
 
           patchState(store, { playlists: mappedPlaylists, isLoading: false });
@@ -158,7 +196,6 @@ export const PlaylistsStore = signalStore(
 
         patchState(store, { isLoading: true, error: null });
 
-        // Собираем тело запроса строго по контракту коллеги
         const patchPayload: UpdatePlaylistTracksDto = {};
 
         if (updatedData.name && updatedData.name !== currentPlaylist.name) {
@@ -172,7 +209,6 @@ export const PlaylistsStore = signalStore(
           patchPayload.description = updatedData.description;
         }
 
-        // Присваиваем массив строго в ключ tracks!
         if (updatedData.tracks) {
           patchPayload.tracks = updatedData.tracks.map((track: Track, index: number) => ({
             trackId: track.id,
@@ -201,10 +237,10 @@ export const PlaylistsStore = signalStore(
             isLoading: false,
           }));
 
-          console.log(`Плейлист успешно сохранен с полем tracks!`);
+          console.log(`Playlist updated!`);
         } catch (err) {
           console.error('Failed to update playlist in NestJS:', err);
-          patchState(store, { error: 'Не удалось обновить плейлист', isLoading: false });
+          patchState(store, { error: 'Failed to update playlist', isLoading: false });
         }
       },
     };

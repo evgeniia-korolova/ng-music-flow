@@ -38,11 +38,14 @@ export class TrackEntity {
   @Length(2, 30)
   genre!: string;
 
-  @Column({ type: 'simple-array', nullable: true })
+  @Column('int', { array: true, nullable: true })
   waveform!: number[];
 
   @Column()
   url!: string;
+
+  @Column({ type: 'varchar', nullable: true })
+  coverUrl: string;
 
   @Column({ type: 'int', default: 0 })
   duration!: number;
