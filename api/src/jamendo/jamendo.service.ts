@@ -11,9 +11,14 @@ export class JamendoService {
 
   async getTrackById(trackId: string): Promise<Track | null> {
     const baseUrl = this.configService.getOrThrow<string>('JAMENDO_BASE_URL');
+    const clientId = this.configService.getOrThrow<string>('JAMENDO_CLIENT_ID');
+
     try {
-      const res = await fetch(`${baseUrl}/tracks/?id=${trackId}&format=json`);
+      const res = await fetch(
+        `${baseUrl}/tracks/?client_id=${clientId}&id=${trackId}&format=json&include=stats`,
+      );
       const data = (await res.json()) as JamendoResponse<JamendoTrackDto>;
+
       return data.results?.[0] ? mapJamendoToTrack(data.results[0]) : null;
     } catch {
       return null;

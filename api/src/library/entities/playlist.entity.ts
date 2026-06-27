@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   JoinColumn,
   ManyToOne,
+  Unique,
 } from 'typeorm';
 
 export interface PlaylistTrackReference {
@@ -16,6 +17,7 @@ export interface PlaylistTrackReference {
 }
 
 @Entity('playlists')
+@Unique(['userId', 'name'])
 export class PlaylistEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -29,7 +31,7 @@ export class PlaylistEntity {
   @JoinColumn({ name: 'userId' })
   user!: UserEntity;
 
-  @Column({ unique: true })
+  @Column()
   name!: string;
 
   @Column({ nullable: true })

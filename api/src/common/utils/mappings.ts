@@ -2,7 +2,9 @@ import { JamendoTrackDto } from 'src/library/DTOs/track.dto';
 import { Track } from 'src/library/models/track.model';
 
 export const mapJamendoToTrack = (dto: JamendoTrackDto): Track => {
-  return {
+  const waveform = (JSON.parse(dto.waveform) as { peaks: number[] }).peaks;
+
+  const result = {
     id: dto.id,
     title: dto.name,
     duration: dto.duration,
@@ -18,7 +20,9 @@ export const mapJamendoToTrack = (dto: JamendoTrackDto): Track => {
     audioUrl: dto.audio,
     playCount: dto.stats.rate_listened_total,
     rating: dto.stats.rate_total,
-    waveform: dto.waveform ? dto.waveform.split(',').map(Number) : [],
+    waveform,
     releasedate: dto.releasedate,
   };
+
+  return result;
 };
