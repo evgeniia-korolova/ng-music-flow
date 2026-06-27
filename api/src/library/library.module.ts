@@ -7,11 +7,14 @@ import { TracksController } from './tracks.controller';
 import { CommonModule } from 'src/common/common.module';
 import { PlaylistsController } from './playlists.controller';
 import { PlaylistsService } from './playlists.service';
+import { JamendoModule } from 'src/jamendo/jamendo.module';
+import { HistoryEntity } from './entities/history.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([TrackEntity, PlaylistEntity]),
+    TypeOrmModule.forFeature([TrackEntity, PlaylistEntity, HistoryEntity]),
     CommonModule,
+    JamendoModule,
   ],
   controllers: [TracksController, PlaylistsController],
   providers: [TracksService, PlaylistsService],
