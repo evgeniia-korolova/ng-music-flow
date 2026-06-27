@@ -1,15 +1,21 @@
 <div class="drag-drop-list-container">
   <div class="list-header-wrapper">
     <ng-content select="[slot-header]" />
-
-    @if (isOrderChanged()) {
-      <button (click)="onSaveOrder()" class="btn-save">💾 Save Order</button>
-    }
   </div>
 
-  <div cdkDropList (cdkDropListDropped)="drop($event)" class="track-drop-list">
+  <div
+    cdkDropList
+    [cdkDropListDisabled]="!isEditMode()"
+    (cdkDropListDropped)="drop($event)"
+    class="track-drop-list"
+  >
     @for (track of currentTracks(); track track.id; let index = $index) {
-      <div cdkDrag class="track-drag-box">
+      <div
+        cdkDrag
+        [cdkDragDisabled]="!isEditMode()"
+        [class.is-draggable]="isEditMode()"
+        class="track-drag-box"
+      >
         <app-track-card
           [track]="track"
           [showWave]="showWave()"
@@ -17,7 +23,7 @@
           [priority]="$index < 3"
         >
           <ng-container slot-actions>
-            <!-- Если включен режим редактирования, покажем крестик -->
+            <!-- Если включен режим редактирования, покажем крестик если решим удалять прямо в плейлисте -->
             @if (isEditMode()) {
               <button
                 class="btn-delete-track"

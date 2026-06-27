@@ -6,7 +6,7 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Track } from '../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
@@ -14,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
 import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model';
 
 export interface PlaylistTrackDto {
-  track: Track;
+  track: LibraryPlaylistTrack;
   origin: 'JAMENDO' | 'LOCAL';
   order: number;
 }
@@ -185,62 +185,54 @@ export const PlaylistsStore = signalStore(
         }
       },
 
-      async updatePlaylist(
-        playlistId: string | undefined,
-        updatedData: { name?: string; description?: string; tracks?: Track[] },
-      ): Promise<void> {
-        if (!playlistId) return;
+      updateLocalPlaylistTracks(playlistId: string, updatedTracks: LibraryPlaylistTrack[]): void {
+        patchState(store, (state) => ({
+          playlists: state.playlists.map((playlist) =>
+            playlist.id === playlistId
+              ? {
+                  ...playlist,
+                  // Просто заменяем массив треков на новый, так как типы теперь идеально совпадают!
+                  tracks: updatedTracks,
+                }
+              : playlist,
+          ),
+        }));
+      },
 
-        const currentPlaylist = store.playlists().find((p) => p.id === playlistId);
-        if (!currentPlaylist) return;
-
+      async updatePlaylist(playlistId: string, dto: UpdatePlaylistTracksDto): Promise<void> {
         patchState(store, { isLoading: true, error: null });
 
-        const patchPayload: UpdatePlaylistTracksDto = {};
-
-        if (updatedData.name && updatedData.name !== currentPlaylist.name) {
-          patchPayload.name = updatedData.name;
-        }
-
-        if (
-          updatedData.description !== undefined &&
-          updatedData.description !== currentPlaylist.description
-        ) {
-          patchPayload.description = updatedData.description;
-        }
-
-        if (updatedData.tracks) {
-          patchPayload.tracks = updatedData.tracks.map((track: Track, index: number) => ({
-            trackId: track.id,
-            origin: (track.origin || 'JAMENDO') as 'JAMENDO' | 'LOCAL',
-            order: index + 1,
-          }));
-        }
-
         try {
-          const response = await firstValueFrom(
-            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, patchPayload),
+          const responseDto = await firstValueFrom(
+            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, dto),
           );
 
-          const updatedPlaylist: LibraryPlaylist = {
-            id: response.id,
-            name: response.name,
-            description: response.description || '',
-            createdAt: response.createdAt,
-            tracks:
-              updatedData.tracks ||
-              (response.tracks ? response.tracks.map((t: PlaylistTrackDto) => t.track) : []),
-          };
-
           patchState(store, (state) => ({
-            playlists: state.playlists.map((p) => (p.id === playlistId ? updatedPlaylist : p)),
+            playlists: state.playlists.map((p) =>
+              p.id === playlistId
+                ? {
+                    ...p,
+                    name: responseDto.name,
+                    description: responseDto.description || '',
+
+                    tracks: responseDto.tracks
+                      ? responseDto.tracks.map((t) => ({
+                          ...t.track,
+                          origin: t.origin,
+                          order: t.order,
+                          coverUrl: t.track.coverUrl,
+                          waveform: t.track.waveform || [],
+                        }))
+                      : p.tracks,
+                  }
+                : p,
+            ),
             isLoading: false,
           }));
-
-          console.log(`Playlist updated!`);
         } catch (err) {
-          console.error('Failed to update playlist in NestJS:', err);
+          console.error('Failed to update playlist:', err);
           patchState(store, { error: 'Failed to update playlist', isLoading: false });
+          throw err;
         }
       },
     };

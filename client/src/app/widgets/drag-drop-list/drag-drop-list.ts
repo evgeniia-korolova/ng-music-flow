@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Track } from '../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../entities/track/model/track.model';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
 import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
 
@@ -22,19 +22,16 @@ import { ResponsiveService } from '../../shared/services/responsive-service/resp
 })
 export class DragDropList {
   private screen = inject(ResponsiveService);
-  public readonly tracks = input.required<Track[]>();
-  public readonly orderChanged = output<Track[]>();
+  public readonly tracks = input.required<LibraryPlaylistTrack[]>();
+  public readonly orderChanged = output<LibraryPlaylistTrack[]>();
 
   public readonly viewMode = signal<'tabs' | 'search' | 'slider'>('search');
 
   public readonly isEditMode = input<boolean>(false);
 
-  public readonly showWave = linkedSignal<boolean>(() => {
-    if (this.screen.isLarge()) return true;
-    return false;
-  });
+  public readonly showWave = linkedSignal<boolean>(() => this.screen.isLarge());
 
-  public readonly currentTracks = linkedSignal<Track[], Track[]>({
+  public readonly currentTracks = linkedSignal<LibraryPlaylistTrack[], LibraryPlaylistTrack[]>({
     source: () => this.tracks(),
     computation: (source) => [...source],
   });
@@ -45,13 +42,28 @@ export class DragDropList {
     return JSON.stringify(originalIds) !== JSON.stringify(currentIds);
   });
 
-  public drop(event: CdkDragDrop<Track[]>): void {
+  public drop(event: CdkDragDrop<LibraryPlaylistTrack[][]>): void {
     const updatedArray = [...this.currentTracks()];
     moveItemInArray(updatedArray, event.previousIndex, event.currentIndex);
-    this.currentTracks.set(updatedArray);
+
+    const reorderedArray = updatedArray.map((item, index) => ({
+      ...item,
+      order: index + 1,
+    }));
+
+    this.currentTracks.set(reorderedArray);
+    this.orderChanged.emit(reorderedArray);
   }
 
-  public onSaveOrder(): void {
-    this.orderChanged.emit(this.currentTracks());
+  public removeTrack(trackId: string): void {
+    const filtered = this.currentTracks().filter((t) => t.id !== trackId);
+
+    const reordered = filtered.map((item, index) => ({
+      ...item,
+      order: index + 1,
+    }));
+
+    this.currentTracks.set(reordered);
+    this.orderChanged.emit(reordered);
   }
 }

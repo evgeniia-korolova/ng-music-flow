@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Track } from '../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
@@ -28,7 +28,7 @@ export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly playlistsStore = inject(PlaylistsStore);
   private readonly router = inject(Router);
-  readonly selectedTracks = signal<Track[]>([]);
+  readonly selectedTracks = signal<LibraryPlaylistTrack[]>([]);
   readonly cancelForm = output<void>();
 
   public readonly playlistId = input<string>();
@@ -71,17 +71,18 @@ export class CreatePlaylistForm implements OnInit {
     const formValues = this.playlistForm.getRawValue();
 
     if (this.isEditMode()) {
-      const playlistPayload = {
-        name: formValues.name ?? '',
-        description: formValues.description ?? '',
-        tracks: this.selectedTracks(),
-      };
-      this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
-        this.playlistForm.reset();
-        this.selectedTracks.set([]);
-        void this.router.navigate(['/library/playlists', this.playlistId()]);
-        this.closeForm();
-      });
+      // const playlistPayload = {
+      //   name: formValues.name ?? '',
+      //   description: formValues.description ?? '',
+      //   tracks: this.selectedTracks(),
+      // };
+      //!!!!!!!!!!!!!! Состыковать с методом стора
+      // this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
+      //   this.playlistForm.reset();
+      //   this.selectedTracks.set([]);
+      //   void this.router.navigate(['/library/playlists', this.playlistId()]);
+      //   this.closeForm();
+      // });
     } else {
       const playlistPayload = {
         name: formValues.name ?? '',
@@ -119,11 +120,21 @@ export class CreatePlaylistForm implements OnInit {
     this.router.navigate(['/library/playlists', this.playlistId()]);
   }
 
-  onAddTrack(trackId: string) {
+  onAddJamendoTrack(trackId: string) {
     const foundedTrack = this.tracksStore.tracks().find((track) => track.id === trackId);
+
     if (foundedTrack) {
-      this.selectedTracks.update((tracks) => [...tracks, foundedTrack]);
-      console.log(foundedTrack);
+      const alreadyAdded = this.selectedTracks().some((t) => t.id === trackId);
+      if (alreadyAdded) return;
+
+      this.selectedTracks.update((tracks) => [
+        ...tracks,
+        {
+          ...foundedTrack,
+          origin: 'JAMENDO',
+          order: tracks.length + 1,
+        },
+      ]);
     }
   }
 

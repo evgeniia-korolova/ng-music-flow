@@ -1,6 +1,7 @@
 .playlist-info-header {
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
+  justify-content: space-between;
   gap: 1rem;
 }
 

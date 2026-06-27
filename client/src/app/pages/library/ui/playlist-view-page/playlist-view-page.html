@@ -1,6 +1,11 @@
 <div class="playlist-view-layout">
   @if (activePlaylist(); as playlist) {
-    <app-drag-drop-list #trackList [tracks]="playlist.tracks">
+    <app-drag-drop-list
+      #trackList
+      [tracks]="playlist.tracks"
+      [isEditMode]="isEditing()"
+      (orderChanged)="onTracksOrderChanged($event)"
+    >
       <div slot-header class="playlist-info-header">
         <div class="header-info">
           <h2 class="playlist-info-header__title">{{ playlist.name }}</h2>
@@ -14,19 +19,18 @@
           }
         </div>
 
+        <app-button variant="ghost" size="sm" (click)="onSaveChangesClick()">
+          {{ isEditing() ? '💾 Save Changes' : 'Edit' }}
+        </app-button>
+
         @if (isEditing()) {
           <div class="header-actions">
             <span class="playlist-info-header__status-badge">⚡ Editing mode</span>
-            <app-button variant="ghost" size="sm" (click)="onAddTrackClick()">
-              ➕ Add Track
-            </app-button>
-            <app-button variant="ghost" size="sm" (click)="onSaveChangesClick(playlist.id)">
-              💾 Save Changes
-            </app-button>
+
             <app-button
               variant="ghost"
               size="sm"
-              [routerLink]="['/library/playlists', playlist.name]"
+              [routerLink]="['/library/playlists', playlist.id]"
             >
               Cancel
             </app-button>
@@ -34,7 +38,5 @@
         }
       </div>
     </app-drag-drop-list>
-  } @else {
-    <p>Playlist not found</p>
   }
 </div>

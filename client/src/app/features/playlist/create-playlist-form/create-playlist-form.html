@@ -1,6 +1,8 @@
 <div class="playlists-form__wrapper">
   <div class="playlists-form__header">
     <h3 class="playlists-form__title">Create List</h3>
+
+    <!-- TODO check the route on close -->
     <app-button type="button" size="icon-rounded-md" aria-label="Close form">
       <app-icon icon="x"></app-icon>
     </app-button>
@@ -39,7 +41,7 @@
               </option>
             }
           </select>
-          <app-button type="button" size="sm" (click)="onAddTrack(trackSelect.value)"
+          <app-button type="button" size="sm" (click)="onAddJamendoTrack(trackSelect.value)"
             >Add track</app-button
           >
         </div>

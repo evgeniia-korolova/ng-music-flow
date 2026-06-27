@@ -1,18 +1,21 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { PlaylistsStore } from '../../model/playlists.store';
 import { DragDropList } from '../../../../widgets/drag-drop-list/drag-drop-list';
 import { DatePipe } from '@angular/common';
 import { Button } from '../../../../shared/ui/button/button';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LibraryPlaylistTrack } from '../../../../entities/track/model/track.model';
 
 @Component({
   selector: 'app-playlist-view-page',
   imports: [DragDropList, DatePipe, Button, RouterLink],
   templateUrl: './playlist-view-page.html',
   styleUrl: './playlist-view-page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlaylistViewPage {
   protected readonly playlistsStore = inject(PlaylistsStore);
+  private readonly router = inject(Router);
 
   protected readonly playlistId = input.required<string>();
 
@@ -22,16 +25,32 @@ export class PlaylistViewPage {
   public readonly activePlaylist = computed(() => {
     const id = this.playlistId();
     const list = this.playlistsStore.playlists();
-    // Ищем совпадение по UUID
     return list.find((p) => p.id === id) ?? null;
-    // return this.playlistsStore.playlists().find((p) => p.id === this.playlistId());
   });
+
+  protected onTracksOrderChanged(updatedTracks: LibraryPlaylistTrack[]): void {
+    this.playlistsStore.updateLocalPlaylistTracks(this.playlistId(), updatedTracks);
+  }
 
   onAddTrackClick() {
     console.log('not empty method for linter');
   }
 
-  onSaveChangesClick(id: string | undefined) {
-    console.log(id);
+  protected onSaveChangesClick(): void {
+    const id = this.playlistId();
+
+    if (!this.isEditing()) {
+      void this.router.navigate([], {
+        queryParams: { edit: 'true' },
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      console.log('Saving changes for playlist:', id);
+
+      void this.router.navigate([], {
+        queryParams: { edit: null },
+        queryParamsHandling: 'merge',
+      });
+    }
   }
 }
