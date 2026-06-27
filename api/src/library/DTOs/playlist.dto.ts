@@ -50,7 +50,7 @@ export class CreatePlaylistDto {
   tracks!: TrackOrderPayloadDto[];
 }
 
-export class UpdatePlaylistTracksDto {
+export class UpdatePlaylistDto {
   @IsOptional()
   @IsString()
   name?: string;
