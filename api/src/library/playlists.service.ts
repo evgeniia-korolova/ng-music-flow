@@ -187,18 +187,26 @@ export class PlaylistsService {
   private async mapToPlaylistModel(
     entity: PlaylistEntity,
   ): Promise<PlaylistModel> {
-    const combined = await this.tracksService.getTracksForPlaylist(
-      entity.userId,
-      entity.tracks,
+    const localTracks: PlaylistTrackReference[] = [],
+      jamendoTracks: PlaylistTrackReference[] = [];
+    entity.tracks.forEach((t) =>
+      t.origin === 'JAMENDO' ? jamendoTracks.push(t) : localTracks.push(t),
     );
-    const results = await Promise.all(
-      combined.map(async (item) =>
+
+    const local = await this.tracksService.getTracksForPlaylist(
+      entity.userId,
+      localTracks,
+    );
+    const jamendo = await Promise.all(
+      jamendoTracks.map(async (item) =>
         isPlaylistTrack(item) ? item : await this.getJamendoTrack(item),
       ),
     );
 
-    const playlistTracks: PlaylistTrack[] = [];
-    const toRemove: PlaylistTrackReference[] = [];
+    const results = [...local, ...jamendo];
+
+    const playlistTracks: PlaylistTrack[] = [],
+      toRemove: PlaylistTrackReference[] = [];
 
     results.forEach((x) =>
       isPlaylistTrack(x) ? playlistTracks.push(x) : toRemove.push(x),
