@@ -33,5 +33,7 @@ export class UploadTrackForm {
     formData.append('genre', this.uploadTrackForm.value.genre!);
     formData.append('file', this.uploadTrackForm.value.file!);
   }
-  // closeForm() {}
+  closeForm() {
+    console.log('Form close');
+  }
 }
