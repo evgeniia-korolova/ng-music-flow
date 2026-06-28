@@ -9,6 +9,8 @@ import { PlaylistsController } from './playlists.controller';
 import { PlaylistsService } from './playlists.service';
 import { JamendoModule } from 'src/jamendo/jamendo.module';
 import { HistoryEntity } from './entities/history.entity';
+import { HistoryController } from './history.controller';
+import { HistoryService } from './history.service';
 
 @Module({
   imports: [
@@ -16,8 +18,8 @@ import { HistoryEntity } from './entities/history.entity';
     CommonModule,
     JamendoModule,
   ],
-  controllers: [TracksController, PlaylistsController],
-  providers: [TracksService, PlaylistsService],
-  exports: [TracksService, PlaylistsService],
+  controllers: [TracksController, PlaylistsController, HistoryController],
+  providers: [TracksService, PlaylistsService, HistoryService],
+  exports: [TracksService, PlaylistsService, HistoryService],
 })
 export class LibraryModule {}
