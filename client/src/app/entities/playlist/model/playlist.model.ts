@@ -1,8 +1,14 @@
 import { Track } from '../../track/model/track.model';
 
-export interface LibraryTrackList {
-  id: string;
-  title: string;
-  descr: string;
-  tracksList: Track[];
+export interface LibraryPlaylistTrack extends Track {
+  origin?: 'JAMENDO' | 'LOCAL';
+  order?: number;
+}
+
+export interface LibraryPlaylist {
+  id?: string;
+  name: string;
+  description?: string;
+  createdAt?: string;
+  tracks: LibraryPlaylistTrack[];
 }

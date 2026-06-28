@@ -16,7 +16,13 @@
       appAutofocus
     />
 
-    <app-input [field]="loginForm.password" label="Password" inputType="password" />
+    <app-input
+      [field]="loginForm.password"
+      label="Password"
+      inputType="password"
+      name="password"
+      autocomplete="on"
+    />
   </div>
 
   <div class="auth-page-footer">

@@ -1,36 +1,42 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CreatePlaylistForm } from '../../features/playlist/create-playlist-form/create-playlist-form';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
-import { LibraryTrackList } from '../../entities/playlist/model/playlist.model';
-import { UploadTrackForm } from '../../features/upload-track-form/upload-track-form';
+import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
+import { RouterOutlet } from '@angular/router';
+import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
 
 @Component({
   selector: 'app-library',
-  imports: [CreatePlaylistForm, LibrarySidebar, Button, Icon, UploadTrackForm],
+  imports: [LibrarySidebar, Button, Icon, RouterOutlet],
   templateUrl: './library.html',
   styleUrl: './library.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Library {
-  readonly playlists = signal<LibraryTrackList[]>([]);
+  readonly playlistsStore = inject(PlaylistsStore);
+
   readonly isFormShow = signal<boolean>(false);
-  readonly saveCurrentList = signal<LibraryTrackList | null>(null);
+  readonly saveCurrentList = signal<LibraryPlaylist | null>(null);
   readonly isSideBarOpen = signal<boolean>(false);
 
-  openCreateForm() {
-    this.isFormShow.set(true);
-    this.saveCurrentList.set(null);
+  // openCreateForm() {
+  //   this.isFormShow.set(true);
+  //   this.saveCurrentList.set(null);
+  // }
+
+  // onCreatePlayList(playlist: LibraryPlaylist) {
+  //   this.playlists.update((data) => [...data, playlist]);
+  // }
+
+  public deletePlaylist(playlist: LibraryPlaylist): void {
+    if (playlist.id) this.playlistsStore.deletePlaylist(playlist.id);
   }
 
-  onCreatePlayList(playlist: LibraryTrackList) {
-    this.playlists.update((data) => [...data, playlist]);
-  }
-  deletePlaylist(playlistToDelete: LibraryTrackList) {
-    this.playlists.update((data) => data.filter((item) => item.title !== playlistToDelete.title));
-    if (this.saveCurrentList()?.title === playlistToDelete.title) {
-      this.saveCurrentList.set(null);
-    }
-  }
+  // deletePlaylist(playlistToDelete: LibraryPlaylist) {
+  //   this.playlists.update((data) => data.filter((item) => item.name !== playlistToDelete.name));
+  //   if (this.saveCurrentList()?.name === playlistToDelete.name) {
+  //     this.saveCurrentList.set(null);
+  //   }
+  // }
 }

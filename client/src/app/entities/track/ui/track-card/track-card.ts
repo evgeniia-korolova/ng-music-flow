@@ -32,6 +32,7 @@ export class TrackCard {
   readonly showExtraInfo = input<boolean>(true);
 
   readonly priority = input<boolean>(false);
+  public readonly isEditMode = input<boolean>(false);
 
   readonly progress = computed(() => {
     if (!this.isCurrentTrack()) {

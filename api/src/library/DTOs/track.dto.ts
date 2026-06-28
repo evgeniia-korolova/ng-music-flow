@@ -5,6 +5,7 @@ export class TrackUploadDto extends PickType(TrackEntity, [
   'title',
   'artist',
   'genre',
+  'url',
 ] as const) {}
 
 export class TrackUpdateDto extends PartialType(TrackUploadDto) {}

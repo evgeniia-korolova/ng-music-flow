@@ -153,7 +153,7 @@ export class TracksService {
             tracks.find((track) => track.id === ref.trackId)!,
           ),
           origin: ref.origin,
-          orderId: ref.order,
+          order: ref.order,
         };
 
         result.push(playlistTrack);

@@ -1,7 +1,6 @@
 <div class="playlists__container">
   <app-library-sidebar
-    [playlists]="playlists()"
-    (openUserForm)="openCreateForm()"
+    [playlists]="playlistsStore.playlists()"
     (checkedUserList)="saveCurrentList.set($event)"
     (deleteUserList)="deletePlaylist($event)"
     [class.is-open]="isSideBarOpen()"
@@ -18,15 +17,6 @@
     }
   </app-button>
   <section class="playlists__content content-playlists" aria-live="polite">
-    @if (isFormShow()) {
-      <app-create-playlist-form
-        (savedPlayList)="onCreatePlayList($event)"
-        (cancelForm)="isFormShow.set(false)"
-      ></app-create-playlist-form>
-    } @else if (saveCurrentList()) {
-      <h3 class="content-playlists__title">List Tracks</h3>
-    } @else {
-      <app-upload-track-form></app-upload-track-form>
-    }
+    <router-outlet />
   </section>
 </div>

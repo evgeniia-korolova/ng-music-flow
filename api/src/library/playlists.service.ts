@@ -245,6 +245,6 @@ export class PlaylistsService {
     ref: PlaylistTrackReference,
   ): Promise<PlaylistTrack | PlaylistTrackReference> {
     const track = await this.jamendoService.getTrackById(ref.trackId);
-    return track ? { origin: 'JAMENDO', orderId: ref.order, track } : ref;
+    return track ? { origin: 'JAMENDO', order: ref.order, track } : ref;
   }
 }

@@ -4,7 +4,7 @@ import { Track } from './track.model';
 export interface PlaylistTrack {
   track: Track;
   origin: 'JAMENDO' | 'LOCAL';
-  orderId: number;
+  order: number;
 }
 
 export interface PlaylistModel {
