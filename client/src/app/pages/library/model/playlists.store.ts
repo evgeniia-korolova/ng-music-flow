@@ -83,8 +83,6 @@ export const PlaylistsStore = signalStore(
             trackId: track.id,
             origin: track.origin || 'JAMENDO',
             order: index + 1,
-            coverUrl: track.coverUrl || '/images/track-placeholder.jpg',
-            waveform: track.waveform || [],
           })),
         };
 

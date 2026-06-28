@@ -16,8 +16,7 @@ import { JamendoStrategy } from './strategies/jamendo.strategy';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         const expiresInMinutes = Number.parseInt(
-          configService.get<string>('JWT_EXPIRES_IN', '7d'),
-          //10,
+          configService.get<string>('JWT_EXPIRES_IN', '60'),
         );
 
         const expiresInSeconds = expiresInMinutes * 60;
