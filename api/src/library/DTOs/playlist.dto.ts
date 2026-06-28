@@ -7,7 +7,6 @@ import {
   IsOptional,
   ValidateNested,
   ArrayNotEmpty,
-  IsNumber,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -22,15 +21,6 @@ export class TrackOrderPayloadDto {
   @IsInt()
   @Min(0)
   order!: number;
-
-  @IsOptional()
-  @IsString()
-  coverUrl?: string;
-
-  @IsOptional()
-  @IsArray()
-  @IsNumber({}, { each: true })
-  waveform?: number[];
 }
 
 export class CreatePlaylistDto {

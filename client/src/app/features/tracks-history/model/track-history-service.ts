@@ -5,13 +5,14 @@ import { Track } from '../../../entities/track/model/track.model';
 import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { AudioPlayerService } from '../../../shared/services/audio-player/audio-player-service';
+import { ApiResponse } from '../../../shared/api/api-response';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TrackHistoryService {
-  private http = inject(HttpClient);
-  private playerService = inject(AudioPlayerService);
+  private readonly http = inject(HttpClient);
+  private readonly playerService = inject(AudioPlayerService);
   private readonly apiAddr = `${environment.appApiUrl}/history`;
 
   private readonly _filterDate = signal<string | null>(null);
@@ -20,7 +21,7 @@ export class TrackHistoryService {
   private readonly refreshTrigger = signal<number>(0);
   private lastTrackIdSaved: string | null = null;
 
-  private readonly historyResource = httpResource<HistoryItem[]>(
+  private readonly historyResource = httpResource<ApiResponse<HistoryItem[]>>(
     () => {
       const date = this._filterDate();
 
@@ -28,22 +29,27 @@ export class TrackHistoryService {
 
       if (date) url += `&date=${date}`;
 
-      return url;
+      return { url, method: 'GET' };
     },
     {
-      defaultValue: [] as HistoryItem[],
+      defaultValue: { data: [], error: null },
     },
   );
 
   public readonly tracks = computed<Track[]>(() => {
-    const historyData = this.historyResource.value();
+    const historyData = this.historyResource.value().data;
+
+    if (historyData === null) {
+      return [];
+    }
+
     const dateFilter = this._filterDate();
 
     const filteredItems = dateFilter
       ? historyData.filter((item) => item.playedAt.startsWith(dateFilter))
       : historyData;
 
-    return filteredItems.map((item) => item.track);
+    return filteredItems?.map((item) => item.track);
   });
 
   public readonly isLoading = this.historyResource.isLoading;
@@ -58,7 +64,7 @@ export class TrackHistoryService {
   });
 
   public readonly tracksForList = computed<Track[]>(() => {
-    const historyData = this.historyResource.value() ?? [];
+    const historyData = this.historyResource.value().data ?? [];
     const dateFilter = this._filterDate();
 
     const filteredItems = dateFilter
