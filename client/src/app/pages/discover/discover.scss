@@ -23,20 +23,42 @@
   padding: 8px 16px;
   text-decoration: none;
   background: transparent;
-  transition: background 0.2s ease;
   font-size: clamp(1rem, 0.875rem + 0.555vi, 1.5rem);
   font-weight: 600;
   cursor: pointer;
   border-radius: 1rem;
-
+  position: relative;
   &:focus-visible {
     outline: 2px dotted var(--color-brand-active);
     outline-offset: 2px;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    transition: width 0.3s ease;
+
+    bottom: 3px;
+    left: 0;
+    height: 2px;
+    width: 0;
+    background-color: var(--color-brand-active);
+  }
+  @media (any-hover: hover) {
+    &:hover {
+      &::before {
+        width: 100%;
+      }
+    }
   }
 }
 
 .explore__link.active-tab {
   border-radius: 1rem;
-  background: var(--color-bg-accent);
+  // background: var(--color-bg-accent);
   color: var(--color-brand-active);
+  &:hover {
+    &::before {
+      width: 0;
+    }
+  }
 }

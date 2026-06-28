@@ -21,17 +21,18 @@ export class BreadcrumbsService {
       this.breadcrumbs.set(this.buildBreadcrumbs(root));
     });
   }
+
   private buildBreadcrumbs(
     route: ActivatedRouteSnapshot,
     url = '',
     breadcrumbs: Breadcrumb[] = [],
   ): Breadcrumb[] {
-    const path = route.url.map((segment) => segment.path).join('/');
+    const path = route.url.map((el) => el.path).join('/');
     const nextUrl = path ? `${url}/${path}` : url;
     const label = route.data['breadcrumb'] || route.title;
 
     if (label) {
-      const isDuplicate = breadcrumbs.some((b) => b.label === label);
+      const isDuplicate = breadcrumbs.some((el) => el.label === label);
       if (!isDuplicate) {
         const parentUrl = route.data['parentUrl'];
         const parentLabel = route.data['parentLabel'];
