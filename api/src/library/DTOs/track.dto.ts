@@ -17,3 +17,24 @@ export interface NestMulterFile {
   size: number;
   buffer: Buffer;
 }
+
+export interface JamendoTrackDto {
+  id: string;
+  name: string;
+  duration: number;
+  artist_id: string;
+  artist_name: string;
+  album_name: string;
+  album_id: string;
+  album_image: string;
+  audio: string;
+  audiodownload: string;
+  waveform: string;
+  stats: {
+    rate_total: number;
+    rate_listened_total: number;
+    rate_downloads_total: number;
+    likes: number;
+  };
+  releasedate: string;
+}

@@ -13,10 +13,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { PlaylistsService } from './playlists.service';
-import {
-  CreatePlaylistDto,
-  UpdatePlaylistTracksDto,
-} from './DTOs/playlist.dto';
+import { CreatePlaylistDto, UpdatePlaylistDto } from './DTOs/playlist.dto';
 import { PlaylistModel } from './models/playlist.model';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { type AuthenticatedRequest } from 'src/auth/interfaces/authorization';
@@ -34,9 +31,22 @@ export class PlaylistsController {
     return this.playlistsService.createPlaylist(req.user.id, createPlaylistDto);
   }
 
+  @Patch(':id')
+  async update(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updatePlaylistTracksDto: UpdatePlaylistDto,
+  ): Promise<PlaylistModel> {
+    return this.playlistsService.updatePlaylist(
+      req.user.id,
+      id,
+      updatePlaylistTracksDto,
+    );
+  }
+
   @Get()
   async findAll(@Req() req: AuthenticatedRequest): Promise<PlaylistModel[]> {
-    return this.playlistsService.getAllUserPlaylists(req.user.id);
+    return await this.playlistsService.getAllUserPlaylists(req.user.id);
   }
 
   @Get(':id')
@@ -45,19 +55,6 @@ export class PlaylistsController {
     @Param('id', ParseUUIDPipe) id: string,
   ): Promise<PlaylistModel> {
     return this.playlistsService.getPlaylistById(req.user.id, id);
-  }
-
-  @Patch(':id')
-  async update(
-    @Req() req: AuthenticatedRequest,
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() updatePlaylistTracksDto: UpdatePlaylistTracksDto,
-  ): Promise<PlaylistModel> {
-    return this.playlistsService.updatePlaylist(
-      req.user.id,
-      id,
-      updatePlaylistTracksDto,
-    );
   }
 
   @Delete(':id')
