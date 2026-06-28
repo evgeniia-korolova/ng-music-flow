@@ -6,46 +6,14 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../track/model/track.model';
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
-import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model';
-
-export interface PlaylistTrackDto {
-  track: LibraryPlaylistTrack;
-  origin: 'JAMENDO' | 'LOCAL';
-  order: number;
-}
-
-export interface PlaylistResponseDto {
-  id: string;
-  userId: string;
-  name: string;
-  description: string | null;
-  totalDuration: number;
-  trackCount: number;
-  createdAt: string;
-  tracks: PlaylistTrackDto[];
-}
-
-export interface GetPlaylistsResponseDto {
-  data: PlaylistResponseDto[];
-  error: string | null;
-}
-
-export interface UpdatePlaylistTracksDto {
-  name?: string;
-  description?: string;
-  tracks?: {
-    trackId: string;
-    origin: 'JAMENDO' | 'LOCAL';
-    order: number;
-    coverUrl?: string;
-    waveform?: number[];
-  }[];
-}
+import { LibraryPlaylist } from './playlist.model';
+import { GetPlaylistsResponseDto, PlaylistResponseDto } from './playlist-dto.interface';
+import { mapPlaylistResponseToLibraryPlaylist } from './map-playlist-respose-back';
 
 export interface PlaylistsState {
   playlists: LibraryPlaylist[];
@@ -73,18 +41,20 @@ export const PlaylistsStore = signalStore(
     const apiAddr = `${environment.appApiUrl}/playlists`;
 
     return {
-      async createPlaylist(playlistData: LibraryPlaylist): Promise<LibraryPlaylist> {
+      async createPlaylist(playlistData: {
+        name: string;
+        description?: string;
+        tracks: LibraryPlaylistTrack[];
+      }): Promise<LibraryPlaylist> {
         patchState(store, { isLoading: true, error: null });
 
         const createPayload = {
           name: playlistData.name,
           description: playlistData.description || undefined,
-          tracks: playlistData.tracks.map((track, index) => ({
+          tracks: playlistData.tracks.map((track) => ({
             trackId: track.id,
             origin: track.origin || 'JAMENDO',
-            order: index + 1,
-            coverUrl: track.coverUrl || '/images/track-placeholder.jpg',
-            waveform: track.waveform || [],
+            order: track.order,
           })),
         };
 
@@ -93,22 +63,7 @@ export const PlaylistsStore = signalStore(
             http.post<PlaylistResponseDto>(apiAddr, createPayload),
           );
 
-          const savedPlaylist: LibraryPlaylist = {
-            id: responseDto.id,
-            name: responseDto.name,
-            description: responseDto.description || '',
-            createdAt: responseDto.createdAt,
-
-            tracks: responseDto.tracks
-              ? responseDto.tracks.map((t) => ({
-                  ...t.track,
-                  coverUrl: t.track.coverUrl,
-                  waveform: t.track.waveform || [],
-                  origin: t.origin,
-                  order: t.order,
-                }))
-              : [],
-          };
+          const savedPlaylist: LibraryPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
 
           patchState(store, (state) => ({
             playlists: [...state.playlists, savedPlaylist],
@@ -135,26 +90,9 @@ export const PlaylistsStore = signalStore(
 
           const rawPlaylists: PlaylistResponseDto[] = response.data || [];
 
-          const mappedPlaylists: LibraryPlaylist[] = rawPlaylists.map((p: PlaylistResponseDto) => ({
-            id: p.id,
-            name: p.name,
-            description: p.description || '',
-            createdAt: p.createdAt,
-
-            tracks: p.tracks
-              ? p.tracks.map((t: PlaylistTrackDto) => {
-                  const rawTrack = t.track;
-
-                  return {
-                    ...rawTrack,
-                    coverUrl: rawTrack.coverUrl,
-                    waveform: rawTrack.waveform || [],
-                    origin: t.origin,
-                    order: t.order,
-                  };
-                })
-              : [],
-          }));
+          const mappedPlaylists: LibraryPlaylist[] = rawPlaylists.map((p: PlaylistResponseDto) =>
+            mapPlaylistResponseToLibraryPlaylist(p),
+          );
 
           patchState(store, { playlists: mappedPlaylists, isLoading: false });
         } catch (err) {
@@ -191,7 +129,7 @@ export const PlaylistsStore = signalStore(
             playlist.id === playlistId
               ? {
                   ...playlist,
-                  // Просто заменяем массив треков на новый, так как типы теперь идеально совпадают!
+
                   tracks: updatedTracks,
                 }
               : playlist,
@@ -199,34 +137,39 @@ export const PlaylistsStore = signalStore(
         }));
       },
 
-      async updatePlaylist(playlistId: string, dto: UpdatePlaylistTracksDto): Promise<void> {
+      async updatePlaylist(
+        playlistId: string,
+        playlistData: {
+          name?: string;
+          description?: string;
+          tracks?: LibraryPlaylistTrack[];
+        },
+      ): Promise<void> {
         patchState(store, { isLoading: true, error: null });
+
+        //const token = localStorage.getItem('ngMusicFlow:token');
+
+        const updatePayload = {
+          name: playlistData.name,
+          description: playlistData.description || undefined,
+          tracks: playlistData.tracks
+            ? playlistData.tracks.map((track) => ({
+                trackId: track.id,
+                origin: track.origin || 'JAMENDO',
+                order: track.order || 1,
+              }))
+            : undefined,
+        };
 
         try {
           const responseDto = await firstValueFrom(
-            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, dto),
+            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, updatePayload),
           );
 
-          patchState(store, (state) => ({
-            playlists: state.playlists.map((p) =>
-              p.id === playlistId
-                ? {
-                    ...p,
-                    name: responseDto.name,
-                    description: responseDto.description || '',
+          const updatedPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
 
-                    tracks: responseDto.tracks
-                      ? responseDto.tracks.map((t) => ({
-                          ...t.track,
-                          origin: t.origin,
-                          order: t.order,
-                          coverUrl: t.track.coverUrl,
-                          waveform: t.track.waveform || [],
-                        }))
-                      : p.tracks,
-                  }
-                : p,
-            ),
+          patchState(store, (state) => ({
+            playlists: state.playlists.map((p) => (p.id === playlistId ? updatedPlaylist : p)),
             isLoading: false,
           }));
         } catch (err) {

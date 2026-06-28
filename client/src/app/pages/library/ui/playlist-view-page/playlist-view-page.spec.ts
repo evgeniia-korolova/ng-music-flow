@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlaylistViewPage } from './playlist-view-page';
 import { signal } from '@angular/core';
-import { PlaylistsStore } from '../../model/playlists.store';
+import { PlaylistsStore } from '../../../../entities/playlist/model/playlists.store';
 
 describe('PlaylistViewPage', () => {
   let component: PlaylistViewPage;

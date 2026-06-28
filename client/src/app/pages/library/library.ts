@@ -4,7 +4,7 @@ import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
 import { RouterOutlet } from '@angular/router';
-import { PlaylistsStore } from './model/playlists.store';
+import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
 
 @Component({
   selector: 'app-library',

@@ -14,7 +14,8 @@ import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
 import { Router } from '@angular/router';
-import { PlaylistsStore } from '../../../pages/library/model/playlists.store';
+import { PlaylistsStore } from '../../../entities/playlist/model/playlists.store';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-create-playlist-form',
@@ -28,6 +29,7 @@ export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly playlistsStore = inject(PlaylistsStore);
   private readonly router = inject(Router);
+  private readonly location = inject(Location);
   readonly selectedTracks = signal<LibraryPlaylistTrack[]>([]);
   readonly cancelForm = output<void>();
 
@@ -69,55 +71,67 @@ export class CreatePlaylistForm implements OnInit {
   onSubmit() {
     if (this.playlistForm.invalid || this.selectedTracks().length === 0) return;
     const formValues = this.playlistForm.getRawValue();
+    const id = this.playlistId();
 
-    if (this.isEditMode()) {
-      // const playlistPayload = {
-      //   name: formValues.name ?? '',
-      //   description: formValues.description ?? '',
-      //   tracks: this.selectedTracks(),
-      // };
-      //!!!!!!!!!!!!!! Состыковать с методом стора
-      // this.playlistsStore.updatePlaylist(this.playlistId(), playlistPayload).then(() => {
-      //   this.playlistForm.reset();
-      //   this.selectedTracks.set([]);
-      //   void this.router.navigate(['/library/playlists', this.playlistId()]);
-      //   this.closeForm();
-      // });
+    // const cleanTracksPayload = this.selectedTracks().map((track, index) => ({
+    //   trackId: track.id,
+    //   origin: track.origin ?? 'JAMENDO',
+    //   order: index + 1,
+    // }));
+
+    if (this.isEditMode() && id) {
+      const updatePayload = {
+        name: formValues.name ?? '',
+        description: formValues.description ?? '',
+        tracks: this.selectedTracks(),
+      };
+
+      console.log('Sending secure payload to backend:', updatePayload);
+
+      this.playlistsStore
+        .updatePlaylist(id, updatePayload)
+        .then(() => {
+          this.playlistForm.reset();
+          this.selectedTracks.set([]);
+          void this.router.navigate(['/library/playlists', id]);
+        })
+        .catch((err) => console.error('Failed to update playlist:', err));
     } else {
-      const playlistPayload = {
+      const createPayload = {
         name: formValues.name ?? '',
         description: formValues.description ?? '',
         tracks: this.selectedTracks(),
       };
 
       this.playlistsStore
-        .createPlaylist(playlistPayload)
+        .createPlaylist(createPayload)
         .then(() => {
           const updatedLists = this.playlistsStore.playlists();
           const freshPlaylist = updatedLists[0];
 
+          this.playlistForm.reset();
+          this.selectedTracks.set([]);
+
           if (freshPlaylist && freshPlaylist.id) {
-            console.log('New route:', freshPlaylist.id);
-
-            this.playlistForm.reset();
-            this.selectedTracks.set([]);
-
             void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
-            void this.router.navigate(['/library/custom-tracks']);
+            this.navigateToPreviousOrFallback();
           }
         })
-        .catch((err) => console.error('Ошибка создания:', err));
+        .catch((err) => console.error('failed to create playlist:', err));
+    }
+  }
+
+  private navigateToPreviousOrFallback(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      void this.router.navigate(['/library/custom-tracks']);
     }
   }
 
   closeForm(): void {
-    // if (this.isEditMode()) {
-    //   void this.router.navigate(['/library/playlists', this.playlistId()]);
-    // } else {
-    //   void this.router.navigate(['/library/custom-tracks']);
-    // }
-    this.router.navigate(['/library/playlists', this.playlistId()]);
+    this.navigateToPreviousOrFallback();
   }
 
   onAddJamendoTrack(trackId: string) {
@@ -140,9 +154,5 @@ export class CreatePlaylistForm implements OnInit {
 
   removeTrack(trackId: string) {
     this.selectedTracks.update((tracks) => tracks.filter((track) => track.id !== trackId));
-  }
-
-  public onCancel(): void {
-    this.router.navigate(['/library/custom-tracks']);
   }
 }

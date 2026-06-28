@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { PlaylistsStore } from '../../model/playlists.store';
+import { PlaylistsStore } from '../../../../entities/playlist/model/playlists.store';
 import { DragDropList } from '../../../../widgets/drag-drop-list/drag-drop-list';
 import { DatePipe } from '@angular/common';
 import { Button } from '../../../../shared/ui/button/button';
