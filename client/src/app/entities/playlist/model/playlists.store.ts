@@ -147,8 +147,6 @@ export const PlaylistsStore = signalStore(
       ): Promise<void> {
         patchState(store, { isLoading: true, error: null });
 
-        //const token = localStorage.getItem('ngMusicFlow:token');
-
         const updatePayload = {
           name: playlistData.name,
           description: playlistData.description || undefined,
@@ -172,6 +170,8 @@ export const PlaylistsStore = signalStore(
             playlists: state.playlists.map((p) => (p.id === playlistId ? updatedPlaylist : p)),
             isLoading: false,
           }));
+
+          await this.loadPlaylists();
         } catch (err) {
           console.error('Failed to update playlist:', err);
           patchState(store, { error: 'Failed to update playlist', isLoading: false });

@@ -25,12 +25,7 @@
           <ng-container slot-actions>
             <!-- Если включен режим редактирования, покажем крестик если решим удалять прямо в плейлисте -->
             @if (isEditMode()) {
-              <button
-                class="btn-delete-track"
-                (click)="currentTracks.set(currentTracks().filter((t) => t.id !== track.id))"
-              >
-                ✕
-              </button>
+              <button class="btn-delete-track" (click)="removeTrack(track.id)">✕</button>
             }
           </ng-container>
         </app-track-card>
