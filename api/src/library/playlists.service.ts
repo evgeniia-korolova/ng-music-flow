@@ -1,266 +1,232 @@
 import {
   Injectable,
-  BadRequestException,
   NotFoundException,
+  BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   PlaylistEntity,
   PlaylistTrackReference,
 } from './entities/playlist.entity';
-import { TrackEntity } from './entities/track.entity';
+import { CreatePlaylistDto, UpdatePlaylistDto } from './DTOs/playlist.dto';
 import {
-  CreatePlaylistDto,
-  UpdatePlaylistTracksDto,
-} from './DTOs/playlist.dto';
-import { PlaylistModel, PlaylistTrack } from './models/playlist.model';
+  isPlaylistTrack,
+  PlaylistModel,
+  PlaylistTrack,
+} from './models/playlist.model';
+import { TracksService } from './tracks.service';
+import { ApiException } from 'src/common/exceptions/api.exception';
+import { JamendoService } from 'src/jamendo/jamendo.service';
 
 @Injectable()
 export class PlaylistsService {
   constructor(
     @InjectRepository(PlaylistEntity)
     private readonly playlistRepository: Repository<PlaylistEntity>,
-
-    @InjectRepository(TrackEntity)
-    private readonly trackRepository: Repository<TrackEntity>,
+    private readonly tracksService: TracksService,
+    private readonly jamendoService: JamendoService,
   ) {}
 
   async createPlaylist(
     userId: string,
     dto: CreatePlaylistDto,
   ): Promise<PlaylistModel> {
-    try {
-      const { updatedTracks, trackCount, totalDuration } =
-        await this.processTracksAndCalculateMetrics(dto.tracks);
+    const { updatedTracks, trackCount, totalDuration } =
+      await this.processTracksAndCalculateMetrics(userId, dto.tracks);
+    const playlist = this.playlistRepository.create({
+      userId,
+      name: dto.name,
+      description: dto.description,
+      tracks: updatedTracks,
+      trackCount,
+      totalDuration,
+    });
+    return this.mapToPlaylistModel(
+      await this.playlistRepository.save(playlist),
+    );
+  }
 
-      const playlist = this.playlistRepository.create({
-        userId,
-        name: dto.name,
-        description: dto.description,
-        tracks: updatedTracks,
-        trackCount,
-        totalDuration,
+  async getAllUserPlaylists(userId: string): Promise<PlaylistModel[]> {
+    try {
+      const playlists = await this.playlistRepository.find({
+        where: { userId },
+        order: { createdAt: 'DESC' },
       });
 
-      const savedPlaylist = await this.playlistRepository.save(playlist);
-      return this.mapToPlaylistModel(savedPlaylist);
-    } catch (error: unknown) {
-      this.handleDatabaseError(error, dto.name);
-      throw error;
+      return Promise.all(playlists.map((p) => this.mapToPlaylistModel(p)));
+    } catch {
+      throw new ApiException(
+        {
+          message: 'Failed to connect to database',
+          code: 'DATABASE.FAIL.OPERATION',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   async getPlaylistById(
     userId: string,
-    playlistId: string,
+    trackId: string,
   ): Promise<PlaylistModel> {
-    const playlist = await this.playlistRepository.findOne({
-      where: { id: playlistId, userId },
-    });
+    try {
+      const playlist = await this.playlistRepository.findOne({
+        where: { userId, id: trackId },
+      });
 
-    if (!playlist) {
-      throw new NotFoundException('Playlist not found or access denied.');
+      if (playlist === null) {
+        throw new ApiException(
+          {
+            message: 'Failed to connect to database',
+            code: 'DATABASE.NOT_FOUND',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      return this.mapToPlaylistModel(playlist);
+    } catch {
+      throw new ApiException(
+        {
+          message: 'Failed to connect to database',
+          code: 'DATABASE.FAIL.OPERATION',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-
-    return this.mapToPlaylistModel(playlist);
   }
 
-  async getAllUserPlaylists(userId: string): Promise<PlaylistModel[]> {
-    const playlists = await this.playlistRepository.find({
-      where: { userId },
-      order: { createdAt: 'DESC' },
+  async deletePlaylist(userId: string, playlistId: string): Promise<void> {
+    const result = await this.playlistRepository.delete({
+      id: playlistId,
+      userId,
     });
-
-    return Promise.all(
-      playlists.map((playlist) => this.mapToPlaylistModel(playlist)),
-    );
+    if (result.affected === 0) {
+      throw new NotFoundException('Playlist not found.');
+    }
   }
 
   async updatePlaylist(
     userId: string,
     playlistId: string,
-    dto: UpdatePlaylistTracksDto,
+    dto: UpdatePlaylistDto,
   ): Promise<PlaylistModel> {
     const playlist = await this.playlistRepository.findOne({
       where: { id: playlistId, userId },
     });
-
-    if (!playlist) {
-      throw new NotFoundException('Playlist not found or access denied.');
-    }
+    if (!playlist) throw new NotFoundException('Playlist not found.');
 
     if (dto.name) playlist.name = dto.name;
     if (dto.description) playlist.description = dto.description;
 
-    if (dto.sortedTracks) {
+    if (dto.tracks) {
+      const trackRefs: PlaylistTrackReference[] = dto.tracks.map((t) => ({
+        trackId: t.trackId,
+        origin: t.origin,
+        order: t.order,
+      }));
+
       const { updatedTracks, trackCount, totalDuration } =
-        await this.processTracksAndCalculateMetrics(dto.sortedTracks);
+        await this.processTracksAndCalculateMetrics(userId, trackRefs);
 
       playlist.tracks = updatedTracks;
       playlist.trackCount = trackCount;
       playlist.totalDuration = totalDuration;
     }
-
-    try {
-      const savedPlaylist = await this.playlistRepository.save(playlist);
-      return this.mapToPlaylistModel(savedPlaylist);
-    } catch (error: unknown) {
-      this.handleDatabaseError(error, dto.name || playlist.name);
-      throw error;
-    }
-  }
-
-  async deletePlaylist(
-    userId: string,
-    playlistId: string,
-  ): Promise<{ message: string }> {
-    const playlist = await this.playlistRepository.findOne({
-      where: { id: playlistId, userId },
-    });
-
-    if (!playlist) {
-      throw new NotFoundException('Playlist not found or access denied.');
-    }
-
-    await this.playlistRepository.remove(playlist);
-    return { message: 'Playlist successfully deleted.' };
+    return this.mapToPlaylistModel(
+      await this.playlistRepository.save(playlist),
+    );
   }
 
   private async processTracksAndCalculateMetrics(
-    inputTracks: {
-      trackId: string;
-      origin: 'JAMENDO' | 'LOCAL';
-      order: number;
-    }[],
+    userId: string,
+    inputTracks: PlaylistTrackReference[],
   ): Promise<{
     updatedTracks: PlaylistTrackReference[];
     trackCount: number;
     totalDuration: number;
   }> {
-    const orderedPayload = [...inputTracks].sort((a, b) => a.order - b.order);
+    const ordered = [...inputTracks].sort((a, b) => a.order - b.order);
 
-    const localTrackIds = orderedPayload
-      .filter((t) => t.origin === 'LOCAL')
-      .map((t) => t.trackId);
-
-    const localTracksFromDb =
-      localTrackIds.length > 0
-        ? await this.trackRepository.findBy({ id: In(localTrackIds) })
-        : [];
-
-    const localDurationMap = new Map<string, number>(
-      localTracksFromDb.map((t) => [t.id, t.duration || 0]),
+    const results = await Promise.all(
+      ordered.map(async (ref) => {
+        if (ref.origin === 'LOCAL') {
+          const track = await this.tracksService.getLocalTrack(
+            userId,
+            ref.trackId,
+          );
+          return track
+            ? { ref, duration: track.duration, valid: true }
+            : { ref, duration: 0, valid: false };
+        } else {
+          const jamendoTrack = await this.jamendoService.getTrackById(
+            ref.trackId,
+          );
+          return jamendoTrack
+            ? { ref, duration: jamendoTrack.duration, valid: true }
+            : { ref, duration: 0, valid: false };
+        }
+      }),
     );
 
-    let accumulatedDuration = 0;
+    const validTracks = results.filter((r) => r.valid).map((r) => r.ref);
+    const totalDuration = results.reduce((acc, curr) => acc + curr.duration, 0);
 
-    const updatedTracks: PlaylistTrackReference[] = orderedPayload.map(
-      (track) => {
-        const duration =
-          track.origin === 'LOCAL'
-            ? localDurationMap.get(track.trackId) || 0
-            : 180;
-
-        accumulatedDuration += duration;
-
-        return {
-          trackId: track.trackId,
-          origin: track.origin,
-          order: track.order,
-        };
-      },
-    );
+    if (validTracks.length === 0 && ordered.length > 0)
+      throw new BadRequestException('All provided tracks are invalid.');
 
     return {
-      updatedTracks,
-      trackCount: updatedTracks.length,
-      totalDuration: accumulatedDuration,
+      updatedTracks: validTracks,
+      trackCount: validTracks.length,
+      totalDuration,
     };
-  }
-
-  private handleDatabaseError(error: unknown, playlistName: string): void {
-    if (error && typeof error === 'object' && 'code' in error) {
-      const pgError = error as { code: string };
-      if (pgError.code === '23505') {
-        throw new BadRequestException(
-          `A playlist named "${playlistName}" already exists.`,
-        );
-      }
-    }
   }
 
   private async mapToPlaylistModel(
     entity: PlaylistEntity,
   ): Promise<PlaylistModel> {
-    const localTrackIds = entity.tracks
-      .filter((t) => t.origin === 'LOCAL')
-      .map((t) => t.trackId);
-
-    const localTracksFromDb =
-      localTrackIds.length > 0
-        ? await this.trackRepository.findBy({ id: In(localTrackIds) })
-        : [];
-
-    const localTracksMap = new Map<string, TrackEntity>(
-      localTracksFromDb.map((track) => [track.id, track]),
+    const localTracks: PlaylistTrackReference[] = [],
+      jamendoTracks: PlaylistTrackReference[] = [];
+    entity.tracks.forEach((t) =>
+      t.origin === 'JAMENDO' ? jamendoTracks.push(t) : localTracks.push(t),
     );
 
-    const sortedDbTracks = [...entity.tracks].sort((a, b) => a.order - b.order);
-    const hydratedTracks: PlaylistTrack[] = [];
+    const local = await this.tracksService.getTracksForPlaylist(
+      entity.userId,
+      localTracks,
+    );
+    const jamendo = await Promise.all(
+      jamendoTracks.map(async (item) =>
+        isPlaylistTrack(item) ? item : await this.getJamendoTrack(item),
+      ),
+    );
 
-    for (const trackRef of sortedDbTracks) {
-      if (trackRef.origin === 'LOCAL') {
-        const fullTrack = localTracksMap.get(trackRef.trackId);
+    const results = [...local, ...jamendo];
 
-        if (fullTrack) {
-          hydratedTracks.push({
-            origin: 'LOCAL',
-            orderId: trackRef.order,
-            track: {
-              id: fullTrack.id,
-              title: fullTrack.title,
-              duration: fullTrack.duration,
-              artist: {
-                id: fullTrack.userId,
-                name: fullTrack.artist,
-              },
-              album: {
-                id: '',
-                name: 'Single',
-              },
-              genre: fullTrack.genre,
-              coverUrl: 'assets/images/default-cover.png',
-              audioUrl: fullTrack.url,
-              playCount: 0,
-              rating: 0,
-              waveform: Array.isArray(fullTrack.waveform)
-                ? fullTrack.waveform
-                : (fullTrack.waveform as string).split(',').map(Number),
-              releasedate: fullTrack.createdAt.toISOString().split('T')[0],
-            },
-          });
-        }
-      } else {
-        hydratedTracks.push({
-          origin: 'JAMENDO',
-          orderId: trackRef.order,
-          track: {
-            id: trackRef.trackId,
-            title: 'Jamendo Stream Track',
-            duration: 180,
-            artist: { id: 'external-artist-id', name: 'Jamendo Artist' },
-            album: { id: 'external-album-id', name: 'Jamendo Album' },
-            genre: 'External Stream',
-            coverUrl: 'assets/images/default-jamendo-cover.png',
-            audioUrl: `https://api.jamendo.com/v3.0/tracks/file/?id=${trackRef.trackId}&action=stream`,
-            playCount: 0,
-            rating: 0,
-            waveform: [],
-            releasedate: new Date().toISOString().split('T')[0],
-          },
-        });
-      }
+    const playlistTracks: PlaylistTrack[] = [],
+      toRemove: PlaylistTrackReference[] = [];
+
+    results.forEach((x) =>
+      isPlaylistTrack(x) ? playlistTracks.push(x) : toRemove.push(x),
+    );
+
+    if (toRemove.length > 0) {
+      entity.tracks = entity.tracks.filter(
+        (ref) => !toRemove.some((rem) => rem.trackId === ref.trackId),
+      );
+      entity.totalDuration = playlistTracks.reduce(
+        (acc, curr) => acc + curr.track.duration,
+        0,
+      );
+      entity.trackCount = playlistTracks.length;
+      await this.playlistRepository.update(entity.id, {
+        tracks: entity.tracks,
+        totalDuration: entity.totalDuration,
+        trackCount: entity.trackCount,
+      });
+      return this.mapToPlaylistModel(entity);
     }
 
     return {
@@ -268,10 +234,17 @@ export class PlaylistsService {
       userId: entity.userId,
       name: entity.name,
       description: entity.description,
-      tracks: hydratedTracks,
+      tracks: playlistTracks,
       totalDuration: entity.totalDuration,
       trackCount: entity.trackCount,
       createdAt: entity.createdAt.toISOString().split('T')[0],
     };
+  }
+
+  private async getJamendoTrack(
+    ref: PlaylistTrackReference,
+  ): Promise<PlaylistTrack | PlaylistTrackReference> {
+    const track = await this.jamendoService.getTrackById(ref.trackId);
+    return track ? { origin: 'JAMENDO', orderId: ref.order, track } : ref;
   }
 }

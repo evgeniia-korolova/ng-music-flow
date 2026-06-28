@@ -5,7 +5,7 @@ import {
   Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { TrackEntity } from './entities/track.entity';
 import { SUPABASE_CLIENT } from 'src/common/constants';
@@ -14,6 +14,8 @@ import { randomUUID } from 'node:crypto';
 import * as musicMeta from 'music-metadata';
 import decode from 'audio-decode';
 import { Track } from './models/track.model';
+import { PlaylistTrackReference } from './entities/playlist.entity';
+import { PlaylistTrack } from './models/playlist.model';
 
 @Injectable()
 export class TracksService {
@@ -91,7 +93,7 @@ export class TracksService {
     return this.mapToModel(savedTrack);
   }
 
-  async getUserTracks(
+  async getLocalTracks(
     userId: string,
     page = 1,
     limit = 20,
@@ -118,7 +120,52 @@ export class TracksService {
     };
   }
 
-  async getUserTrackTitles(
+  async getLocalTrack(userId: string, trackId: string): Promise<Track | null> {
+    const result = await this.trackRepository.findOne({
+      where: { userId: userId, id: trackId },
+    });
+
+    if (result) {
+      return this.mapToModel(result);
+    }
+
+    return null;
+  }
+
+  async getTracksForPlaylist(
+    userId: string,
+    trackRefs: PlaylistTrackReference[],
+  ): Promise<(PlaylistTrack | PlaylistTrackReference)[]> {
+    const trackIds = trackRefs.map((ref) => ref.trackId);
+    const tracks = await this.trackRepository.find({
+      where: {
+        userId,
+        id: In(trackIds),
+      },
+    });
+    const trackedTracks = new Set(tracks.map((track) => track.id));
+    const result: (PlaylistTrack | PlaylistTrackReference)[] = [];
+
+    trackRefs.forEach((ref) => {
+      if (trackedTracks.has(ref.trackId)) {
+        const playlistTrack: PlaylistTrack = {
+          track: this.mapToModel(
+            tracks.find((track) => track.id === ref.trackId)!,
+          ),
+          origin: ref.origin,
+          orderId: ref.order,
+        };
+
+        result.push(playlistTrack);
+      } else {
+        result.push(ref);
+      }
+    });
+
+    return result;
+  }
+
+  async getLocalTrackTitles(
     userId: string,
   ): Promise<Array<{ id: string; title: string }>> {
     return this.trackRepository.find({

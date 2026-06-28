@@ -1,7 +1,11 @@
+import { HistoryEntity } from 'src/library/entities/history.entity';
+import { PlaylistEntity } from 'src/library/entities/playlist.entity';
+import { TrackEntity } from 'src/library/entities/track.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -33,4 +37,13 @@ export class UserEntity {
 
   @Column({ select: false, nullable: true })
   jamendoRefreshToken?: string;
+
+  @OneToMany(() => TrackEntity, (track) => track.user)
+  tracks!: TrackEntity[];
+
+  @OneToMany(() => PlaylistEntity, (playlist) => playlist.user)
+  playlists!: PlaylistEntity[];
+
+  @OneToMany(() => HistoryEntity, (history) => history.user)
+  listeningHistory!: HistoryEntity[];
 }

@@ -7,9 +7,14 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  Unique,
 } from 'typeorm';
+import { UserEntity } from 'src/users/entities/user.entity/user.entity';
 
 @Entity('tracks')
+@Unique(['userId', 'title'])
 export class TrackEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
@@ -17,7 +22,13 @@ export class TrackEntity {
   @Column()
   userId!: string;
 
-  @Column({ unique: true })
+  @ManyToOne(() => UserEntity, (user) => user.tracks, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId' })
+  user!: UserEntity;
+
+  @Column()
   @IsNotEmpty({ message: 'Title is required' })
   @IsString()
   @Transform(trimAndSanitize)

@@ -3,7 +3,10 @@ import { TokenPayload } from './token-payload';
 import { Request } from 'express';
 
 export type AuthResponse = {
-  user: Omit<UserEntity, 'password'>;
+  user: Pick<
+    Omit<UserEntity, 'password'>,
+    'id' | 'email' | 'jamendoId' | 'roles' | 'username' | 'createdAt'
+  >;
   accessToken: string;
 };
 
