@@ -21,6 +21,7 @@
           [showWave]="showWave()"
           [playlistContext]="tracks()"
           [priority]="$index < 3"
+          [isEditMode]="isEditMode()"
         >
           <ng-container slot-actions>
             <!-- Если включен режим редактирования, покажем крестик если решим удалять прямо в плейлисте -->

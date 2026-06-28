@@ -12,6 +12,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk
 import { LibraryPlaylistTrack } from '../../entities/track/model/track.model';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
 import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
+import { AudioPlayerService } from '../../shared/services/audio-player/audio-player-service';
 
 @Component({
   selector: 'app-drag-drop-list',
@@ -22,6 +23,7 @@ import { ResponsiveService } from '../../shared/services/responsive-service/resp
 })
 export class DragDropList {
   private screen = inject(ResponsiveService);
+  private readonly playerService = inject(AudioPlayerService);
   public readonly tracks = input.required<LibraryPlaylistTrack[]>();
   public readonly orderChanged = output<LibraryPlaylistTrack[]>();
 
