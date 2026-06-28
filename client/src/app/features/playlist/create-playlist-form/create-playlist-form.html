@@ -3,7 +3,7 @@
     <h3 class="playlists-form__title">Create List</h3>
 
     <!-- TODO check the route on close -->
-    <app-button type="button" size="icon-rounded-md" aria-label="Close form">
+    <app-button type="button" size="icon-rounded-md" aria-label="Close form" (click)="closeForm()">
       <app-icon icon="x"></app-icon>
     </app-button>
   </div>
@@ -67,7 +67,7 @@
       }
     </div>
     <div class="playlists-form__line">
-      <app-button type="submit">Cancel</app-button>
+      <app-button type="submit" (click)="closeForm()">Cancel</app-button>
       <app-button type="submit" [disabled]="!playlistForm.valid || selectedTracks().length === 0">{{
         isEditMode() ? 'Update list' : 'Create list'
       }}</app-button>

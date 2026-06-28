@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
-import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
+
 import { RouterOutlet } from '@angular/router';
-import { PlaylistsStore } from './model/playlists.store';
+import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
+import { LibraryPlaylist } from '../../entities/playlist/model/playlist-model.interface';
 
 @Component({
   selector: 'app-library',

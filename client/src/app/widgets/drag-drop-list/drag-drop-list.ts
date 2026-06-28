@@ -9,9 +9,10 @@ import {
   signal,
 } from '@angular/core';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
-import { LibraryPlaylistTrack } from '../../entities/track/model/track.model';
+
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
 import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
+import { LibraryPlaylistTrack } from '../../entities/playlist/model/playlist-model.interface';
 
 @Component({
   selector: 'app-drag-drop-list',

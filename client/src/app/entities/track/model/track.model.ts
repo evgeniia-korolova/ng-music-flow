@@ -39,8 +39,3 @@ export interface Track {
   waveform: number[];
   releasedate: string;
 }
-
-export interface LibraryPlaylistTrack extends Track {
-  origin?: 'JAMENDO' | 'LOCAL';
-  order?: number;
-}

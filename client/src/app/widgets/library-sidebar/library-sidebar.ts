@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
+
 import { TooltipDirective } from '../../shared/directives/tooltip';
+import { LibraryPlaylist } from '../../entities/playlist/model/playlist-model.interface';
 
 @Component({
   selector: 'app-library-sidebar',

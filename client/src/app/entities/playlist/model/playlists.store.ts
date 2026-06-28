@@ -6,46 +6,19 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
+
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
-import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model';
 
-export interface PlaylistTrackDto {
-  track: LibraryPlaylistTrack;
-  origin: 'JAMENDO' | 'LOCAL';
-  order: number;
-}
-
-export interface PlaylistResponseDto {
-  id: string;
-  userId: string;
-  name: string;
-  description: string | null;
-  totalDuration: number;
-  trackCount: number;
-  createdAt: string;
-  tracks: PlaylistTrackDto[];
-}
-
-export interface GetPlaylistsResponseDto {
-  data: PlaylistResponseDto[];
-  error: string | null;
-}
-
-export interface UpdatePlaylistTracksDto {
-  name?: string;
-  description?: string;
-  tracks?: {
-    trackId: string;
-    origin: 'JAMENDO' | 'LOCAL';
-    order: number;
-    coverUrl?: string;
-    waveform?: number[];
-  }[];
-}
+import { LibraryPlaylist, LibraryPlaylistTrack } from './playlist-model.interface';
+import {
+  GetPlaylistsResponseDto,
+  PlaylistResponseDto,
+  PlaylistTrackDto,
+  UpdatePlaylistTracksDto,
+} from './playlist-dto.interface';
 
 export interface PlaylistsState {
   playlists: LibraryPlaylist[];
@@ -201,10 +174,15 @@ export const PlaylistsStore = signalStore(
 
       async updatePlaylist(playlistId: string, dto: UpdatePlaylistTracksDto): Promise<void> {
         patchState(store, { isLoading: true, error: null });
+        const token = localStorage.getItem('ngMusicFlow:token');
 
         try {
           const responseDto = await firstValueFrom(
-            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, dto),
+            http.post<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, dto, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }),
           );
 
           patchState(store, (state) => ({
@@ -229,6 +207,8 @@ export const PlaylistsStore = signalStore(
             ),
             isLoading: false,
           }));
+
+          await this.loadPlaylists();
         } catch (err) {
           console.error('Failed to update playlist:', err);
           patchState(store, { error: 'Failed to update playlist', isLoading: false });

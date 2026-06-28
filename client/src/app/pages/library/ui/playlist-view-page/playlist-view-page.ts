@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { PlaylistsStore } from '../../model/playlists.store';
+import { PlaylistsStore } from '../../../../entities/playlist/model/playlists.store';
 import { DragDropList } from '../../../../widgets/drag-drop-list/drag-drop-list';
 import { DatePipe } from '@angular/common';
 import { Button } from '../../../../shared/ui/button/button';
 import { Router, RouterLink } from '@angular/router';
-import { LibraryPlaylistTrack } from '../../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../../../entities/playlist/model/playlist-model.interface';
 
 @Component({
   selector: 'app-playlist-view-page',
@@ -38,6 +38,7 @@ export class PlaylistViewPage {
 
   protected onSaveChangesClick(): void {
     const id = this.playlistId();
+    const playlist = this.activePlaylist();
 
     if (!this.isEditing()) {
       void this.router.navigate([], {
@@ -45,12 +46,31 @@ export class PlaylistViewPage {
         queryParamsHandling: 'merge',
       });
     } else {
-      console.log('Saving changes for playlist:', id);
+      if (playlist && playlist.tracks) {
+        const updatePayload = {
+          tracks: playlist.tracks.map((t, index) => ({
+            trackId: t.id,
+            origin: t.origin || 'JAMENDO',
+            order: t.order || index + 1,
+          })),
+        };
 
-      void this.router.navigate([], {
-        queryParams: { edit: null },
-        queryParamsHandling: 'merge',
-      });
+        console.log('Syncing new drag&drop order with backend:', updatePayload);
+
+        this.playlistsStore
+          .updatePlaylist(id, updatePayload)
+          .then(() => {
+            console.log('New track order successfully saved to Supabase!');
+
+            void this.router.navigate([], {
+              queryParams: { edit: null },
+              queryParamsHandling: 'merge',
+            });
+          })
+          .catch((err) => {
+            console.error('Failed to save track order on backend:', err);
+          });
+      }
     }
   }
 }
