@@ -55,9 +55,6 @@ export class TrackEntity {
   @Column()
   url!: string;
 
-  @Column({ type: 'varchar', nullable: true })
-  coverUrl: string;
-
   @Column({ type: 'int', default: 0 })
   duration!: number;
 
