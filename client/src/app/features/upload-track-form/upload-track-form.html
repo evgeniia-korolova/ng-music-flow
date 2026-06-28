@@ -1,0 +1,42 @@
+<div class="upload-track-form__wrapper">
+  <div class="upload-track-form__header">
+    <h3 class="upload-track-form__title">Add file</h3>
+    <app-button type="button" size="icon-rounded-md" (click)="closeForm()" aria-label="Close form">
+      <app-icon icon="x"></app-icon>
+    </app-button>
+  </div>
+  <form [formGroup]="uploadTrackForm" class="upload-track-form" (ngSubmit)="onSubmit()">
+    <div class="upload-track-form__line">
+      <label for="title" class="upload-track-form__label">Track name:</label>
+      <input
+        type="text"
+        placeholder="Track name..."
+        formControlName="title"
+        id="title"
+        [class.error]="
+          uploadTrackForm.controls.title.invalid && uploadTrackForm.controls.title.touched
+        "
+        aria-describedby="title-error"
+      />
+      @if (uploadTrackForm.controls.title.invalid && uploadTrackForm.controls.title.touched) {
+        <div class="upload-track-form__error" id="title-error">Title is required</div>
+      }
+    </div>
+    <div class="upload-track-form__line">
+      <label for="artist" class="upload-track-form__label">Artist name:</label>
+      <input placeholder="Artist name..." type="text" formControlName="artist" id="artist" />
+    </div>
+    <div class="upload-track-form__line">
+      <label for="genre" class="upload-track-form__label">Genre:</label>
+      <input placeholder="Genre..." type="text" formControlName="genre" id="genre" />
+    </div>
+    <div class="upload-track-form__line">
+      <label for="file" class="upload-track-form__label">File:</label>
+      <input type="file" accept="audio/*" (change)="onFileSelected($event)" id="file" />
+    </div>
+    <div class="upload-track-form__line">
+      <app-button type="button" (click)="closeForm()">Cancel</app-button>
+      <app-button type="submit" [disabled]="!uploadTrackForm.valid">Add track</app-button>
+    </div>
+  </form>
+</div>
