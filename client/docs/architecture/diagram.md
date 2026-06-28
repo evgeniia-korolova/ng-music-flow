@@ -17,7 +17,7 @@ graph TD
 
     %% Header Logic
     Header --> SearchBar[Search Bar]
-    Header --> UserMenu[User Dropdown]
+    Header --> UserMenu[User Controls / Buttons]
 
     %% Data Flow from Header
     SearchBar -.->|Set Query| SearchStore
@@ -28,12 +28,17 @@ graph TD
     RouterOutlet --> Artists[Artists Page]
     RouterOutlet --> About[About Page]
     RouterOutlet --> Library[Library Page <br> 🔒 Auth Required]
+    RouterOutlet --> Auth[Auth Page]
 
     %% Shared UI Components
     subgraph SharedUI [Shared UI Components]
         TracksList[Tracks List]
         AlbumsList[Albums List]
+        TrackCard[Track Card]
     end
+
+    %% Internal Shared UI Links
+    TracksList --> TrackCard
 
     %% Discover Branch
     Discover --> Popular[Popular Tracks]
@@ -59,14 +64,16 @@ graph TD
     ArtistProfile --> AlbumsList
     Albums --> AlbumsList
 
-    %% Library Branch (Your work)
+    %% Library Branch
     Library --> LibSidebar[Library Sidebar]
     Library --> CreatePlaylist[Create Playlist Form]
     Library --> UploadTrack[Upload Track Form]
 
-    %% Auth Branch
-    UserMenu --> Auth[Auth Page]
+    %% Auth Branch (Now correctly in Router Outlet)
     Auth --> Login[Login Form]
     Auth --> Register[Register Form]
     Auth --> Jamendo[Jamendo Sync]
+
+    %% Navigation
+    UserMenu -.->|Navigate| Auth
 ```
