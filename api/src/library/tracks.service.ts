@@ -198,7 +198,7 @@ export class TracksService {
 
   private async generateWaveform(
     buffer: Buffer,
-    points = 100,
+    points = 400,
   ): Promise<number[]> {
     try {
       const audioBuffer = (await decode(buffer)) as unknown as {
@@ -231,7 +231,13 @@ export class TracksService {
       const maxPeak = Math.max(...waveform);
       if (maxPeak === 0) return new Array(points).fill(0) as number[];
 
-      return waveform.map((peak) => Math.round((peak / maxPeak) * 100));
+      return waveform.reduce((acc: number[], peak) => {
+        const normalizedWavelength = peak / maxPeak;
+        if (normalizedWavelength > 0.2) {
+          acc.push(normalizedWavelength);
+        }
+        return acc;
+      }, []);
     } catch {
       return Array.from(
         { length: points },
