@@ -49,7 +49,7 @@ export class TrackEntity {
   @Length(2, 30)
   genre!: string;
 
-  @Column('int', { array: true, nullable: true })
+  @Column('float', { array: true, nullable: true })
   waveform!: number[];
 
   @Column()
