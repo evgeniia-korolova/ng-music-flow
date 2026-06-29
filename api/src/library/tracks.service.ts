@@ -245,7 +245,7 @@ export class TracksService {
       console.error(error);
       return Array.from(
         { length: points },
-        () => Math.floor(Math.random() * 40) + 20,
+        () => (Math.floor(Math.random() * 40) + 20) / 100,
       );
     }
   }
