@@ -1,6 +1,7 @@
 @use 'sass:map';
 @use 'styles/mixins' as m;
 @use 'tailwindcss';
+@use './styles/forms';
 @include m.generate-theme-variables;
 
 $header-width: 1800px;

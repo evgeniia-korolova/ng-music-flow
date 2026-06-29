@@ -15,11 +15,13 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
 import { Router } from '@angular/router';
 import { PlaylistsStore } from '../../../entities/playlist/model/playlists.store';
-import { Location } from '@angular/common';
+import { FormNavigationService } from '../../../shared/services/form-navigation-service/form-navigation-service';
+import { FormError } from '../../../shared/ui/form-error/form-error';
+// import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-create-playlist-form',
-  imports: [ReactiveFormsModule, Button, Icon],
+  imports: [ReactiveFormsModule, Button, Icon, FormError],
   providers: [TracksStore],
   templateUrl: './create-playlist-form.html',
   styleUrl: './create-playlist-form.scss',
@@ -29,7 +31,8 @@ export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly playlistsStore = inject(PlaylistsStore);
   private readonly router = inject(Router);
-  private readonly location = inject(Location);
+  // private readonly location = inject(Location);
+  private readonly formNavigateService = inject(FormNavigationService);
   readonly selectedTracks = signal<LibraryPlaylistTrack[]>([]);
   readonly cancelForm = output<void>();
 
@@ -115,23 +118,24 @@ export class CreatePlaylistForm implements OnInit {
           if (freshPlaylist && freshPlaylist.id) {
             void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
-            this.navigateToPreviousOrFallback();
+            // this.navigateToPreviousOrFallback();
+            this.formNavigateService.goBackOrFallback('/library/custom-tracks');
           }
         })
         .catch((err) => console.error('failed to create playlist:', err));
     }
   }
 
-  private navigateToPreviousOrFallback(): void {
-    if (window.history.length > 1) {
-      this.location.back();
-    } else {
-      void this.router.navigate(['/library/custom-tracks']);
-    }
-  }
+  // private navigateToPreviousOrFallback(): void {
+  //   if (window.history.length > 1) {
+  //     this.location.back();
+  //   } else {
+  //     void this.router.navigate(['/library/custom-tracks']);
+  //   }
+  // }
 
   closeForm(): void {
-    this.navigateToPreviousOrFallback();
+    this.formNavigateService.goBackOrFallback('/library/custom-tracks');
   }
 
   onAddJamendoTrack(trackId: string) {

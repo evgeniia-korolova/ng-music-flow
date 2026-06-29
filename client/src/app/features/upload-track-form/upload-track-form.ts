@@ -1,17 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormNavigationService } from '../../shared/services/form-navigation-service/form-navigation-service';
+import { FormError } from '../../shared/ui/form-error/form-error';
 
 @Component({
   selector: 'app-upload-track-form',
-  imports: [Button, Icon, ReactiveFormsModule],
+  imports: [Button, Icon, ReactiveFormsModule, FormError],
   templateUrl: './upload-track-form.html',
   styleUrl: './upload-track-form.scss',
 })
 export class UploadTrackForm {
+  private readonly formNavigateService = inject(FormNavigationService);
+
   uploadTrackForm = new FormGroup({
-    title: new FormControl('', [Validators.required, Validators.minLength(3)]),
+    title: new FormControl('', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20),
+    ]),
     artist: new FormControl('', [Validators.required]),
     genre: new FormControl('', [Validators.required]),
     file: new FormControl<File | null>(null, [Validators.required]),
@@ -34,6 +42,6 @@ export class UploadTrackForm {
     formData.append('file', this.uploadTrackForm.value.file!);
   }
   closeForm() {
-    console.log('Form close');
+    this.formNavigateService.goBackOrFallback('/library/custom-tracks');
   }
 }

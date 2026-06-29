@@ -21,7 +21,9 @@ export const LIBRARY_ROUTES: Routes = [
         path: 'custom-tracks',
 
         loadComponent: () =>
-          import('../../widgets/custom-tracks/custom-tracks').then((m) => m.CustomTracks),
+          import('../../features/upload-track-form/upload-track-form').then(
+            (m) => m.UploadTrackForm,
+          ),
       },
       {
         path: 'create',
