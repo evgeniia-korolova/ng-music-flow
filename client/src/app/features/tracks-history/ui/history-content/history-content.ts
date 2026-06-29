@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { TRACK_DATA_PROVIDER } from '../../../../widgets/tracks-list/model/track-provider.token';
 
 import TracksList from '../../../../widgets/tracks-list/tracks-list';
 import { HistoryStore } from '../../model/track-history.store';
+import { AuthStore } from '../../../../entities/user/user.state';
 
 @Component({
   selector: 'app-history-content',
@@ -19,6 +20,17 @@ import { HistoryStore } from '../../model/track-history.store';
 })
 export class HistoryContent {
   public historyService = inject(HistoryStore);
+  private readonly authStore = inject(AuthStore);
+
+  constructor() {
+    effect(() => {
+      const isAuth = this.authStore.isUnsafeAuthenticated();
+
+      if (isAuth) {
+        this.historyService.loadHistory({ page: 1, limit: 20 });
+      }
+    });
+  }
 
   onDateChange(event: Event) {
     const input = event.target as HTMLInputElement;

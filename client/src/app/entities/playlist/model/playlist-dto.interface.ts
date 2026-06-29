@@ -38,3 +38,8 @@ export interface UpdatePlaylistTracksDto {
     albumName?: string;
   }[];
 }
+
+export interface SinglePlaylistResponseDto {
+  data: PlaylistResponseDto;
+  error: string | null;
+}

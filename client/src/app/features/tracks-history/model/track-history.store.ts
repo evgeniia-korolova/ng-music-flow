@@ -1,11 +1,4 @@
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withHooks,
-  withMethods,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
 import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
 import { HttpClient } from '@angular/common/http';
@@ -77,9 +70,6 @@ export const HistoryStore = signalStore(
 
             const url = `${apiAddr}?page=${page}&limit=${limit}`;
 
-            //const date = store.filterDate();
-            // const url = date ? `${apiAddr}?date=${date}` : apiAddr;
-
             return http.get<HistoryResponseDto>(url).pipe(
               tapResponse({
                 next: (response) => {
@@ -132,11 +122,5 @@ export const HistoryStore = signalStore(
         ),
       ),
     };
-  }),
-
-  withHooks({
-    onInit(store) {
-      store.loadHistory({ page: 1, limit: 20 });
-    },
   }),
 );
