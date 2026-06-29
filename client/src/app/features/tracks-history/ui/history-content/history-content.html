@@ -5,5 +5,13 @@
     <input type="date" (change)="onDateChange($event)" class="date-picker" />
   </div>
 
-  <app-tracks-list [viewMode]="'tabs'"></app-tracks-list>
+  <app-tracks-list [viewMode]="'tabs'">
+    <ng-template #cardActions let-track>
+      @if (track.playedAtDate) {
+        <span class="history-time-badge">
+          {{ track.playedAtDate }}
+        </span>
+      }
+    </ng-template>
+  </app-tracks-list>
 </div>

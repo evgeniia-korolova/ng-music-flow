@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TRACK_DATA_PROVIDER } from '../../../../widgets/tracks-list/model/track-provider.token';
-import { TrackHistoryService } from '../../model/track-history-service';
+
 import TracksList from '../../../../widgets/tracks-list/tracks-list';
+import { HistoryStore } from '../../model/track-history.store';
 
 @Component({
   selector: 'app-history-content',
@@ -12,12 +13,12 @@ import TracksList from '../../../../widgets/tracks-list/tracks-list';
   providers: [
     {
       provide: TRACK_DATA_PROVIDER,
-      useExisting: TrackHistoryService,
+      useExisting: HistoryStore,
     },
   ],
 })
 export class HistoryContent {
-  public historyService = inject(TrackHistoryService);
+  public historyService = inject(HistoryStore);
 
   onDateChange(event: Event) {
     const input = event.target as HTMLInputElement;

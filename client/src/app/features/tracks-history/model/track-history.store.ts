@@ -1,15 +1,23 @@
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { HistoryItem } from './history.types';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { Track } from '../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { HistoryBackendModel, HistoryResponseDto } from './history-dto.interface';
 
 export interface HistoryState {
-  items: HistoryItem[];
+  items: HistoryBackendModel[];
+  currentPage: number;
   filterDate: string | null;
   isLoading: boolean;
   error: string | null;
@@ -17,17 +25,18 @@ export interface HistoryState {
 
 const initialState: HistoryState = {
   items: [],
+  currentPage: 1,
   filterDate: null,
   isLoading: false,
   error: null,
 };
 
-export const HistorySignalStore = signalStore(
+export const HistoryStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
 
   withComputed((store) => ({
-    tracks: computed<Track[]>(() => {
+    tracks: computed<LibraryPlaylistTrack[]>(() => {
       const historyData = store.items();
       const dateFilter = store.filterDate();
 
@@ -35,7 +44,14 @@ export const HistorySignalStore = signalStore(
         ? historyData.filter((item) => item.playedAt.startsWith(dateFilter))
         : historyData;
 
-      return filtered.map((item) => item.track);
+      return filtered.map(
+        (item) =>
+          ({
+            ...item.track,
+            origin: item.origin,
+            playedAtDate: item.playedAt,
+          }) as LibraryPlaylistTrack,
+      );
     }),
 
     listTitle: computed<string>(() => {
@@ -52,16 +68,29 @@ export const HistorySignalStore = signalStore(
         patchState(store, { filterDate: date });
       },
 
-      loadHistory: rxMethod<void>(
+      loadHistory: rxMethod<{ page?: number; limit?: number } | void>(
         pipe(
           tap(() => patchState(store, { isLoading: true, error: null })),
-          switchMap(() => {
-            const date = store.filterDate();
-            const url = date ? `${apiAddr}?date=${date}` : apiAddr;
+          switchMap((params) => {
+            const page = params?.page ?? 1;
+            const limit = params?.limit ?? 20;
 
-            return http.get<HistoryItem[]>(url).pipe(
+            const url = `${apiAddr}?page=${page}&limit=${limit}`;
+
+            //const date = store.filterDate();
+            // const url = date ? `${apiAddr}?date=${date}` : apiAddr;
+
+            return http.get<HistoryResponseDto>(url).pipe(
               tapResponse({
-                next: (items) => patchState(store, { items, isLoading: false }),
+                next: (response) => {
+                  const incomingItems = response.data || [];
+
+                  patchState(store, {
+                    items: page === 1 ? incomingItems : [...store.items(), ...incomingItems],
+                    currentPage: page,
+                    isLoading: false,
+                  });
+                },
                 error: (err) => {
                   console.error('Failed to load history in store:', err);
                   patchState(store, {
@@ -75,22 +104,39 @@ export const HistorySignalStore = signalStore(
         ),
       ),
 
-      addTrackToHistory: rxMethod<Track>(
+      addTrackToHistory: rxMethod<LibraryPlaylistTrack>(
         pipe(
-          switchMap((track) =>
-            http.post<HistoryItem>(apiAddr, { trackId: track.id }).pipe(
+          switchMap((track) => {
+            const payload = {
+              trackId: track.id,
+              origin: track.origin || 'JAMENDO',
+            };
+
+            return http.post<void>(apiAddr, payload).pipe(
               tapResponse({
-                next: (newItem) => {
+                next: () => {
+                  const newItem: HistoryBackendModel = {
+                    track: track,
+                    origin: track.origin || 'JAMENDO',
+                    playedAt: new Date().toISOString(),
+                  };
+
                   patchState(store, (state) => ({
                     items: [newItem, ...state.items],
                   }));
                 },
                 error: (err) => console.error('Failed to save track to history in store:', err),
               }),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     };
+  }),
+
+  withHooks({
+    onInit(store) {
+      store.loadHistory({ page: 1, limit: 20 });
+    },
   }),
 );

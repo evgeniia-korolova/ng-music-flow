@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, input, linkedSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
 import { TRACK_DATA_PROVIDER } from './model/track-provider.token';
 import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
@@ -13,6 +20,12 @@ export default class TracksList {
   protected readonly provider = inject(TRACK_DATA_PROVIDER);
   private screen = inject(ResponsiveService);
   readonly viewMode = input.required<'tabs' | 'search' | 'slider'>();
+
+  constructor() {
+    effect(() => {
+      console.log(this.provider.tracks());
+    });
+  }
 
   readonly showWave = linkedSignal({
     source: () => ({
