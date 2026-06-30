@@ -19,7 +19,11 @@
       margin-bottom: 24px;
     }
   }
-
+  &__add-track-btn {
+    &:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
   &__list {
     display: flex;
     flex-direction: column;

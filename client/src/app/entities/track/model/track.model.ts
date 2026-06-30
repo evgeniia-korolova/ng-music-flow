@@ -44,3 +44,7 @@ export interface LibraryPlaylistTrack extends Track {
   origin?: 'JAMENDO' | 'LOCAL';
   order?: number;
 }
+export interface CustomTrackTitle {
+  id: string;
+  title: string;
+}

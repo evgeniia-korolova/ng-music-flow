@@ -21,9 +21,7 @@ export const LIBRARY_ROUTES: Routes = [
         path: 'custom-tracks',
 
         loadComponent: () =>
-          import('../../features/upload-track-form/upload-track-form').then(
-            (m) => m.UploadTrackForm,
-          ),
+          import('../../widgets/custom-tracks/custom-tracks').then((m) => m.CustomTracks),
       },
       {
         path: 'create',
@@ -44,6 +42,13 @@ export const LIBRARY_ROUTES: Routes = [
         loadComponent: () =>
           import('../../features/playlist/create-playlist-form/create-playlist-form').then(
             (m) => m.CreatePlaylistForm,
+          ),
+      },
+      {
+        path: 'add-user-track',
+        loadComponent: () =>
+          import('../../features/upload-track-form/upload-track-form').then(
+            (m) => m.UploadTrackForm,
           ),
       },
     ],
