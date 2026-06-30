@@ -24,7 +24,7 @@ export class HistoryService {
       .createQueryBuilder()
       .insert()
       .values({ userId, trackId, origin })
-      .orUpdate(['lastListenedAt'], ['userId', 'trackId', 'origin'])
+      .orUpdate(['playedAt'], ['userId', 'trackId', 'origin'])
       .execute();
   }
 
