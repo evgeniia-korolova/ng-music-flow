@@ -4,10 +4,11 @@ import { TRACK_DATA_PROVIDER } from '../../../../widgets/tracks-list/model/track
 import TracksList from '../../../../widgets/tracks-list/tracks-list';
 import { HistoryStore } from '../../model/track-history.store';
 import { AuthStore } from '../../../../entities/user/user.state';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-history-content',
-  imports: [TracksList],
+  imports: [TracksList, DatePipe],
   templateUrl: './history-content.html',
   styleUrl: './history-content.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
