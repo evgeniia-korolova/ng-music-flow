@@ -1,4 +1,11 @@
 <div class="playlist-view-layout">
+  @if (playlistsStore.isLoading()) {
+    <p class="text-accent animate-pulse">Loading tracks...</p>
+  }
+
+  @if (playlistsStore.error()) {
+    <p class="text-red-500">{{ playlistsStore.error() }}</p>
+  }
   @if (activePlaylist(); as playlist) {
     <app-drag-drop-list
       #trackList

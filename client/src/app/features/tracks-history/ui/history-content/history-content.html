@@ -5,5 +5,16 @@
     <input type="date" (change)="onDateChange($event)" class="date-picker" />
   </div>
 
-  <app-tracks-list [viewMode]="'tabs'"></app-tracks-list>
+  <app-tracks-list [viewMode]="'tabs'">
+    <ng-template #trackHeader let-track let-idx="index">
+      <div class="history-track-meta" [class.is-first]="idx === 0">
+        <span class="history-origin-badge" [class.jamendo]="track.origin === 'JAMENDO'">
+          {{ track.origin }}
+        </span>
+        <span class="history-time-badge">
+          Played at: {{ track.playedAtDate | date: 'short' }}
+        </span>
+      </div>
+    </ng-template>
+  </app-tracks-list>
 </div>
