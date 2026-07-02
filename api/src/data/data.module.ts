@@ -11,6 +11,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         const isProduction =
           configService.get<string>('ENVIRONMENT') === 'production';
 
+        console.log(
+          'current entivornemt: ',
+          configService.get<string>('ENVIRONMENT'),
+        );
+
+        console.log(configService.get<string>('DATABASE_URL'));
+
         return {
           type: 'postgres',
           url: isProduction
