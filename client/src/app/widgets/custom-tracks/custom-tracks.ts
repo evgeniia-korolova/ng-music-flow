@@ -3,10 +3,11 @@ import { TrackApiService } from '../../entities/track/api/track-api-service';
 import { Track } from '../../entities/track/model/track.model';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
 import { Icon } from '../../shared/ui/icon/icon.component';
+import { Button } from '../../shared/ui/button/button';
 
 @Component({
   selector: 'app-custom-tracks',
-  imports: [TrackCard, Icon],
+  imports: [TrackCard, Icon, Button],
   templateUrl: './custom-tracks.html',
   styleUrl: './custom-tracks.scss',
 })

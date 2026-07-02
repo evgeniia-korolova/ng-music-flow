@@ -1,7 +1,14 @@
 <div class="custom-tracks__wrapper">
   <div class="custom-tracks__header">
     <h2 class="custom-tracks__title">My tracks</h2>
-    <button (click)="isEditing.set(!isEditing())" class="custom-tracks__edit-btn">Edit</button>
+    <app-button
+      (click)="isEditing.set(!isEditing())"
+      variant="ghost"
+      size="sm"
+      class="custom-tracks__edit-btn"
+    >
+      Edit
+    </app-button>
   </div>
   <ul class="custom-tracks__list">
     @for (track of tracks(); track track.id) {

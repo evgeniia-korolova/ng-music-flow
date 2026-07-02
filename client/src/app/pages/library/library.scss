@@ -7,11 +7,13 @@
     grid-template-columns: 300px 1fr;
     gap: 1rem;
     height: calc(100vh - 175px);
+    min-height: 0;
     @media (width < 768px) {
       grid-template-columns: 1fr;
       height: auto;
       padding: 10px 15px;
       gap: 10px;
+      overflow-y: visible;
     }
   }
 
@@ -34,7 +36,6 @@
     display: block;
   }
   app-library-sidebar {
-    text-align: center;
     padding: 30px 15px 100px;
     position: fixed;
     top: 4.5rem;
