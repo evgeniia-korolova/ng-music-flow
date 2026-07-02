@@ -8,7 +8,7 @@
 
 [[redirects]]
   from = "/api/auth/*"
-  to = "https://ng-music-flow.onrender.com"
+  to = "https://ng-music-flow.onrender.com/:splat"
   status = 200
   force = true
 
