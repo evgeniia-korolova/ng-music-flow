@@ -3,5 +3,5 @@ export const environment = {
   jamendoClientId: '',
   jamendoClientSecret: '',
   apiUrl: '/api',
-  appApiUrl: 'https://ng-music-flow.onrender.com',
+  appApiUrl: '/api',
 };
