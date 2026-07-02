@@ -7,6 +7,12 @@
   directory = "netlify/functions"
 
 [[redirects]]
+  from = "/api/auth/*"
+  to = "https://onrender.com"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/music/:splat"
   status = 200
