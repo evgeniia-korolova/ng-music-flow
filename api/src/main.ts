@@ -32,7 +32,10 @@ async function bootstrap(): Promise<void> {
   app.enableCors({
     origin: corsOrigin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization, X-Requested-With',
     credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
