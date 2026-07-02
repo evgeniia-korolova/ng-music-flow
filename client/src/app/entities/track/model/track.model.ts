@@ -48,3 +48,13 @@ export interface CustomTrackTitle {
   id: string;
   title: string;
 }
+export interface PaginatedTracksResponse {
+  tracks: Track[];
+  total: number;
+  page: number;
+  limit: number;
+}
+export interface TrackServerResponse<T> {
+  data: T;
+  error: string | null;
+}

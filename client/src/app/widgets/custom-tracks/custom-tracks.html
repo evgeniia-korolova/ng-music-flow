@@ -1,1 +1,24 @@
-<div class="custom-track__wrapper"></div>
+<div class="custom-tracks__wrapper">
+  <div class="custom-tracks__header">
+    <h2 class="custom-tracks__title">My tracks</h2>
+    <button (click)="isEditing.set(!isEditing())" class="custom-tracks__edit-btn">Edit</button>
+  </div>
+  <ul class="custom-tracks__list">
+    @for (track of tracks(); track track.id) {
+      <li class="custom-tracks__item">
+        <app-track-card
+          [showWave]="true"
+          [track]="track"
+          [playlistContext]="tracks()"
+          [isEditMode]="isEditing()"
+        >
+          @if (isEditing()) {
+            <button (click)="onDeleteTrack(track.id)" class="custom-tracks__edit" slot-actions>
+              <app-icon icon="x"></app-icon>
+            </button>
+          }
+        </app-track-card>
+      </li>
+    }
+  </ul>
+</div>

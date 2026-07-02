@@ -1,0 +1,25 @@
+.custom-tracks {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: center;
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+  &__title {
+    font-weight: 600;
+    font-size: 28px;
+  }
+  &__edit-btn {
+    cursor: pointer;
+  }
+  &__list {
+    display: grid;
+    row-gap: 10px;
+  }
+  &__edit {
+    cursor: pointer;
+  }
+}

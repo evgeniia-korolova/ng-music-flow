@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CustomTrackTitle } from '../model/track.model';
+import {
+  CustomTrackTitle,
+  PaginatedTracksResponse,
+  TrackServerResponse,
+} from '../model/track.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -17,5 +21,12 @@ export class TrackApiService {
 
   getCustomTrackTitles(): Observable<CustomTrackTitle[]> {
     return this.http.get<CustomTrackTitle[]>(`${this.apiUrl}/tracks/titles`);
+  }
+
+  getUserTracks(): Observable<TrackServerResponse<PaginatedTracksResponse>> {
+    return this.http.get<TrackServerResponse<PaginatedTracksResponse>>(`${this.apiUrl}/tracks`);
+  }
+  deleteTrack(trackId: string) {
+    return this.http.delete(`${this.apiUrl}/tracks/${trackId}`);
   }
 }
