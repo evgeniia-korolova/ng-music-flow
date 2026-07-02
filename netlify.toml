@@ -7,12 +7,6 @@
   directory = "netlify/functions"
 
 [[redirects]]
-  from = "/api/auth/*"
-  to = "https://ng-music-flow.onrender.com/:splat"
-  status = 200
-  force = true
-
-[[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/music/:splat"
   status = 200
