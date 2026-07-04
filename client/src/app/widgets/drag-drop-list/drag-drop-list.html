@@ -1,4 +1,7 @@
 <div class="drag-drop-list-container">
+  <div class="list-header-wrapper">
+    <ng-content select="[slot-header]" />
+  </div>
   <div
     cdkDropList
     [cdkDropListDisabled]="!isEditMode()"
