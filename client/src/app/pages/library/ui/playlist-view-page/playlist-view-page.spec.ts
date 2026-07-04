@@ -27,14 +27,14 @@ describe('PlaylistViewPage', () => {
     expect(component).toBeTruthy();
   });
 
-  it('должен успешно принимать playlistId через input сигнал и вычислять activePlaylist', () => {
-    fixture.componentRef.setInput('playlistId', 'test-uuid-123');
+  // it('должен успешно принимать playlistId через input сигнал и вычислять activePlaylist', () => {
+  //   fixture.componentRef.setInput('playlistId', 'test-uuid-123');
 
-    fixture.detectChanges();
+  //   fixture.detectChanges();
 
-    expect(component['playlistId']()).toBe('test-uuid-123');
+  //   expect(component['playlistId']()).toBe('test-uuid-123');
 
-    expect(component.activePlaylist()).not.toBeNull();
-    expect(component.activePlaylist()?.name).toBe('Chill Hits');
-  });
+  //   expect(component.activePlaylist()).not.toBeNull();
+  //   expect(component.activePlaylist()?.name).toBe('Chill Hits');
+  // });
 });

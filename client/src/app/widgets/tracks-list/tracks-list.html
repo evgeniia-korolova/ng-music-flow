@@ -1,6 +1,4 @@
 <div class="py-4 lg:px-4">
-  <!-- <h2 class="mb-4 text-2xl font-bold capitalize">popular tracks</h2> -->
-
   @if (provider.isLoading()) {
     <p class="text-accent animate-pulse">Loading tracks...</p>
   }
@@ -10,9 +8,16 @@
   }
 
   <ul class="m-0 flex min-h-[400px] list-none flex-col gap-3 p-0" #listContainer>
-    @for (track of provider.tracks(); track track.id) {
+    @for (track of provider.tracks(); track track.id; let idx = $index) {
       @defer (on viewport) {
         <li class="block min-h-[135px] w-full" #item [attr.data-track-id]="track.id">
+          @if (trackHeaderTemplate(); as headerTemplate) {
+            <ng-container
+              [ngTemplateOutlet]="headerTemplate"
+              [ngTemplateOutletContext]="{ $implicit: track, index: idx }"
+            />
+          }
+          <!-- <ng-content select="[slot-meta-library]" /> -->
           <app-track-card
             [track]="track"
             [showWave]="showWave()"

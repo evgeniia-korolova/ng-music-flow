@@ -50,7 +50,7 @@ export class TracksService {
       );
     }
 
-    const waveform = await this.generateWaveform(file.buffer, 100);
+    const waveform = await this.generateWaveform(file.buffer, 200);
 
     const fileExtension = file.originalname.split('.').pop();
     const uniqueFileName = `${userId}/${randomUUID()}.${fileExtension}`;
@@ -198,21 +198,24 @@ export class TracksService {
 
   private async generateWaveform(
     buffer: Buffer,
-    points = 100,
+    points = 400,
   ): Promise<number[]> {
     try {
       const audioBuffer = (await decode(buffer)) as unknown as {
         duration: number;
         sampleRate: number;
         numberOfChannels: number;
-        getChannelData(channel: number): Float32Array;
+        channelData: Float32Array[];
       };
 
-      const channelData = audioBuffer.getChannelData(0);
+      if (audioBuffer.channelData.length === 0)
+        throw new Error('0 length channelData returned');
+
+      const channelData = audioBuffer.channelData[0];
       const totalSamples = channelData.length;
+
       const blockSize = Math.floor(totalSamples / points);
       const waveform: number[] = [];
-
       for (let i = 0; i < points; i++) {
         const start = i * blockSize;
         const end = start + blockSize;
@@ -231,11 +234,18 @@ export class TracksService {
       const maxPeak = Math.max(...waveform);
       if (maxPeak === 0) return new Array(points).fill(0) as number[];
 
-      return waveform.map((peak) => Math.round((peak / maxPeak) * 100));
-    } catch {
+      return waveform.reduce((acc: number[], peak) => {
+        const normalizedWavelength = Math.round((peak / maxPeak) * 100) / 100;
+        if (normalizedWavelength > 0.2) {
+          acc.push(normalizedWavelength);
+        }
+        return acc;
+      }, []);
+    } catch (error) {
+      console.error(error);
       return Array.from(
         { length: points },
-        () => Math.floor(Math.random() * 40) + 20,
+        () => (Math.floor(Math.random() * 40) + 20) / 100,
       );
     }
   }

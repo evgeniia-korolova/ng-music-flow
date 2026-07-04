@@ -10,10 +10,16 @@ import { LibraryPlaylistTrack } from '../../track/model/track.model';
 import { computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { firstValueFrom } from 'rxjs';
+import { filter, pipe, switchMap, tap } from 'rxjs';
 import { LibraryPlaylist } from './playlist.model';
-import { GetPlaylistsResponseDto, PlaylistResponseDto } from './playlist-dto.interface';
+import {
+  GetPlaylistsResponseDto,
+  PlaylistResponseDto,
+  SinglePlaylistResponseDto,
+} from './playlist-dto.interface';
 import { mapPlaylistResponseToLibraryPlaylist } from './map-playlist-respose-back';
+import { tapResponse } from '@ngrx/operators';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
 
 export interface PlaylistsState {
   playlists: LibraryPlaylist[];
@@ -41,87 +47,139 @@ export const PlaylistsStore = signalStore(
     const apiAddr = `${environment.appApiUrl}/playlists`;
 
     return {
-      async createPlaylist(playlistData: {
-        name: string;
-        description?: string;
-        tracks: LibraryPlaylistTrack[];
-      }): Promise<LibraryPlaylist> {
-        patchState(store, { isLoading: true, error: null });
+      createPlaylist: rxMethod<{
+        playlistData: { name: string; description?: string; tracks: LibraryPlaylistTrack[] };
+        onSuccess?: (savedPlaylist: LibraryPlaylist) => void;
+        onError?: (err: unknown) => void;
+      }>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true, error: null })),
+          switchMap(({ playlistData, onSuccess, onError }) => {
+            const createPayload = {
+              name: playlistData.name,
+              description: playlistData.description || undefined,
+              tracks: playlistData.tracks.map((track) => ({
+                trackId: track.id,
+                origin: track.origin || 'JAMENDO',
+                order: track.order,
+              })),
+            };
 
-        const createPayload = {
-          name: playlistData.name,
-          description: playlistData.description || undefined,
-          tracks: playlistData.tracks.map((track) => ({
-            trackId: track.id,
-            origin: track.origin || 'JAMENDO',
-            order: track.order,
-          })),
-        };
+            return http.post<SinglePlaylistResponseDto>(apiAddr, createPayload).pipe(
+              tap((rawResponseFromBackend) => {
+                console.log('=== СЫРОЙ ОТВЕТ С БЭКА НА POST (СОЗДАНИЕ) ===');
+                console.dir(rawResponseFromBackend);
+              }),
+              tapResponse({
+                next: (responseDto) => {
+                  const playlistRawData = responseDto.data;
 
-        try {
-          const responseDto = await firstValueFrom(
-            http.post<PlaylistResponseDto>(apiAddr, createPayload),
-          );
+                  const savedPlaylist = mapPlaylistResponseToLibraryPlaylist(playlistRawData);
 
-          const savedPlaylist: LibraryPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
+                  patchState(store, (state) => ({
+                    playlists: [savedPlaylist, ...state.playlists],
+                    isLoading: false,
+                  }));
 
-          patchState(store, (state) => ({
-            playlists: [...state.playlists, savedPlaylist],
-            isLoading: false,
-          }));
+                  if (onSuccess) {
+                    onSuccess(savedPlaylist);
+                  }
+                },
+                error: (err: unknown) => {
+                  console.error('Failed to save playlist to Supabase via NestJS:', err);
+                  patchState(store, { error: 'fail to create playlist', isLoading: false });
+                  if (onError) onError(err);
+                },
+              }),
+            );
 
-          await this.loadPlaylists();
+            // return http.post<PlaylistResponseDto>(apiAddr, createPayload).pipe(
+            //   tap((rawResponseFromBackend) => {
+            //     console.log('=== СЫРОЙ ОТВЕТ С БЭКА НА POST (СОЗДАНИЕ) ===');
+            //     console.dir(rawResponseFromBackend);
+            //   }),
+            //   tapResponse({
+            //     next: (responseDto) => {
 
-          return savedPlaylist;
-        } catch (err) {
-          console.error('Failed to save playlist to Supabase via NestJS:', err);
-          patchState(store, { error: 'fail to create playlist', isLoading: false });
-          throw err;
-        }
-      },
+            //       const savedPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
 
-      async loadPlaylists(): Promise<void> {
-        patchState(store, { isLoading: true, error: null });
+            //       patchState(store, (state) => ({
+            //         playlists: [...state.playlists, savedPlaylist],
+            //         isLoading: false,
+            //       }));
 
-        try {
-          const response = await firstValueFrom(http.get<GetPlaylistsResponseDto>(apiAddr));
+            //       if (onSuccess) {
+            //         onSuccess(savedPlaylist);
+            //       }
+            //     },
+            //     error: (err) => {
+            //       console.error('Failed to save playlist to Supabase via NestJS:', err);
+            //       patchState(store, { error: 'fail to create playlist', isLoading: false });
 
-          console.log('--- ЧТО ПРИШЛО С БЭКА НА GET ---', response);
+            //       if (onError) {
+            //         onError(err);
+            //       }
+            //     },
+            //   }),
+            // );
+          }),
+        ),
+      ),
 
-          const rawPlaylists: PlaylistResponseDto[] = response.data || [];
+      loadPlaylists: rxMethod<void>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true, error: null })),
+          switchMap(() =>
+            http.get<GetPlaylistsResponseDto>(apiAddr).pipe(
+              tapResponse({
+                next: (response) => {
+                  const rawPlaylists: PlaylistResponseDto[] = response.data || [];
+                  const mappedPlaylists: LibraryPlaylist[] = rawPlaylists.map(
+                    (p: PlaylistResponseDto) => mapPlaylistResponseToLibraryPlaylist(p),
+                  );
 
-          const mappedPlaylists: LibraryPlaylist[] = rawPlaylists.map((p: PlaylistResponseDto) =>
-            mapPlaylistResponseToLibraryPlaylist(p),
-          );
+                  patchState(store, { playlists: mappedPlaylists, isLoading: false });
+                },
+                error: (err) => {
+                  console.error('Failed to load playlists from NestJS:', err);
+                  patchState(store, { error: 'Failed to load playlists', isLoading: false });
+                },
+              }),
+            ),
+          ),
+        ),
+      ),
 
-          patchState(store, { playlists: mappedPlaylists, isLoading: false });
-        } catch (err) {
-          console.error('Failed to load playlists from NestJS:', err);
-          patchState(store, { error: 'Failed to load playlists', isLoading: false });
-        }
-      },
+      deletePlaylist: rxMethod<string>(
+        pipe(
+          tap((playlistId) => {
+            if (!playlistId) {
+              console.warn('failed delete playlist: ID is not defined');
+            }
+            patchState(store, { isLoading: true, error: null });
+          }),
 
-      async deletePlaylist(playlistId: string): Promise<void> {
-        if (!playlistId) {
-          console.warn('failed delete playlist: ID is not defined');
-          return;
-        }
-        patchState(store, { isLoading: true, error: null });
+          filter((playlistId) => !!playlistId),
+          switchMap((playlistId) =>
+            http.delete<void>(`${apiAddr}/${playlistId}`).pipe(
+              tapResponse({
+                next: () => {
+                  patchState(store, (state) => ({
+                    playlists: state.playlists.filter((p) => p.id !== playlistId),
+                    isLoading: false,
+                  }));
 
-        try {
-          await firstValueFrom(http.delete<void>(`${apiAddr}/${playlistId}`));
-
-          patchState(store, (state) => ({
-            playlists: state.playlists.filter((p) => p.id !== playlistId),
-            isLoading: false,
-          }));
-
-          console.log(`Playlist с ID ${playlistId} deleted!`);
-        } catch (err) {
-          console.error('Failed to delete playlist from NestJS:', err);
-          patchState(store, { error: 'Failed to delete playlist', isLoading: false });
-        }
-      },
+                  console.log(`Playlist с ID ${playlistId} deleted!`);
+                },
+                error: (err) => {
+                  console.error('Failed to delete playlist from NestJS:', err);
+                  patchState(store, { error: 'Failed to delete playlist', isLoading: false });
+                },
+              }),
+            ),
+          ),
+        ),
+      ),
 
       updateLocalPlaylistTracks(playlistId: string, updatedTracks: LibraryPlaylistTrack[]): void {
         patchState(store, (state) => ({
@@ -137,47 +195,61 @@ export const PlaylistsStore = signalStore(
         }));
       },
 
-      async updatePlaylist(
-        playlistId: string,
-        playlistData: {
-          name?: string;
-          description?: string;
-          tracks?: LibraryPlaylistTrack[];
-        },
-      ): Promise<void> {
-        patchState(store, { isLoading: true, error: null });
+      updatePlaylist: rxMethod<{
+        playlistId: string;
+        playlistData: { name?: string; description?: string; tracks?: LibraryPlaylistTrack[] };
+        onSuccess?: () => void;
+        onError?: (err: unknown) => void;
+      }>(
+        pipe(
+          tap(() => patchState(store, { isLoading: true, error: null })),
+          switchMap(({ playlistId, playlistData, onSuccess, onError }) => {
+            const updatePayload = {
+              name: playlistData.name,
+              description: playlistData.description || undefined,
+              tracks: playlistData.tracks
+                ? playlistData.tracks.map((track) => ({
+                    trackId: track.id,
+                    origin: track.origin || 'JAMENDO',
+                    order: track.order || 1,
+                  }))
+                : undefined,
+            };
 
-        const updatePayload = {
-          name: playlistData.name,
-          description: playlistData.description || undefined,
-          tracks: playlistData.tracks
-            ? playlistData.tracks.map((track) => ({
-                trackId: track.id,
-                origin: track.origin || 'JAMENDO',
-                order: track.order || 1,
-              }))
-            : undefined,
-        };
+            return http
+              .patch<SinglePlaylistResponseDto>(`${apiAddr}/${playlistId}`, updatePayload)
+              .pipe(
+                tapResponse({
+                  next: (responseDto) => {
+                    const updatedPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto.data);
 
-        try {
-          const responseDto = await firstValueFrom(
-            http.patch<PlaylistResponseDto>(`${apiAddr}/${playlistId}`, updatePayload),
-          );
+                    patchState(store, (state) => ({
+                      playlists: state.playlists.map((p) =>
+                        p.id === playlistId ? updatedPlaylist : p,
+                      ),
+                      isLoading: false,
+                    }));
 
-          const updatedPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
+                    // 2. ВЫЗЫВАЕМ КОЛБЭК: Сеть успешно обновилась, стейт синхронизирован!
+                    if (onSuccess) {
+                      onSuccess();
+                    }
+                  },
+                  error: (err: unknown) => {
+                    console.error('Failed to update playlist:', err);
+                    patchState(store, { error: 'Failed to update playlist', isLoading: false });
 
-          patchState(store, (state) => ({
-            playlists: state.playlists.map((p) => (p.id === playlistId ? updatedPlaylist : p)),
-            isLoading: false,
-          }));
+                    if (onError) {
+                      onError(err);
+                    }
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
 
-          await this.loadPlaylists();
-        } catch (err) {
-          console.error('Failed to update playlist:', err);
-          patchState(store, { error: 'Failed to update playlist', isLoading: false });
-          throw err;
-        }
-      },
+      // ----
     };
   }),
 
