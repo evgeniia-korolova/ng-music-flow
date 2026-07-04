@@ -2,7 +2,14 @@ import { JamendoTrackDto } from 'src/library/DTOs/track.dto';
 import { Track } from 'src/library/models/track.model';
 
 export const mapJamendoToTrack = (dto: JamendoTrackDto): Track => {
-  const waveform = (JSON.parse(dto.waveform) as { peaks: number[] }).peaks;
+  const rawWaveform = (JSON.parse(dto.waveform) as { peaks: number[] }).peaks;
+  const peakWavelength = Math.max(...rawWaveform);
+  const waveform: number[] = [];
+  rawWaveform.forEach((el) => {
+    if (el > 20) {
+      waveform.push(el / peakWavelength);
+    }
+  });
 
   const result = {
     id: dto.id,

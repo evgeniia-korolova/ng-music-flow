@@ -53,19 +53,10 @@ export class PlaylistViewPage {
 
         console.log('Syncing new drag&drop order with backend:', updatePayload);
 
-        this.playlistsStore
-          .updatePlaylist(id, updatePayload)
-          .then(() => {
-            console.log('New track order successfully saved to Supabase!');
-
-            void this.router.navigate([], {
-              queryParams: { edit: null },
-              queryParamsHandling: 'merge',
-            });
-          })
-          .catch((err) => {
-            console.error('Failed to save track order on backend:', err);
-          });
+        this.playlistsStore.updatePlaylist({
+          playlistId: id,
+          playlistData: updatePayload,
+        });
       }
     }
   }

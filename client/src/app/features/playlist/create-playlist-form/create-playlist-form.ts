@@ -86,12 +86,6 @@ export class CreatePlaylistForm implements OnInit {
     const formValues = this.playlistForm.getRawValue();
     const id = this.playlistId();
 
-    // const cleanTracksPayload = this.selectedTracks().map((track, index) => ({
-    //   trackId: track.id,
-    //   origin: track.origin ?? 'JAMENDO',
-    //   order: index + 1,
-    // }));
-
     if (this.isEditMode() && id) {
       const updatePayload = {
         name: formValues.name ?? '',
@@ -99,16 +93,18 @@ export class CreatePlaylistForm implements OnInit {
         tracks: this.selectedTracks(),
       };
 
-      console.log('Sending secure payload to backend:', updatePayload);
+      this.playlistsStore.updatePlaylist({
+        playlistId: id,
+        playlistData: updatePayload,
+        onSuccess: () => {
+          console.log('Playlist successfully updated! Navigating back...');
 
-      this.playlistsStore
-        .updatePlaylist(id, updatePayload)
-        .then(() => {
           this.playlistForm.reset();
           this.selectedTracks.set([]);
           void this.router.navigate(['/library/playlists', id]);
-        })
-        .catch((err) => console.error('Failed to update playlist:', err));
+        },
+        onError: (err: unknown) => console.error('Failed to update playlist in form:', err),
+      });
     } else {
       const createPayload = {
         name: formValues.name ?? '',
@@ -116,23 +112,25 @@ export class CreatePlaylistForm implements OnInit {
         tracks: this.selectedTracks(),
       };
 
-      this.playlistsStore
-        .createPlaylist(createPayload)
-        .then(() => {
-          const updatedLists = this.playlistsStore.playlists();
-          const freshPlaylist = updatedLists[0];
-
+      this.playlistsStore.createPlaylist({
+        playlistData: createPayload,
+        onSuccess: () => {
           this.playlistForm.reset();
           this.selectedTracks.set([]);
+          const freshPlaylist = this.playlistsStore.playlists()[0];
+
+          this.playlistsStore.loadPlaylists();
 
           if (freshPlaylist && freshPlaylist.id) {
+            console.log('Redirecting to the exact newly created playlist ID:', freshPlaylist.id);
             void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
             // this.navigateToPreviousOrFallback();
             this.formNavigateService.goBackOrFallback('/library/custom-tracks');
           }
-        })
-        .catch((err) => console.error('failed to create playlist:', err));
+        },
+        onError: (err) => console.error('failed to create playlist:', err),
+      });
     }
   }
 
