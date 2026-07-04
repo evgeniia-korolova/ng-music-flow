@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   contentChild,
-  effect,
   inject,
   input,
   linkedSignal,
@@ -26,12 +25,6 @@ export default class TracksList {
   readonly viewMode = input.required<'tabs' | 'search' | 'slider'>();
   protected readonly trackHeaderTemplate =
     contentChild<TemplateRef<{ $implicit: Track; index: number }>>('trackHeader');
-
-  constructor() {
-    effect(() => {
-      console.log(this.provider.tracks());
-    });
-  }
 
   readonly showWave = linkedSignal({
     source: () => ({

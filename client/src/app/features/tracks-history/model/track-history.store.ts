@@ -51,10 +51,18 @@ export const HistoryStore = signalStore(
       const date = store.filterDate();
       return date ? `Recently Played (${date})` : 'Recently Played';
     }),
+
+    hasMore: computed<boolean>(() => {
+      const currentItemsCount = store.items().length;
+      if (currentItemsCount === 0) return false;
+
+      return currentItemsCount % 20 === 0;
+    }),
   })),
 
   withMethods((store, http = inject(HttpClient)) => {
     const apiAddr = `${environment.appApiUrl}/history`;
+    const LIMIT = 20;
 
     return {
       changeFilterDate(date: string | null): void {
@@ -66,7 +74,7 @@ export const HistoryStore = signalStore(
           tap(() => patchState(store, { isLoading: true, error: null })),
           switchMap((params) => {
             const page = params?.page ?? 1;
-            const limit = params?.limit ?? 20;
+            const limit = params?.limit ?? LIMIT;
 
             const url = `${apiAddr}?page=${page}&limit=${limit}`;
 
@@ -93,6 +101,13 @@ export const HistoryStore = signalStore(
           }),
         ),
       ),
+
+      loadNextPage(): void {
+        if (!store.isLoading()) {
+          const nextPage = store.currentPage() + 1;
+          this.loadHistory({ page: nextPage, limit: LIMIT });
+        }
+      },
 
       addTrackToHistory: rxMethod<LibraryPlaylistTrack>(
         pipe(
