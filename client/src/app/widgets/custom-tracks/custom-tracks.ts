@@ -29,7 +29,7 @@ export class CustomTracks implements OnInit {
         this.tracks.set(mappedTracks);
       },
       error: (err) => {
-        console.error('Помилка завантаження треків:', err);
+        console.error('Error loading tracks:', err);
       },
     });
   }

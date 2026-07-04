@@ -12,6 +12,7 @@ export function mapPlaylistResponseToLibraryPlaylist(dto: PlaylistResponseDto): 
     tracks: (dto.tracks || []).map(
       (t): LibraryPlaylistTrack => ({
         ...t.track,
+        coverUrl: t.track.coverUrl || '/images/track-placeholder.jpg',
         origin: t.origin,
         order: t.order,
       }),

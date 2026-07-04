@@ -16,10 +16,6 @@
     cursor: pointer;
     font-weight: 600;
     color: var(--color-btn-ghost-text);
-    @media (any-hover: hover) {
-      &:hover {
-      }
-    }
   }
   &__list {
     display: grid;

@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LibraryPlaylistTrack } from '../../../entities/track/model/track.model';
+import { LibraryPlaylistTrack, Track } from '../../../entities/track/model/track.model';
 import { Button } from '../../../shared/ui/button/button';
 import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
@@ -17,6 +17,7 @@ import { Router } from '@angular/router';
 import { PlaylistsStore } from '../../../entities/playlist/model/playlists.store';
 import { FormNavigationService } from '../../../shared/services/form-navigation-service/form-navigation-service';
 import { FormError } from '../../../shared/ui/form-error/form-error';
+import { TrackApiService } from '../../../entities/track/api/track-api-service';
 // import { Location } from '@angular/common';
 
 @Component({
@@ -33,8 +34,11 @@ export class CreatePlaylistForm implements OnInit {
   private readonly router = inject(Router);
   // private readonly location = inject(Location);
   private readonly formNavigateService = inject(FormNavigationService);
+  private trackApiService = inject(TrackApiService);
   readonly selectedTracks = signal<LibraryPlaylistTrack[]>([]);
   readonly cancelForm = output<void>();
+  readonly customTracks = signal<Track[]>([]);
+  readonly duplicateError = signal<string | null>(null);
 
   public readonly playlistId = input<string>();
   public readonly isEditMode = computed(() => !!this.playlistId());
@@ -69,6 +73,12 @@ export class CreatePlaylistForm implements OnInit {
         this.selectedTracks.set(currentPlaylist.tracks);
       }
     }
+    this.trackApiService.getUserTracks().subscribe({
+      next: (response) => {
+        this.customTracks.set(response.data.tracks);
+      },
+      error: (err) => console.error('Failed to load custom tracks', err),
+    });
   }
 
   onSubmit() {
@@ -143,8 +153,11 @@ export class CreatePlaylistForm implements OnInit {
 
     if (foundedTrack) {
       const alreadyAdded = this.selectedTracks().some((t) => t.id === trackId);
-      if (alreadyAdded) return;
-
+      if (alreadyAdded) {
+        this.duplicateError.set('This track is already added');
+        return;
+      }
+      this.duplicateError.set(null);
       this.selectedTracks.update((tracks) => [
         ...tracks,
         {
@@ -155,7 +168,27 @@ export class CreatePlaylistForm implements OnInit {
       ]);
     }
   }
-
+  onAddCustomTrack(trackId: string) {
+    const foundedTrack = this.customTracks().find((track) => track.id === trackId);
+    console.log(foundedTrack);
+    if (foundedTrack) {
+      const alreadyAdded = this.selectedTracks().some((track) => track.id === trackId);
+      if (alreadyAdded) {
+        this.duplicateError.set('This track is already added');
+        return;
+      }
+      this.duplicateError.set(null);
+      this.selectedTracks.update((tracks) => [
+        ...tracks,
+        {
+          ...foundedTrack,
+          // coverUrl: '/images/track-placeholder.jpg',
+          origin: 'LOCAL',
+          order: tracks.length + 1,
+        },
+      ]);
+    }
+  }
   removeTrack(trackId: string) {
     this.selectedTracks.update((tracks) => tracks.filter((track) => track.id !== trackId));
   }

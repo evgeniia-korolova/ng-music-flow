@@ -29,7 +29,7 @@
       ></textarea>
     </div>
     <div class="base-form__line">
-      <label for="trackSelect" class="base-form__label">Choose track</label>
+      <label for="trackSelect" class="base-form__label">Choose Jamendo track</label>
       @defer (when tracksStore.tracks().length>0) {
         <div class="playlist-form__select-group">
           <select #trackSelect id="trackSelect" class="playlist-form__list">
@@ -50,6 +50,33 @@
         </div>
       }
     </div>
+    <div class="base-form__line">
+      <label for="customTrackSelect" class="base-form__label">Choose custom track</label>
+      @defer (when customTracks().length>0) {
+        <div class="playlist-form__select-group">
+          <select #customTrackSelect id="customTrackSelect" class="playlist-form__list">
+            @for (track of customTracks(); track track.id) {
+              <option [value]="track.id" class="playlist-form__list-item">
+                {{ track.title }} - {{ track.artist.name }}
+              </option>
+            }
+          </select>
+          <app-button type="button" size="sm" (click)="onAddCustomTrack(customTrackSelect.value)"
+            >Add track</app-button
+          >
+        </div>
+      } @placeholder (minimum 500ms) {
+        <div class="playlist-form__select-group">
+          <select class="playlist-form__list"></select>
+          <app-button size="sm" [disabled]="true">Loading...</app-button>
+        </div>
+      }
+    </div>
+    @if (duplicateError()) {
+      <div class="playlist-form__tracks-error">
+        {{ duplicateError() }}
+      </div>
+    }
     <div class="playlist-form__tracks-list">
       @for (track of selectedTracks(); track track.id) {
         <div class="playlist-form__track-chip">
