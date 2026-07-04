@@ -123,6 +123,7 @@ export class CreatePlaylistForm implements OnInit {
 
           if (freshPlaylist && freshPlaylist.id) {
             console.log('Redirecting to the exact newly created playlist ID:', freshPlaylist.id);
+            void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
             // this.navigateToPreviousOrFallback();
             this.formNavigateService.goBackOrFallback('/library/custom-tracks');
