@@ -1,6 +1,6 @@
 <div class="history-page">
   <div class="history-page-header">
-    <h3>{{ historyService.listTitle() }}</h3>
+    <h3>{{ historyStore.listTitle() }}</h3>
 
     <input type="date" (change)="onDateChange($event)" class="date-picker" />
   </div>
@@ -17,4 +17,14 @@
       </div>
     </ng-template>
   </app-tracks-list>
+  @if (historyStore.hasMore()) {
+    <app-button
+      class="load-more-btn"
+      (click)="historyStore.loadNextPage()"
+      variant="default"
+      size="md"
+      [disabled]="historyStore.isLoading()"
+      >Load More</app-button
+    >
+  }
 </div>

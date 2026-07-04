@@ -5,10 +5,11 @@ import TracksList from '../../../../widgets/tracks-list/tracks-list';
 import { HistoryStore } from '../../model/track-history.store';
 import { AuthStore } from '../../../../entities/user/user.state';
 import { DatePipe } from '@angular/common';
+import { Button } from '../../../../shared/ui/button/button';
 
 @Component({
   selector: 'app-history-content',
-  imports: [TracksList, DatePipe],
+  imports: [TracksList, DatePipe, Button],
   templateUrl: './history-content.html',
   styleUrl: './history-content.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,7 +21,7 @@ import { DatePipe } from '@angular/common';
   ],
 })
 export class HistoryContent {
-  public historyService = inject(HistoryStore);
+  public historyStore = inject(HistoryStore);
   private readonly authStore = inject(AuthStore);
 
   constructor() {
@@ -28,13 +29,17 @@ export class HistoryContent {
       const isAuth = this.authStore.isUnsafeAuthenticated();
 
       if (isAuth) {
-        this.historyService.loadHistory({ page: 1, limit: 20 });
+        this.historyStore.loadHistory({ page: 1, limit: 20 });
       }
     });
   }
 
   onDateChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.historyService.changeFilterDate(input.value || null);
+    this.historyStore.changeFilterDate(input.value || null);
+  }
+
+  public onLoadMore(): void {
+    this.historyStore.loadNextPage();
   }
 }
