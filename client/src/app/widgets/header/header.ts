@@ -47,6 +47,7 @@ export class Header {
 
   readonly user = computed(() => this.authStore.user());
   readonly isSafeAuthenticated = this.authStore.isSafeAuthenticated;
+  readonly isNotSynced = this.authStore.isNotSyncedToJamendo;
 
   protected readonly navItems = computed(() => {
     const routes = this.router.config.flatMap((layout) => layout.children || []);

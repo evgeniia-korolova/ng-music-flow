@@ -128,6 +128,16 @@ header {
   width: 240px;
 }
 
+.warning.user-menu-item {
+  background-color: rgb(148, 112, 20);
+  color: white;
+  border-radius: 0.8rem;
+
+  &:hover {
+    background-color: rgb(180, 131, 5);
+  }
+}
+
 .button-wrapper {
   position: relative;
 

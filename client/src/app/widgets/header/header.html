@@ -10,7 +10,7 @@
     <div class="header-container__actions">
       <app-navigation-bar [pathCollection]="navItems()" />
       <div class="button-wrapper">
-        @if (true) {
+        @if (isNotSynced()) {
           <div class="avatar-badge">
             <app-icon icon="warning" primaryColor="white" />
           </div>
@@ -50,62 +50,83 @@
             }
           </app-button>
 
+          @if (isNotSynced()) {
+            <ng-template #item>
+              <a
+                class="warning user-menu-item"
+                appAutofocus
+                [appDropdownClose]="userMenu"
+                role="menuitem"
+                routerLink="/auth/jamendo"
+              >
+                <app-icon
+                  icon="waveForm"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Connect Jamendo
+              </a>
+            </ng-template>
+          }
+
+          @if (!isNotSynced()) {
+            <ng-template #item>
+              <a
+                class="user-menu-item"
+                [appDropdownClose]="userMenu"
+                role="menuitem"
+                routerLink="/library"
+              >
+                <app-icon
+                  icon="waveForm"
+                  variant="fill"
+                  style="font-size: 1.5rem"
+                  primaryColor="var(--color-btn-default-border)"
+                  fillColor="white"
+                />
+                Your Library
+              </a>
+            </ng-template>
+          }
           <ng-template #item>
-            <ul class="dropdown-list" role="menu">
-              <li role="none">
-                <a
-                  class="user-menu-item"
-                  appAutofocus
-                  [appDropdownClose]="userMenu"
-                  role="menuitem"
-                >
-                  <app-icon
-                    icon="user"
-                    variant="fill"
-                    style="font-size: 1.5rem"
-                    primaryColor="var(--color-btn-default-border)"
-                    fillColor="white"
-                  />
-                  Profile
-                </a>
-              </li>
-              <li role="none">
-                <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
-                  <app-icon
-                    icon="waveForm"
-                    variant="fill"
-                    style="font-size: 1.5rem"
-                    primaryColor="var(--color-btn-default-border)"
-                    fillColor="white"
-                  />
-                  Your Library
-                </a>
-              </li>
-              <li role="none">
-                <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
-                  <app-icon
-                    icon="keySquare"
-                    variant="fill"
-                    style="font-size: 1.5rem"
-                    primaryColor="var(--color-btn-default-border)"
-                    fillColor="white"
-                  />
-                  Change Password
-                </a>
-              </li>
-              <li role="none">
-                <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
-                  <app-icon
-                    icon="logOut"
-                    variant="fill"
-                    style="font-size: 1.5rem"
-                    primaryColor="var(--color-btn-default-border)"
-                    fillColor="white"
-                  />
-                  Logout
-                </button>
-              </li>
-            </ul>
+            <a class="user-menu-item" appAutofocus [appDropdownClose]="userMenu" role="menuitem">
+              <app-icon
+                icon="user"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Profile
+            </a>
+          </ng-template>
+
+          <ng-template #item>
+            <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+              <app-icon
+                icon="keySquare"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Change Password
+            </a>
+          </ng-template>
+
+          <ng-template #item>
+            <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
+              <app-icon
+                icon="logOut"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Logout
+            </button>
           </ng-template>
         </app-dropdown>
       </div>
