@@ -9,91 +9,107 @@
 
     <div class="header-container__actions">
       <app-navigation-bar [pathCollection]="navItems()" />
-      <app-dropdown #userMenu alignment="right" class="register-button">
-        <app-button
-          trigger
-          #trigger
-          [size]="!user() ? 'sm' : 'avatar'"
-          (click)="handleAuthButtonClick($event)"
-        >
-          @if (!user()) {
-            Sign Up
-            <app-icon
-              icon="logIn"
-              variant="fill"
-              style="font-size: 1.2rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-          } @else {
-            @if (user()?.userInformation?.avatar) {
-              <img [src]="user()?.userInformation?.avatar" alt="avatar" class="avatar" />
+      <div class="button-wrapper">
+        @if (true) {
+          <div class="avatar-badge">
+            <app-icon icon="warning" primaryColor="white" />
+          </div>
+        }
+        <app-dropdown #userMenu alignment="right" class="register-button">
+          <app-button
+            trigger
+            #trigger
+            [size]="!user() ? 'sm' : 'avatar'"
+            (click)="handleAuthButtonClick($event)"
+          >
+            @if (!user()) {
+              Sign Up
+              <app-icon
+                icon="logIn"
+                variant="fill"
+                style="font-size: 1.2rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
             } @else {
-              <div
-                class="avatar-placeholder"
-                role="img"
-                [attr.aria-label]="user()?.username + ' profile placeholder'"
-              >
-                <span class="avatar-text" aria-hidden="true">
-                  {{ user()?.username?.[0] }}
-                </span>
+              <div class="avatar-wrapper">
+                @if (user()?.userInformation?.avatar) {
+                  <img [src]="user()?.userInformation?.avatar" alt="avatar" class="avatar" />
+                } @else {
+                  <div
+                    class="avatar-placeholder"
+                    role="img"
+                    [attr.aria-label]="user()?.username + ' profile placeholder'"
+                  >
+                    <span class="avatar-text" aria-hidden="true">
+                      {{ user()?.username?.[0] }}
+                    </span>
+                  </div>
+                }
               </div>
             }
-          }
-        </app-button>
-        <ng-template #item>
-          <ul class="dropdown-list" role="menu">
-            <li role="none">
-              <a class="user-menu-item" appAutofocus [appDropdownClose]="userMenu" role="menuitem">
-                <app-icon
-                  icon="user"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Profile
-              </a>
-            </li>
-            <li role="none">
-              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
-                <app-icon
-                  icon="waveForm"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Your Library
-              </a>
-            </li>
-            <li role="none">
-              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
-                <app-icon
-                  icon="keySquare"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Change Password
-              </a>
-            </li>
-            <li role="none">
-              <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
-                <app-icon
-                  icon="logOut"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Logout
-              </button>
-            </li>
-          </ul>
-        </ng-template>
-      </app-dropdown>
+          </app-button>
+
+          <ng-template #item>
+            <ul class="dropdown-list" role="menu">
+              <li role="none">
+                <a
+                  class="user-menu-item"
+                  appAutofocus
+                  [appDropdownClose]="userMenu"
+                  role="menuitem"
+                >
+                  <app-icon
+                    icon="user"
+                    variant="fill"
+                    style="font-size: 1.5rem"
+                    primaryColor="var(--color-btn-default-border)"
+                    fillColor="white"
+                  />
+                  Profile
+                </a>
+              </li>
+              <li role="none">
+                <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+                  <app-icon
+                    icon="waveForm"
+                    variant="fill"
+                    style="font-size: 1.5rem"
+                    primaryColor="var(--color-btn-default-border)"
+                    fillColor="white"
+                  />
+                  Your Library
+                </a>
+              </li>
+              <li role="none">
+                <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+                  <app-icon
+                    icon="keySquare"
+                    variant="fill"
+                    style="font-size: 1.5rem"
+                    primaryColor="var(--color-btn-default-border)"
+                    fillColor="white"
+                  />
+                  Change Password
+                </a>
+              </li>
+              <li role="none">
+                <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
+                  <app-icon
+                    icon="logOut"
+                    variant="fill"
+                    style="font-size: 1.5rem"
+                    primaryColor="var(--color-btn-default-border)"
+                    fillColor="white"
+                  />
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </ng-template>
+        </app-dropdown>
+      </div>
+
       <div class="search-icon-container">
         <app-button
           variant="ghost"
