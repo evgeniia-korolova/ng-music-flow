@@ -7,6 +7,7 @@ import { jwtDecode } from 'jwt-decode';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
+import { ChangePasswordData } from '../../features/auth/change-password/change-password';
 
 export interface AuthState {
   user: UserProfile | null;
@@ -136,6 +137,61 @@ export class AuthStore {
       this.updateState({
         loading: false,
         initialCheck: true,
+        error: {
+          message: (err instanceof Error && err.message) || 'Something went wrong',
+          status: 500,
+        },
+      });
+    }
+  }
+
+  async changePassword(changeData: ChangePasswordData) {
+    this.updateState({ loading: true, error: null });
+
+    if (!this.state().initialCheck) {
+      this.updateState({
+        loading: false,
+        error: {
+          status: 400,
+          message: 'User authorization should be checked first',
+        },
+      });
+
+      return;
+    }
+
+    try {
+      const { error } = await firstValueFrom(
+        this.http.patch<ApiResponse<void>>(
+          `${environment.appApiUrl}/auth/change-password`,
+          changeData,
+        ),
+      );
+
+      if (error) {
+        this.updateState({
+          loading: false,
+          error,
+        });
+
+        return;
+      }
+
+      this.updateState({
+        loading: false,
+      });
+    } catch (err) {
+      if (err instanceof HttpErrorResponse) {
+        const apiResponse = err.error as ApiResponse<null>;
+
+        this.updateState({
+          loading: false,
+          error: apiResponse.error,
+        });
+        return;
+      }
+      this.updateState({
+        loading: false,
         error: {
           message: (err instanceof Error && err.message) || 'Something went wrong',
           status: 500,

@@ -215,6 +215,14 @@ export const ICON_REGISTRY: Record<string, () => Promise<string>> = {
     Promise.resolve(
       `<svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="var(--primary-color, currentColor)"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>`,
     ),
+  lock: () =>
+    Promise.resolve(
+      `
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="var(--primary-color, currentColor)"" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="16" r="1" fill="var(--primary-color, currentColor)"/>
+      <rect x="3" y="10" width="18" height="12" rx="2"/>
+      <path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>`,
+    ),
 };
 
 export type IconName = keyof typeof ICON_REGISTRY;
