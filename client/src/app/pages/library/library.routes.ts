@@ -44,6 +44,13 @@ export const LIBRARY_ROUTES: Routes = [
             (m) => m.CreatePlaylistForm,
           ),
       },
+      {
+        path: 'add-user-track',
+        loadComponent: () =>
+          import('../../features/upload-track-form/upload-track-form').then(
+            (m) => m.UploadTrackForm,
+          ),
+      },
     ],
   },
 ];

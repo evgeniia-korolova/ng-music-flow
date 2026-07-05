@@ -1,13 +1,13 @@
-<div class="upload-track-form__wrapper">
-  <div class="upload-track-form__header">
-    <h3 class="upload-track-form__title">Add file</h3>
+<div class="base-form__wrapper">
+  <div class="base-form__header">
+    <h3 class="base-form__title">Add file</h3>
     <app-button type="button" size="icon-rounded-md" (click)="closeForm()" aria-label="Close form">
       <app-icon icon="x"></app-icon>
     </app-button>
   </div>
-  <form [formGroup]="uploadTrackForm" class="upload-track-form" (ngSubmit)="onSubmit()">
-    <div class="upload-track-form__line">
-      <label for="title" class="upload-track-form__label">Track name:</label>
+  <form [formGroup]="uploadTrackForm" class="base-form" (ngSubmit)="onSubmit()">
+    <div class="base-form__line">
+      <label for="title" class="base-form__label">Track name:</label>
       <input
         type="text"
         placeholder="Track name..."
@@ -18,23 +18,23 @@
         "
         aria-describedby="title-error"
       />
-      @if (uploadTrackForm.controls.title.invalid && uploadTrackForm.controls.title.touched) {
-        <div class="upload-track-form__error" id="title-error">Title is required</div>
-      }
+      <app-form-error [control]="uploadTrackForm.controls.title"></app-form-error>
     </div>
-    <div class="upload-track-form__line">
-      <label for="artist" class="upload-track-form__label">Artist name:</label>
+    <div class="base-form__line">
+      <label for="artist" class="base-form__label">Artist name:</label>
       <input placeholder="Artist name..." type="text" formControlName="artist" id="artist" />
+      <app-form-error [control]="uploadTrackForm.controls.artist"></app-form-error>
     </div>
-    <div class="upload-track-form__line">
-      <label for="genre" class="upload-track-form__label">Genre:</label>
+    <div class="base-form__line">
+      <label for="genre" class="base-form__label">Genre:</label>
       <input placeholder="Genre..." type="text" formControlName="genre" id="genre" />
+      <app-form-error [control]="uploadTrackForm.controls.genre"></app-form-error>
     </div>
-    <div class="upload-track-form__line">
-      <label for="file" class="upload-track-form__label">File:</label>
+    <div class="base-form__line">
+      <label for="file" class="base-form__label">File:</label>
       <input type="file" accept="audio/*" (change)="onFileSelected($event)" id="file" />
     </div>
-    <div class="upload-track-form__line">
+    <div class="base-form__line">
       <app-button type="button" (click)="closeForm()">Cancel</app-button>
       <app-button type="submit" [disabled]="!uploadTrackForm.valid">Add track</app-button>
     </div>

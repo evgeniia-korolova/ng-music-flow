@@ -58,6 +58,11 @@ export class PlaylistViewPage {
           playlistData: updatePayload,
         });
       }
+
+      void this.router.navigate([], {
+        queryParams: { edit: null },
+        queryParamsHandling: 'merge',
+      });
     }
   }
 }

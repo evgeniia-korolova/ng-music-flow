@@ -1,0 +1,13 @@
+@if (control()?.touched) {
+  @if (control()?.hasError('required')) {
+    <div class="base-form__error" id="title-error">Title is required</div>
+  } @else if (control()?.hasError('minlength')) {
+    <div class="base-form__error" id="title-error">
+      Minimum length is {{ control()?.errors?.['minlength']?.requiredLength }} symbols
+    </div>
+  } @else if (control()?.hasError('maxlength')) {
+    <div class="base-form__error" id="title-error">
+      Maximum length is {{ control()?.errors?.['maxlength']?.requiredLength }} symbols
+    </div>
+  }
+}
