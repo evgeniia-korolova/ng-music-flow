@@ -89,6 +89,12 @@ export const routes: Routes = [
             canActivate: [guestGuard],
           },
           {
+            path: 'change-password',
+            title: 'Change Password',
+            loadComponent: () => import('./features/auth/change-password/change-password'),
+            canActivate: [authGuard],
+          },
+          {
             path: 'jamendo',
             title: 'Sync to Jamendo',
             loadComponent: () => import('./features/auth/jamendo/jamendo'),

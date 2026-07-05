@@ -104,7 +104,12 @@
           </ng-template>
 
           <ng-template #item>
-            <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+            <a
+              class="user-menu-item"
+              [appDropdownClose]="userMenu"
+              role="menuitem"
+              routerLink="/auth/change-password"
+            >
               <app-icon
                 icon="keySquare"
                 variant="fill"
