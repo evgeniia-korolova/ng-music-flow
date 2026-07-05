@@ -8,7 +8,7 @@
     </a>
 
     <div class="header-container__actions">
-      <app-navigation-bar [pathCollection]="navItems" />
+      <app-navigation-bar [pathCollection]="navItems()" />
       <app-dropdown #userMenu alignment="right" class="register-button">
         <app-button
           trigger

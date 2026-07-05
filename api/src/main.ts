@@ -20,17 +20,11 @@ async function bootstrap(): Promise<void> {
 
   const app = await NestFactory.create(AppModule);
 
-  const isProduction = process.env.ENVIRONMENT === 'production';
-
   const apiPort = process.env.API_PORT ?? 3000;
   const clientPort = process.env.CLIENT_PORT ?? 4200;
 
-  const corsOrigin = isProduction
-    ? process.env.HOSTED_CLIENT
-    : `http://localhost:${clientPort}`;
-
   app.enableCors({
-    origin: corsOrigin,
+    origin: [process.env.HOSTED_CLIENT, `http://localhost:${clientPort}`],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

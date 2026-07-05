@@ -4,13 +4,12 @@ import {
   Component,
   computed,
   inject,
-  OnInit,
   viewChild,
 } from '@angular/core';
 import { Dropdown } from '../../shared/ui/dropdown/dropdown';
 import { ThemeToggler } from '../../features/theme-toggler/theme-toggler';
 import { ThemeStore } from '../../features/theme-toggler/theme.store';
-import { Route, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { DropdownCloseDirective } from '../../shared/ui/dropdown/dropdown-close.directive';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { NavigationBar } from '../../features/navigation-bar/navigation-bar';
@@ -21,6 +20,7 @@ import { AutofocusDirective } from '../../shared/directives/autofocus.directive'
 
 @Component({
   selector: 'app-header',
+  standalone: true,
   imports: [
     Dropdown,
     ThemeToggler,
@@ -35,7 +35,7 @@ import { AutofocusDirective } from '../../shared/directives/autofocus.directive'
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Header implements OnInit {
+export class Header {
   readonly themeStore = inject(ThemeStore);
   private readonly authStore = inject(AuthStore);
   private readonly router = inject(Router);
@@ -46,8 +46,19 @@ export class Header implements OnInit {
   readonly userMenu = viewChild<Dropdown>('userMenu');
 
   readonly user = computed(() => this.authStore.user());
+  readonly isSafeAuthenticated = this.authStore.isSafeAuthenticated;
 
-  protected navItems: Route[] = [];
+  protected readonly navItems = computed(() => {
+    const routes = this.router.config.flatMap((layout) => layout.children || []);
+
+    console.log('updating navItems');
+
+    return routes.filter(
+      (route) =>
+        route?.data?.['displayOnNavbar'] === true &&
+        (this.authStore.isUnsafeAuthenticated() || !route?.data?.['requiresAuth']),
+    );
+  });
 
   signOut = () => {
     this.authStore.logout();
@@ -56,22 +67,12 @@ export class Header implements OnInit {
   };
 
   handleAuthButtonClick = (event: Event) => {
-    if (!this.user()) {
+    if (this.authStore.isUnsafeAuthenticated()) {
+      this.userMenu()?.toggleDropdown(event);
+    } else {
       event.stopPropagation();
       event.preventDefault();
       this.router.navigateByUrl('/auth/register');
-    } else {
-      this.userMenu()?.toggleDropdown(event);
     }
   };
-
-  setNavItems() {
-    const routes = this.router.config.flatMap((layout) => layout.children || []);
-
-    this.navItems = routes.filter((route) => route?.data?.['displayOnNavbar'] === true);
-  }
-
-  ngOnInit(): void {
-    this.setNavItems();
-  }
 }
