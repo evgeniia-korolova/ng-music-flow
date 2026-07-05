@@ -14,7 +14,8 @@ import { AppService } from './app.service';
     DataModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['../.env', '.env'],
+      envFilePath:
+        process.env.NODE_ENV === 'production' ? [] : ['.env', '../.env'],
     }),
     UsersModule,
     CommonModule,

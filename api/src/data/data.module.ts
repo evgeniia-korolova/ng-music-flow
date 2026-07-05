@@ -10,7 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) => {
         const isProduction =
           configService.get<string>('ENVIRONMENT') === 'production';
-
         return {
           type: 'postgres',
           url: isProduction
