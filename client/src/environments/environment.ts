@@ -3,5 +3,5 @@ export const environment = {
   jamendoClientId: '',
   jamendoClientSecret: '',
   apiUrl: '/api',
-  appApiUrl: '/api',
+  appApiUrl: '/app-api',
 };
