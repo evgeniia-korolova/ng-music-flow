@@ -1,4 +1,4 @@
-const auth = async (request: Request) => {
+export default async (request: Request) => {
   const backendUrl = 'https://ng-music-flow.onrender.com';
 
   const url = new URL(request.url);
@@ -30,8 +30,7 @@ const auth = async (request: Request) => {
     });
   }
 };
-export default auth;
 
 export const config = {
-  path: ['/api/auth/*', '/auth/*'],
+  path: ['/api/auth/*'],
 };
