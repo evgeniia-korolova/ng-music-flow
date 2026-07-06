@@ -32,10 +32,6 @@ export class PlaylistViewPage {
     this.playlistsStore.updateLocalPlaylistTracks(this.playlistId(), updatedTracks);
   }
 
-  onAddTrackClick() {
-    console.log('not empty method for linter');
-  }
-
   protected onSaveChangesClick(): void {
     const id = this.playlistId();
     const playlist = this.activePlaylist();
@@ -50,8 +46,6 @@ export class PlaylistViewPage {
         const updatePayload = {
           tracks: playlist.tracks,
         };
-
-        console.log('Syncing new drag&drop order with backend:', updatePayload);
 
         this.playlistsStore.updatePlaylist({
           playlistId: id,

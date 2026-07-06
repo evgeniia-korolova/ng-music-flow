@@ -14,10 +14,9 @@ export class JamendoApiService {
   get<T>(endpoint: string, params: Record<string, string | number | boolean> = {}) {
     const httpParams = new HttpParams({
       fromObject: {
+        ...params,
         ...(this.clientId ? { client_id: this.clientId } : {}),
         format: 'json',
-        ...params,
-        // featured: 'true',
       },
     });
 

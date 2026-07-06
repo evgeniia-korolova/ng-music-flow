@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DragDropList } from './drag-drop-list';
-import { Track } from '../../entities/track/model/track.model';
-import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
 
-const mockTracks: Track[] = [
+import { ResponsiveService } from '../../shared/services/responsive-service/responsive-service';
+import { LibraryPlaylistTrack } from '../../entities/track/model/track.model';
+
+const mockTracks: LibraryPlaylistTrack[] = [
   {
     id: '1',
     title: 'First Track',
@@ -16,9 +17,9 @@ const mockTracks: Track[] = [
     audioUrl: 'http://example.com',
     playCount: 100,
     rating: 5,
-    waveform: [0.2, 0.4, 0.6, 0.3, 0.5, 0.1, 0.7, 0.4, 0.2, 0.5], // ТвоиPeaks для app-track-waveform!
+    waveform: [0.2, 0.4, 0.6, 0.3, 0.5, 0.1, 0.7, 0.4, 0.2, 0.5],
     releasedate: '2026-03-30',
-  } as Track,
+  } as LibraryPlaylistTrack,
   {
     id: '2',
     title: 'Second Track',
@@ -30,9 +31,9 @@ const mockTracks: Track[] = [
     audioUrl: 'http://example.com',
     playCount: 200,
     rating: 4,
-    waveform: [0.1, 0.5, 0.3, 0.6, 0.2, 0.7, 0.4, 0.3, 0.6, 0.2], // Твои Peaks для app-track-waveform!
+    waveform: [0.1, 0.5, 0.3, 0.6, 0.2, 0.7, 0.4, 0.3, 0.6, 0.2],
     releasedate: '2026-03-30',
-  } as Track,
+  } as LibraryPlaylistTrack,
 ];
 
 describe('DragDropList', () => {
@@ -57,10 +58,10 @@ describe('DragDropList', () => {
   });
 
   it('should change order status when tracks are moved', () => {
-    // Имитируем перемещение треков руками через set()
-    component.currentTracks.set([{ id: '2' } as Track, { id: '1' } as Track]);
-
-    // Сигнал isOrderChanged должен мгновенно пересчитаться в true
+    component.currentTracks.set([
+      { id: '2' } as LibraryPlaylistTrack,
+      { id: '1' } as LibraryPlaylistTrack,
+    ]);
     expect(component.isOrderChanged()).toBe(true);
   });
 });

@@ -82,6 +82,14 @@ Signals are used as the primary reactive mechanism across the application.
 
 ![Search Page](./client/public/screenshots/global-player-widget.png)
 
+### Library Page
+
+![Library Page](./client/public/screenshots/library-history.png)
+
+![Library Page](./client/public/screenshots/library-create.png)
+
+![Library Page](./client/public/screenshots/library-edit.png)
+
 ## Development server
 
 1. **Clone repo:**
@@ -91,7 +99,7 @@ Signals are used as the primary reactive mechanism across the application.
    cd ng-music-flow
    ```
 
-2. **Install dependencies (in two folders):**
+2. **Install dependencies (in two folders and root):**
 
    ```bash
    npm install
@@ -131,4 +139,5 @@ All actual tasks, progress and backlog is on our [GitHub Project Board](https://
    - All code must be merged via **Pull Request**.
    - At least one **Code Review** approval is required to merge into `dev`.
    - Final merge from `dev` to `main` happens at the end of the sprint.
-4. **Pre-commit Checks**: Every commit is automatically verified by Husky (Linter + Tests). Please ensure your code passes all checks locally.
+4. **Pre-commit Checks**: Every commit is automatically verified by Husky (Linter). Please ensure your code passes all checks locally.
+5. **Pre-push Checks**: Every commit is automatically verified by Husky (Tests). Please ensure your code passes all checks locally.
