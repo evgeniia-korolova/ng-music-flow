@@ -8,55 +8,77 @@
     </a>
 
     <div class="header-container__actions">
-      <app-navigation-bar [pathCollection]="navItems" />
-      <app-dropdown #userMenu alignment="right" class="register-button">
-        <app-button
-          trigger
-          #trigger
-          [size]="!user() ? 'sm' : 'avatar'"
-          (click)="handleAuthButtonClick($event)"
-        >
-          @if (!user()) {
-            Sign Up
-            <app-icon
-              icon="logIn"
-              variant="fill"
-              style="font-size: 1.2rem"
-              primaryColor="var(--color-btn-default-border)"
-              fillColor="white"
-            />
-          } @else {
-            @if (user()?.userInformation?.avatar) {
-              <img [src]="user()?.userInformation?.avatar" alt="avatar" class="avatar" />
+      <app-navigation-bar [pathCollection]="navItems()" />
+      <div class="button-wrapper">
+        @if (isNotSynced()) {
+          <div class="avatar-badge">
+            <app-icon icon="warning" primaryColor="white" />
+          </div>
+        }
+        <app-dropdown #userMenu alignment="right" class="register-button">
+          <app-button
+            trigger
+            #trigger
+            [size]="!user() ? 'sm' : 'avatar'"
+            (click)="handleAuthButtonClick($event)"
+          >
+            @if (!user()) {
+              Sign Up
+              <app-icon
+                icon="logIn"
+                variant="fill"
+                style="font-size: 1.2rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
             } @else {
-              <div
-                class="avatar-placeholder"
-                role="img"
-                [attr.aria-label]="user()?.username + ' profile placeholder'"
-              >
-                <span class="avatar-text" aria-hidden="true">
-                  {{ user()?.username?.[0] }}
-                </span>
+              <div class="avatar-wrapper">
+                @if (user()?.userInformation?.avatar) {
+                  <img [src]="user()?.userInformation?.avatar" alt="avatar" class="avatar" />
+                } @else {
+                  <div
+                    class="avatar-placeholder"
+                    role="img"
+                    [attr.aria-label]="user()?.username + ' profile placeholder'"
+                  >
+                    <span class="avatar-text" aria-hidden="true">
+                      {{ user()?.username?.[0] }}
+                    </span>
+                  </div>
+                }
               </div>
             }
-          }
-        </app-button>
-        <ng-template #item>
-          <ul class="dropdown-list" role="menu">
-            <li role="none">
-              <a class="user-menu-item" appAutofocus [appDropdownClose]="userMenu" role="menuitem">
+          </app-button>
+
+          @if (isNotSynced()) {
+            <ng-template #item>
+              <a
+                class="warning user-menu-item"
+                appAutofocus
+                [appDropdownClose]="userMenu"
+                role="menuitem"
+                routerLink="/auth/jamendo"
+              >
                 <app-icon
-                  icon="user"
+                  icon="waveForm"
                   variant="fill"
                   style="font-size: 1.5rem"
                   primaryColor="var(--color-btn-default-border)"
                   fillColor="white"
                 />
-                Profile
+                Connect Jamendo
               </a>
-            </li>
-            <li role="none">
-              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
+            </ng-template>
+          }
+
+          @if (!isNotSynced()) {
+            <ng-template #item>
+              <a
+                class="user-menu-item"
+                [appDropdownClose]="userMenu"
+                role="menuitem"
+                routerLink="/library"
+              >
                 <app-icon
                   icon="waveForm"
                   variant="fill"
@@ -66,34 +88,54 @@
                 />
                 Your Library
               </a>
-            </li>
-            <li role="none">
-              <a class="user-menu-item" [appDropdownClose]="userMenu" role="menuitem">
-                <app-icon
-                  icon="keySquare"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Change Password
-              </a>
-            </li>
-            <li role="none">
-              <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
-                <app-icon
-                  icon="logOut"
-                  variant="fill"
-                  style="font-size: 1.5rem"
-                  primaryColor="var(--color-btn-default-border)"
-                  fillColor="white"
-                />
-                Logout
-              </button>
-            </li>
-          </ul>
-        </ng-template>
-      </app-dropdown>
+            </ng-template>
+          }
+          <ng-template #item>
+            <a class="user-menu-item" appAutofocus [appDropdownClose]="userMenu" role="menuitem">
+              <app-icon
+                icon="user"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Profile
+            </a>
+          </ng-template>
+
+          <ng-template #item>
+            <a
+              class="user-menu-item"
+              [appDropdownClose]="userMenu"
+              role="menuitem"
+              routerLink="/auth/change-password"
+            >
+              <app-icon
+                icon="keySquare"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Change Password
+            </a>
+          </ng-template>
+
+          <ng-template #item>
+            <button class="user-menu-item" [appDropdownClose]="userMenu" (click)="signOut()">
+              <app-icon
+                icon="logOut"
+                variant="fill"
+                style="font-size: 1.5rem"
+                primaryColor="var(--color-btn-default-border)"
+                fillColor="white"
+              />
+              Logout
+            </button>
+          </ng-template>
+        </app-dropdown>
+      </div>
+
       <div class="search-icon-container">
         <app-button
           variant="ghost"

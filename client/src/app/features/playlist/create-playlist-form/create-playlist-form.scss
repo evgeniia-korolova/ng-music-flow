@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+}
+.playlist-form__select-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  app-button {
+    width: max-content;
+  }
+}
+
+.playlist-form__list-item {
+  background-color: var(--color-bg-surface);
+}
+.playlist-form__track-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+.playlist-form__tracks-list {
+  margin-bottom: 1.5rem;
+}
+.playlist-form__tracks-error {
+  color: var(--color-text-accent);
+  &:not(:last-child) {
+    margin-bottom: 5px;
+  }
+}

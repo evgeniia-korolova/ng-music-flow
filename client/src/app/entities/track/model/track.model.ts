@@ -23,6 +23,7 @@ export interface Track {
   id: string;
   title: string;
   duration: number;
+  origin?: string;
   artist: {
     id: string;
     name: string;
@@ -37,4 +38,23 @@ export interface Track {
   rating: number;
   waveform: number[];
   releasedate: string;
+}
+
+export interface LibraryPlaylistTrack extends Track {
+  origin?: 'JAMENDO' | 'LOCAL';
+  order?: number;
+}
+export interface CustomTrackTitle {
+  id: string;
+  title: string;
+}
+export interface PaginatedTracksResponse {
+  tracks: Track[];
+  total: number;
+  page: number;
+  limit: number;
+}
+export interface TrackServerResponse<T> {
+  data: T;
+  error: string | null;
 }

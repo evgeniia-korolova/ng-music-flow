@@ -1,0 +1,65 @@
+<aside class="aside-library" aria-label="User playlists">
+  <h2 class="aside-library__title">My playlists</h2>
+  <app-button class="aside-library__create-btn" routerLink="create">Create playlist</app-button>
+  <app-button class="aside-library__add-track-btn" routerLink="add-user-track"
+    >Add track</app-button
+  >
+
+  <nav class="aside-library__nav" aria-label="Library navigation">
+    <ul class="aside-library__list">
+      <li class="aside-library__item system-tab">
+        <a class="aside-library__link" routerLink="/library/history" routerLinkActive="active-tab">
+          🕒 Recently Played
+        </a>
+      </li>
+      <li class="aside-library__group">
+        <div class="aside-library__group-title">📝 Playlists</div>
+        <ul class="aside-library__sublist">
+          @for (list of playlists(); track list.id) {
+            <li class="aside-library__item">
+              <a
+                class="aside-library__link"
+                [routerLink]="['/library/playlists', list.id]"
+                routerLinkActive="active-tab"
+              >
+                {{ list.name }}
+              </a>
+
+              <app-button
+                variant="ghost"
+                type="button"
+                size="icon-rounded-sm"
+                [appTooltip]="'Edit playlist'"
+                [routerLink]="['/library/playlists/edit', list.id]"
+                aria-label="Edit playlist"
+                ><app-icon icon="edit"></app-icon
+              ></app-button>
+
+              <app-button
+                variant="ghost"
+                type="button"
+                size="icon-rounded-sm"
+                [appTooltip]="'Delete playlist'"
+                (click)="
+                  deleteUserList.emit(list); $event.stopPropagation(); $event.preventDefault()
+                "
+                aria-label="Delete playlist"
+                ><app-icon icon="x"></app-icon
+              ></app-button>
+            </li>
+          }
+        </ul>
+      </li>
+
+      <li class="aside-library__item system-tab">
+        <a
+          class="aside-library__link"
+          routerLink="/library/custom-tracks"
+          routerLinkActive="active-tab"
+        >
+          🎵 User's Tracks
+        </a>
+      </li>
+    </ul>
+  </nav>
+</aside>

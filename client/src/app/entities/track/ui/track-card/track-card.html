@@ -13,6 +13,7 @@
       [class.is-playing-now]="isPlayingTrack()"
       [aria-label]="isPlaying() && isCurrentTrack() ? 'Pause' : 'Play'"
       (click)="play(track())"
+      [disabled]="isEditMode()"
     >
       <app-icon
         [icon]="isPlaying() && isCurrentTrack() ? 'pause' : 'play'"

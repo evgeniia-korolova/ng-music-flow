@@ -10,6 +10,9 @@
       <app-album-card [album]="album" [isLink]="false"></app-album-card>
     </div>
     <div class="album-profile__tracks">
+      <div class="album-controls">
+        <app-button (click)="playFullAlbum()" variant="default">Play All</app-button>
+      </div>
       @for (item of album.tracks; track item.id) {
         <app-track-card
           [track]="item"

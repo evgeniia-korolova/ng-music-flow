@@ -26,9 +26,24 @@
     <h3 class="text-lg font-semibold" [class.hover:underline]="isLink()">
       {{ artist().name }}
     </h3>
-    <p class="truncate text-sm">{{ artist().website }}</p>
-    <p class="text-sm">{{ artist().joinDate }}</p>
-    <p class="text-sm">{{ artist().shortUrl }}</p>
-    <p class="text-sm">{{ artist().shareUrl }}</p>
+    @if (isLink()) {
+      <p class="truncate text-sm">{{ artist().website }}</p>
+      <p class="text-sm">{{ artist().joinDate }}</p>
+      <p class="truncate text-sm">{{ artist().shareUrl }}</p>
+    } @else {
+      <a
+        [href]="artist().website"
+        target="_blank"
+        class="truncate text-sm transition-opacity duration-200 hover:opacity-60"
+        >{{ artist().website }}</a
+      >
+      <p class="text-sm">{{ artist().joinDate }}</p>
+      <a
+        [href]="artist().shareUrl"
+        target="_blank"
+        class="truncate text-sm transition-opacity duration-200 hover:opacity-60"
+        >{{ artist().shareUrl }}</a
+      >
+    }
   </div>
 </ng-template>

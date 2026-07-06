@@ -1,0 +1,101 @@
+<div class="base-form__wrapper">
+  <div class="base-form__header">
+    <h3 class="base-form__title">Create List</h3>
+
+    <!-- TODO check the route on close -->
+    <app-button type="button" size="icon-rounded-md" aria-label="Close form" (click)="closeForm()">
+      <app-icon icon="x"></app-icon>
+    </app-button>
+  </div>
+  <form [formGroup]="playlistForm" class="base-form" (ngSubmit)="onSubmit()">
+    <div class="base-form__line">
+      <label for="name" class="base-form__label">List title</label>
+      <input
+        type="text"
+        placeholder="List title..."
+        formControlName="name"
+        id="name"
+        [class.error]="playlistForm.controls.name.invalid && playlistForm.controls.name.touched"
+        aria-describedby="title-error"
+      />
+      <app-form-error [control]="playlistForm.controls.name"></app-form-error>
+    </div>
+    <div class="base-form__line">
+      <label for="description" class="base-form__label">Description</label>
+      <textarea
+        placeholder="List description..."
+        formControlName="description"
+        id="description"
+      ></textarea>
+    </div>
+    <div class="base-form__line">
+      <label for="trackSelect" class="base-form__label">Choose Jamendo track</label>
+      @defer (when tracksStore.tracks().length>0) {
+        <div class="playlist-form__select-group">
+          <select #trackSelect id="trackSelect" class="playlist-form__list">
+            @for (track of tracksStore.tracks(); track track.id) {
+              <option [value]="track.id" class="playlist-form__list-item">
+                {{ track.title }} - {{ track.artist.name }}
+              </option>
+            }
+          </select>
+          <app-button type="button" size="sm" (click)="onAddJamendoTrack(trackSelect.value)"
+            >Add track</app-button
+          >
+        </div>
+      } @placeholder (minimum 500ms) {
+        <div class="playlist-form__select-group">
+          <select class="playlist-form__list"></select>
+          <app-button size="sm" [disabled]="true">Loading...</app-button>
+        </div>
+      }
+    </div>
+    <div class="base-form__line">
+      <label for="customTrackSelect" class="base-form__label">Choose custom track</label>
+      @defer (when customTracks().length>0) {
+        <div class="playlist-form__select-group">
+          <select #customTrackSelect id="customTrackSelect" class="playlist-form__list">
+            @for (track of customTracks(); track track.id) {
+              <option [value]="track.id" class="playlist-form__list-item">
+                {{ track.title }} - {{ track.artist.name }}
+              </option>
+            }
+          </select>
+          <app-button type="button" size="sm" (click)="onAddCustomTrack(customTrackSelect.value)"
+            >Add track</app-button
+          >
+        </div>
+      } @placeholder (minimum 500ms) {
+        <div class="playlist-form__select-group">
+          <select class="playlist-form__list"></select>
+          <app-button size="sm" [disabled]="true">Loading...</app-button>
+        </div>
+      }
+    </div>
+    @if (duplicateError()) {
+      <div class="playlist-form__tracks-error">
+        {{ duplicateError() }}
+      </div>
+    }
+    <div class="playlist-form__tracks-list">
+      @for (track of selectedTracks(); track track.id) {
+        <div class="playlist-form__track-chip">
+          {{ track.title }} - {{ track.artist.name }}
+          <app-button
+            type="button"
+            size="icon-rounded-sm"
+            (click)="removeTrack(track.id)"
+            aria-label="Remove track {{ track.title }}"
+            ><app-icon icon="x"></app-icon
+          ></app-button>
+        </div>
+      }
+    </div>
+    <div class="base-form__line">
+      <app-button type="submit" (click)="closeForm()">Cancel</app-button>
+      <app-button type="submit" [disabled]="!playlistForm.valid || selectedTracks().length === 0">{{
+        isEditMode() ? 'Update list' : 'Create list'
+      }}</app-button>
+    </div>
+  </form>
+</div>

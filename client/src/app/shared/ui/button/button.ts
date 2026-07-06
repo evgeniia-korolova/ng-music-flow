@@ -28,6 +28,7 @@ export class Button {
   readonly size = input<ButtonSize>('md');
   readonly active = input(false);
   readonly disabled = input(false);
+  readonly type = input<'button' | 'submit' | 'reset'>('button');
 
   protected buttonClasses = computed(
     () => `btn ${this.active() ? 'active' : ''} btn-${this.variant()} ${this.size()}`,

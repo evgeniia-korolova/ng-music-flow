@@ -1,0 +1,53 @@
+.playlists {
+  &__container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 50px 15px;
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 1rem;
+    height: calc(100vh - 175px);
+    min-height: 0;
+    @media (width < 768px) {
+      grid-template-columns: 1fr;
+      height: auto;
+      padding: 10px 15px;
+      gap: 10px;
+      overflow-y: visible;
+    }
+  }
+
+  &__content {
+    overflow-y: auto;
+    height: 100%;
+    @media (width < 768px) {
+      height: auto;
+      overflow-y: visible;
+    }
+  }
+  &__menu-btn {
+    display: none;
+    position: relative;
+    z-index: 100;
+  }
+}
+@media (width < 768px) {
+  .playlists__menu-btn {
+    display: block;
+  }
+  app-library-sidebar {
+    padding: 30px 15px 100px;
+    position: fixed;
+    top: 4.5rem;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 99;
+    left: -100%;
+    transition: left 0.3s ease;
+    background-color: var(--color-bg);
+  }
+  app-library-sidebar.is-open {
+    left: 0;
+  }
+}

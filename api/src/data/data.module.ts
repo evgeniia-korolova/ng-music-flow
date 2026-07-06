@@ -10,7 +10,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) => {
         const isProduction =
           configService.get<string>('ENVIRONMENT') === 'production';
-
         return {
           type: 'postgres',
           url: isProduction
@@ -32,7 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           autoLoadEntities: true,
           logging: true,
           synchronize: !isProduction,
-          dropSchema: false,
+          dropSchema: true,
         };
       },
     }),

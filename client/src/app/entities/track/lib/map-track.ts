@@ -38,6 +38,7 @@ export function mapTrack(dto: TrackDto): Track {
     id: dto.id,
     title: cleanTitle,
     duration: dto.duration,
+    origin: 'JAMENDO',
     artist: {
       name: cleanArtistName,
       id: dto.artist_id,

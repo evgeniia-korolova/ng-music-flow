@@ -3,6 +3,8 @@
   gap: 0.5rem;
   padding-block: 0.4375rem;
   font-size: 0.875rem;
+  position: relative;
+  z-index: 2;
 }
 .breadcrumbs__link {
   @media (any-hover: hover) {

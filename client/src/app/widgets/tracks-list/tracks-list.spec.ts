@@ -77,7 +77,7 @@ describe('TracksList', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show loader when isLoading is true', async () => {
+  it('should show list loader when data is loading', async () => {
     isLoadingSignal.set(true);
     fixture.detectChanges();
 
@@ -88,7 +88,7 @@ describe('TracksList', () => {
     expect(loaderEl.nativeElement.textContent).toContain('Loading tracks...');
   });
 
-  it('should display error message when error occurs', async () => {
+  it('should display provider error message', async () => {
     errorSignal.set('API Error occurred');
     fixture.detectChanges();
 
@@ -99,7 +99,34 @@ describe('TracksList', () => {
     expect(errorEl.nativeElement.textContent).toContain('API Error occurred');
   });
 
-  it('should render tracks list when data is loaded', async () => {
+  it('should render @empty state when there are no tracks', async () => {
+    tracksSignal.set([]);
+    fixture.detectChanges();
+
+    const deferBlocks = await fixture.getDeferBlocks();
+
+    expect(deferBlocks.length).toBe(0);
+  });
+
+  it('should create one defer block for each track', async () => {
+    tracksSignal.set([mockTrack]);
+    fixture.detectChanges();
+
+    const deferBlocks = await fixture.getDeferBlocks();
+
+    expect(deferBlocks.length).toBe(1);
+  });
+
+  it('should render placeholder before deferred content is rendered', async () => {
+    tracksSignal.set([mockTrack]);
+    fixture.detectChanges();
+
+    const placeholder = fixture.debugElement.query(By.css('[data-testid="track-placeholder"]'));
+
+    expect(placeholder).toBeTruthy();
+  });
+
+  it('should render track card after defer block completes', async () => {
     tracksSignal.set([mockTrack]);
     fixture.detectChanges();
 
@@ -107,11 +134,40 @@ describe('TracksList', () => {
 
     await deferBlocks[0].render(DeferBlockState.Complete);
 
-    fixture.detectChanges();
-    await fixture.whenStable();
+    //await fixture.whenStable();
+    //fixture.detectChanges();
 
-    const itemEl = fixture.debugElement.query(By.css('li'));
-    expect(itemEl).toBeTruthy();
+    const trackCard = fixture.debugElement.query(By.css('[data-testid="track-card"]'));
+
+    const placeholder = fixture.debugElement.query(By.css('[data-testid="track-placeholder"]'));
+
+    expect(trackCard).toBeTruthy();
+    expect(placeholder).toBeNull();
+  });
+
+  it('should render defer blocks independently', async () => {
+    const secondTrack = {
+      ...mockTrack,
+      id: '2',
+      title: 'Second Track',
+    };
+
+    tracksSignal.set([mockTrack, secondTrack]);
+
+    fixture.detectChanges();
+
+    const deferBlocks = await fixture.getDeferBlocks();
+
+    expect(deferBlocks.length).toBe(2);
+
+    await deferBlocks[0].render(DeferBlockState.Complete);
+
+    const trackCards = fixture.debugElement.queryAll(By.css('[data-testid="track-card"]'));
+
+    const placeholders = fixture.debugElement.queryAll(By.css('[data-testid="track-placeholder"]'));
+
+    expect(trackCards.length).toBe(1);
+    expect(placeholders.length).toBe(1);
   });
 
   describe('Adaptive showWave logic (linkedSignal)', () => {

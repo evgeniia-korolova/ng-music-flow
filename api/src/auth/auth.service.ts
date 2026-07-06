@@ -3,12 +3,13 @@ import { JwtService } from '@nestjs/jwt';
 import { ApiException } from 'src/common/exceptions/api.exception';
 import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcrypt';
-import { RegisterDto } from './DTOs/RegisterDto';
+import { RegisterDto } from './DTOs/register.dto';
 import { UserEntity } from 'src/users/entities/user.entity/user.entity';
-import { LoginDto } from './DTOs/LoginDto';
+import { LoginDto } from './DTOs/login.dto';
 import { TokenPayload } from './interfaces/token-payload';
 import { AuthResponse } from './interfaces/authorization';
 import { DatabaseError } from 'src/common/interfaces/database.error';
+import { ChangePasswordDto } from './DTOs/change-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -46,6 +47,7 @@ export class AuthService {
     password: string,
   ): Promise<UserEntity | null> {
     const user = await this.users.findByEmailWithPassword(email);
+
     if (!user) return null;
 
     const match = await bcrypt.compare(password, user.password);
@@ -135,6 +137,35 @@ export class AuthService {
           code: 'AUTH.DATABASE.ERROR',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async changePassword(
+    user: TokenPayload,
+    { oldPassword, newPassword }: ChangePasswordDto,
+  ): Promise<void> {
+    const validationResult = await this.validateUser(user.email, oldPassword);
+
+    if (validationResult === null) {
+      throw new ApiException(
+        {
+          message: 'Provided password does not match',
+          code: 'AUTH.CHANGE_PASSWORD.MISMATCH',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const updateResult = await this.users.updatePassword(user.id, newPassword);
+
+    if (!updateResult.affected) {
+      throw new ApiException(
+        {
+          message: 'Failed to save new password',
+          code: 'AUTH.CHANGE_PASSWORD.NO_UPDATE',
+        },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

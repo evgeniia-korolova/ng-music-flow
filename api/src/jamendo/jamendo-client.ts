@@ -9,7 +9,7 @@ interface JamendoResponseHeader {
   error_message: string;
 }
 
-interface JamendoResponse<T> {
+export interface JamendoResponse<T> {
   headers: JamendoResponseHeader;
   results: T[];
 }

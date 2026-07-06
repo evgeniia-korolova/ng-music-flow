@@ -1,0 +1,38 @@
+<div class="drag-drop-list-container">
+  <div class="list-header-wrapper">
+    <ng-content select="[slot-header]" />
+  </div>
+  <div
+    cdkDropList
+    [cdkDropListDisabled]="!isEditMode()"
+    (cdkDropListDropped)="drop($event)"
+    class="track-drop-list"
+  >
+    @for (track of currentTracks(); track track.id; let index = $index) {
+      <div
+        cdkDrag
+        [cdkDragDisabled]="!isEditMode()"
+        [class.is-draggable]="isEditMode()"
+        class="track-drag-box"
+      >
+        <div class="history-origin-badge">{{ track.origin }}</div>
+        <app-track-card
+          [track]="track"
+          [showWave]="showWave()"
+          [playlistContext]="tracks()"
+          [priority]="$index < 3"
+          [isEditMode]="isEditMode()"
+        >
+          <ng-container slot-actions>
+            <!-- Если включен режим редактирования, покажем крестик если решим удалять прямо в плейлисте -->
+            @if (isEditMode()) {
+              <button class="btn-delete-track" (click)="removeTrack(track.id)">✕</button>
+            }
+          </ng-container>
+        </app-track-card>
+      </div>
+    } @empty {
+      <p class="playlist-tracks__empty">No tracks in this playlist</p>
+    }
+  </div>
+</div>

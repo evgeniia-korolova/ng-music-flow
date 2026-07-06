@@ -1,1 +1,22 @@
-<p>library works!</p>
+<div class="playlists__container">
+  <app-library-sidebar
+    [playlists]="playlistsStore.playlists()"
+    (checkedUserList)="saveCurrentList.set($event)"
+    (deleteUserList)="deletePlaylist($event)"
+    [class.is-open]="isSideBarOpen()"
+  ></app-library-sidebar>
+  <app-button
+    class="playlists__menu-btn"
+    size="icon-rounded-md"
+    (click)="isSideBarOpen.set(!isSideBarOpen())"
+  >
+    @if (!isSideBarOpen()) {
+      <app-icon icon="menu"></app-icon>
+    } @else {
+      <app-icon icon="x"></app-icon>
+    }
+  </app-button>
+  <section class="playlists__content content-playlists" aria-live="polite">
+    <router-outlet />
+  </section>
+</div>

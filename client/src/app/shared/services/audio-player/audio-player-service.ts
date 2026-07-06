@@ -1,11 +1,13 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { Track } from '../../../entities/track/model/track.model';
+import { HistoryStore } from '../../../features/tracks-history/model/track-history.store';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AudioPlayerService {
   private readonly audio = new Audio();
+  private readonly historyStore = inject(HistoryStore);
 
   readonly currentTrack = signal<Track | null>(null);
   readonly isPlaying = signal<boolean>(false);
@@ -21,6 +23,8 @@ export class AudioPlayerService {
   private preMuteVolume = 0.7;
 
   readonly isMinimized = signal<boolean>(false);
+
+  private isTrackLoggedToHistory = false;
 
   readonly currentTrackIndex = computed(() => {
     const track = this.currentTrack();
@@ -111,6 +115,8 @@ export class AudioPlayerService {
   private loadTrack(track: Track): void {
     this.resetPlayerState();
 
+    this.isTrackLoggedToHistory = false;
+
     this.currentTrack.set(track);
 
     this.audio.src = track.audioUrl;
@@ -127,6 +133,34 @@ export class AudioPlayerService {
 
     this.audio.addEventListener('timeupdate', () => {
       this.currentTime.set(this.audio.currentTime);
+
+      if (this.isPlaying() && !this.isTrackLoggedToHistory) {
+        const currentSeconds = this.audio.currentTime;
+        const totalDuration = this.audio.duration;
+
+        const isPastThirtySeconds = currentSeconds >= 30;
+        const isPastHalfTrack = totalDuration > 0 && currentSeconds >= totalDuration / 2;
+
+        if (isPastThirtySeconds || isPastHalfTrack) {
+          const trackToSend = this.currentTrack();
+          if (trackToSend) {
+            this.isTrackLoggedToHistory = true;
+            const trackOrigin: 'JAMENDO' | 'LOCAL' = trackToSend.audioUrl?.includes('jamendo')
+              ? 'JAMENDO'
+              : 'LOCAL';
+
+            console.log(
+              `Track "${trackToSend.title}" qualified for history (${trackOrigin}). Sending to backend...`,
+            );
+
+            this.historyStore.addTrackToHistory({
+              ...trackToSend,
+              origin: trackOrigin,
+              order: 1,
+            });
+          }
+        }
+      }
     });
 
     this.audio.addEventListener('play', () => {

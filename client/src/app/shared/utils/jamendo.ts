@@ -6,7 +6,9 @@ export function connectToJamendo(token: string | null): void {
     return;
   }
 
-  const endpoint = `${environment.appApiUrl}/auth/jamendo/`;
+  const endpoint = environment.production
+    ? 'https://ng-music-flow.onrender.com/auth/jamendo'
+    : `${environment.appApiUrl}/auth/jamendo`.replace(/\/+$/, '');
 
   globalThis.location.href = `${endpoint}?state=${token}`;
 }
