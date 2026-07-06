@@ -224,6 +224,8 @@ export class AuthStore {
         return;
       }
 
+      console.log(response.data);
+
       this.updateState({
         loading: false,
         initialCheck: true,

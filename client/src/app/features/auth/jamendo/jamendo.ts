@@ -22,6 +22,7 @@ export default class Jamendo implements OnDestroy {
   constructor() {
     effect(() => {
       if (this.status()?.toUpperCase() === 'SUCCESS') {
+        this.authStore.retrieveUserInformation();
         this.startCountdown();
       }
     });
