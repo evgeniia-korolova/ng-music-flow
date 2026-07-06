@@ -53,8 +53,7 @@ export class UsersService {
       );
     }
 
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await this.hashPassword(password);
 
     if (!hashedPassword) {
       throw new BadRequestException('Failed to hash password');
@@ -77,7 +76,19 @@ export class UsersService {
     userId: string,
     updateInfo: Partial<UserEntity>,
   ): Promise<UpdateResult> {
-    return await this.userRepository.update(userId, updateInfo);
+    const safeUpdateInfo = { ...updateInfo };
+    delete safeUpdateInfo.password;
+
+    return await this.userRepository.update(userId, safeUpdateInfo);
+  }
+
+  async updatePassword(
+    userId: string,
+    newPassword: string,
+  ): Promise<UpdateResult> {
+    const password = await this.hashPassword(newPassword);
+
+    return await this.userRepository.update(userId, { password });
   }
 
   async findByEmailWithPassword(email: string): Promise<UserEntity | null> {
@@ -86,5 +97,12 @@ export class UsersService {
       .where('user.email = :email', { email })
       .addSelect('user.password')
       .getOne();
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    return hashedPassword;
   }
 }

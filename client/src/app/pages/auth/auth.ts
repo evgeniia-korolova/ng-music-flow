@@ -22,9 +22,14 @@ export default class Auth {
   readonly router = inject(Router);
   private readonly authStore = inject(AuthStore);
 
-  isOpen = computed(
-    () => this.authStore.isNotSyncedToJamendo() && !this.router.url.includes('/jamendo'),
-  );
+  isOpen = computed(() => {
+    const url = this.router.url;
+    const excludedRoutes = ['/jamendo', 'change-password'];
+
+    return (
+      this.authStore.isNotSyncedToJamendo() && !excludedRoutes.some((route) => url.includes(route))
+    );
+  });
 
   jamendoOAuth2Endpoint = `${environment.appApiUrl}/auth/jamendo/`;
 

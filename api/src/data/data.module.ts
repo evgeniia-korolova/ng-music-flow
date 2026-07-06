@@ -31,7 +31,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           autoLoadEntities: true,
           logging: true,
           synchronize: !isProduction,
-          dropSchema: false,
+          dropSchema: true,
         };
       },
     }),
