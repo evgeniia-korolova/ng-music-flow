@@ -48,4 +48,18 @@ describe('ArtistProfile', () => {
     const errorText = fixture.nativeElement.querySelector('.artist-profile__loading');
     expect(errorText.textContent).toContain('Oops!');
   });
+  it('is show content', () => {
+    mockArtistStore.isLoading.set(false);
+    mockArtistStore.error.set(null);
+    mockArtistStore.currentArtist.set({ id: '123', name: 'Test Artist' });
+    fixture.detectChanges();
+    const cart = fixture.nativeElement.querySelector('app-artist-card');
+    expect(cart).toBeTruthy();
+  });
+  it('show load more', () => {
+    mockArtistStore.hasMoreTracks.set(true);
+    fixture.detectChanges();
+    const loadMore = fixture.nativeElement.querySelector('app-button');
+    expect(loadMore).toBeTruthy();
+  });
 });
