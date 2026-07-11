@@ -147,7 +147,9 @@ export class CreatePlaylistForm implements OnInit {
   }
 
   onAddJamendoTrack(trackId: string) {
-    const foundedTrack = this.tracksStore.tracks().find((track) => track.id === trackId);
+    const foundedTrack = this.tracksStore
+      .tracks()
+      .find((track) => String(track.id) === String(trackId));
 
     if (foundedTrack) {
       const alreadyAdded = this.selectedTracks().some((t) => t.id === trackId);
@@ -167,7 +169,7 @@ export class CreatePlaylistForm implements OnInit {
     }
   }
   onAddCustomTrack(trackId: string) {
-    const foundedTrack = this.customTracks().find((track) => track.id === trackId);
+    const foundedTrack = this.customTracks().find((track) => String(track.id) === String(trackId));
     console.log(foundedTrack);
     if (foundedTrack) {
       const alreadyAdded = this.selectedTracks().some((track) => track.id === trackId);

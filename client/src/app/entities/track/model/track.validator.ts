@@ -10,5 +10,5 @@ export function isValidRichTrack(track: Track): boolean {
   // if (track.duration < 30) return false;
 
   const loudPeaks = track.waveform.filter((peak) => peak > 0.2).length;
-  return loudPeaks >= 25;
+  return loudPeaks >= 5;
 }

@@ -30,7 +30,12 @@
     </div>
     <div class="base-form__line">
       <label for="trackSelect" class="base-form__label">Choose Jamendo track</label>
-      @defer (when tracksStore.tracks().length>0) {
+      @if (tracksStore.isLoading()) {
+        <div class="playlist-form__select-group">
+          <select class="playlist-form__list"></select>
+          <app-button size="sm" [disabled]="true">Loading...</app-button>
+        </div>
+      } @else if (tracksStore.tracks().length > 0) {
         <div class="playlist-form__select-group">
           <select #trackSelect id="trackSelect" class="playlist-form__list">
             @for (track of tracksStore.tracks(); track track.id) {
@@ -43,10 +48,19 @@
             >Add track</app-button
           >
         </div>
-      } @placeholder (minimum 500ms) {
+      } @else {
         <div class="playlist-form__select-group">
-          <select class="playlist-form__list"></select>
-          <app-button size="sm" [disabled]="true">Loading...</app-button>
+          <select
+            #trackSelectDisabled
+            id="trackSelectDisabled"
+            class="playlist-form__list"
+            [disabled]="true"
+          >
+            <option class="playlist-form__list-item">Tracks not found</option>
+          </select>
+          <app-button type="button" size="sm" (click)="onAddJamendoTrack(trackSelectDisabled.value)"
+            >Add track</app-button
+          >
         </div>
       }
     </div>
