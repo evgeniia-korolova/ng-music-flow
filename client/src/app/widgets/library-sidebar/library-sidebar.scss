@@ -61,7 +61,10 @@
     color: var(--color-brand-active);
     border-left: 3px solid transparent;
     padding-left: 10px;
-
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
     @media (any-hover: hover) {
       &:hover {
         text-decoration: underline;
@@ -70,6 +73,10 @@
   }
   &__confirm-text {
     font-weight: 600;
+    width: 100%;
+    padding-left: 13px;
+    font-weight: 600;
+    // color: var(--color-text-primary);
   }
 }
 // .active-tab {

@@ -17,13 +17,6 @@
         <ul class="aside-library__sublist">
           @for (list of playlists(); track list.id) {
             <li class="aside-library__item">
-              <a
-                class="aside-library__link"
-                [routerLink]="['/library/playlists', list.id]"
-                routerLinkActive="active-tab"
-              >
-                {{ list.name }}
-              </a>
               @if (deletingListId() === list.id) {
                 <span class="aside-library__confirm-text">Sure?</span>
                 <app-button
@@ -45,6 +38,13 @@
                   ><app-icon icon="x"></app-icon
                 ></app-button>
               } @else {
+                <a
+                  class="aside-library__link"
+                  [routerLink]="['/library/playlists', list.id]"
+                  routerLinkActive="active-tab"
+                >
+                  {{ list.name }}
+                </a>
                 <app-button
                   variant="ghost"
                   type="button"
