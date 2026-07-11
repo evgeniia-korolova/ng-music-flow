@@ -4,7 +4,7 @@
       <p class="artist-profile__loading">Profile is loading...</p>
     }
     @if (artistStore.error()) {
-      <p class="artist-profile__loading">Oops! Artist not found.</p>
+      <p class="artist-profile__error">Oops! Artist not found.</p>
     }
     @if (artistStore.currentArtist(); as artist) {
       <app-artist-card [artist]="artist" [isLink]="false"></app-artist-card>

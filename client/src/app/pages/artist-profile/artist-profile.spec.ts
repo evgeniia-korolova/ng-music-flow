@@ -29,6 +29,8 @@ describe('ArtistProfile', () => {
     fixture = TestBed.createComponent(ArtistProfile);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('artistId', '1');
+    mockArtistStore.isLoading.set(false);
+    mockArtistStore.error.set(null);
     fixture.detectChanges();
   });
 
@@ -42,21 +44,18 @@ describe('ArtistProfile', () => {
     expect(loadingText.textContent).toContain('loading');
   });
   it('should display error message', () => {
-    mockArtistStore.isLoading.set(false);
     mockArtistStore.error.set('Something went wrong');
     fixture.detectChanges();
-    const errorText = fixture.nativeElement.querySelector('.artist-profile__loading');
+    const errorText = fixture.nativeElement.querySelector('.artist-profile__error');
     expect(errorText.textContent).toContain('Oops!');
   });
-  it('is show content', () => {
-    mockArtistStore.isLoading.set(false);
-    mockArtistStore.error.set(null);
+  it('should display artist content', () => {
     mockArtistStore.currentArtist.set({ id: '123', name: 'Test Artist' });
     fixture.detectChanges();
-    const cart = fixture.nativeElement.querySelector('app-artist-card');
-    expect(cart).toBeTruthy();
+    const card = fixture.nativeElement.querySelector('app-artist-card');
+    expect(card).toBeTruthy();
   });
-  it('show load more', () => {
+  it('should display load more button', () => {
     mockArtistStore.hasMoreTracks.set(true);
     fixture.detectChanges();
     const loadMore = fixture.nativeElement.querySelector('app-button');
