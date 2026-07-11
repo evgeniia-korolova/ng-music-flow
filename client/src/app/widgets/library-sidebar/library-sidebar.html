@@ -24,28 +24,49 @@
               >
                 {{ list.name }}
               </a>
+              @if (deletingListId() === list.id) {
+                <span class="aside-library__confirm-text">Sure?</span>
+                <app-button
+                  variant="ghost"
+                  type="button"
+                  size="icon-rounded-sm"
+                  (click)="
+                    deleteUserList.emit(list); $event.stopPropagation(); $event.preventDefault()
+                  "
+                  ><app-icon icon="check"></app-icon
+                ></app-button>
+                <app-button
+                  variant="ghost"
+                  type="button"
+                  size="icon-rounded-sm"
+                  (click)="
+                    deletingListId.set(null); $event.stopPropagation(); $event.preventDefault()
+                  "
+                  ><app-icon icon="x"></app-icon
+                ></app-button>
+              } @else {
+                <app-button
+                  variant="ghost"
+                  type="button"
+                  size="icon-rounded-sm"
+                  [appTooltip]="'Edit playlist'"
+                  [routerLink]="['/library/playlists/edit', list.id]"
+                  aria-label="Edit playlist"
+                  ><app-icon icon="edit"></app-icon
+                ></app-button>
 
-              <app-button
-                variant="ghost"
-                type="button"
-                size="icon-rounded-sm"
-                [appTooltip]="'Edit playlist'"
-                [routerLink]="['/library/playlists/edit', list.id]"
-                aria-label="Edit playlist"
-                ><app-icon icon="edit"></app-icon
-              ></app-button>
-
-              <app-button
-                variant="ghost"
-                type="button"
-                size="icon-rounded-sm"
-                [appTooltip]="'Delete playlist'"
-                (click)="
-                  deleteUserList.emit(list); $event.stopPropagation(); $event.preventDefault()
-                "
-                aria-label="Delete playlist"
-                ><app-icon icon="x"></app-icon
-              ></app-button>
+                <app-button
+                  variant="ghost"
+                  type="button"
+                  size="icon-rounded-sm"
+                  [appTooltip]="'Delete playlist'"
+                  (click)="
+                    deletingListId.set(list.id!); $event.stopPropagation(); $event.preventDefault()
+                  "
+                  aria-label="Delete playlist"
+                  ><app-icon icon="x"></app-icon
+                ></app-button>
+              }
             </li>
           }
         </ul>

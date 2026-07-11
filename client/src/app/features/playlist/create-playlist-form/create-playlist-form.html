@@ -92,7 +92,7 @@
       }
     </div>
     <div class="base-form__line">
-      <app-button type="submit" (click)="closeForm()">Cancel</app-button>
+      <app-button type="button" (click)="closeForm()">Cancel</app-button>
       <app-button type="submit" [disabled]="!playlistForm.valid || selectedTracks().length === 0">{{
         isEditMode() ? 'Update list' : 'Create list'
       }}</app-button>
