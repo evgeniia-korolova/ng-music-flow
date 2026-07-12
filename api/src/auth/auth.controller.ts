@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Req,
   Res,
@@ -23,6 +24,8 @@ import { type Response } from 'express';
 import { JamendoOAuthGuard } from './guards/jamendo.guard';
 import { ApiException } from 'src/common/exceptions/api.exception';
 import { ApiErrorPayload } from 'src/common/interfaces/api.error';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { ChangePasswordDto } from './DTOs/change-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -89,5 +92,15 @@ export class AuthController {
         `${frontendUrl}/auth/jamendo?status=AUTH.JAMENDO.FAILED`,
       );
     }
+  }
+
+  @Patch('change-password')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtAuthGuard)
+  async ChangePassword(
+    @Req() req: AuthenticatedRequest,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ): Promise<void> {
+    await this.authService.changePassword(req.user, changePasswordDto);
   }
 }

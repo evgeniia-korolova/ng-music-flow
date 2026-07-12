@@ -89,6 +89,12 @@ export const routes: Routes = [
             canActivate: [guestGuard],
           },
           {
+            path: 'change-password',
+            title: 'Change Password',
+            loadComponent: () => import('./features/auth/change-password/change-password'),
+            canActivate: [authGuard],
+          },
+          {
             path: 'jamendo',
             title: 'Sync to Jamendo',
             loadComponent: () => import('./features/auth/jamendo/jamendo'),
@@ -111,7 +117,7 @@ export const routes: Routes = [
         path: 'library',
         //loadComponent: () => import('./pages/library/library'),
         title: 'Library',
-        data: { displayOnNavbar: true },
+        data: { displayOnNavbar: true, requiresAuth: true },
         loadChildren: () => import('./pages/library/library.routes').then((m) => m.LIBRARY_ROUTES),
         canActivate: [authGuard],
       },
