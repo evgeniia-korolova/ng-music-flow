@@ -52,8 +52,6 @@ export class Header {
   protected readonly navItems = computed(() => {
     const routes = this.router.config.flatMap((layout) => layout.children || []);
 
-    console.log('updating navItems');
-
     return routes.filter(
       (route) =>
         route?.data?.['displayOnNavbar'] === true &&

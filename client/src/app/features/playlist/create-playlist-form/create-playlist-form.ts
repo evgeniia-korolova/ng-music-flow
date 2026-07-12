@@ -112,17 +112,19 @@ export class CreatePlaylistForm implements OnInit {
         tracks: this.selectedTracks(),
       };
 
+      console.log('ФРОНТЕНД ОТПРАВЛЯЕТ В СТОР:', createPayload.tracks);
+
       this.playlistsStore.createPlaylist({
         playlistData: createPayload,
         onSuccess: () => {
           this.playlistForm.reset();
           this.selectedTracks.set([]);
+
           const freshPlaylist = this.playlistsStore.playlists()[0];
 
-          this.playlistsStore.loadPlaylists();
+          //this.playlistsStore.loadPlaylists();
 
           if (freshPlaylist && freshPlaylist.id) {
-            console.log('Redirecting to the exact newly created playlist ID:', freshPlaylist.id);
             void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
             // this.navigateToPreviousOrFallback();
@@ -180,7 +182,7 @@ export class CreatePlaylistForm implements OnInit {
         ...tracks,
         {
           ...foundedTrack,
-          // coverUrl: '/images/track-placeholder.jpg',
+
           origin: 'LOCAL',
           order: tracks.length + 1,
         },
