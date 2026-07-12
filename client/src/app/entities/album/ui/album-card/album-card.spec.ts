@@ -23,4 +23,22 @@ describe('AlbumCard', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('is link', () => {
+    fixture.componentRef.setInput('isLink', true);
+    fixture.detectChanges();
+    const link = fixture.nativeElement.querySelector('a');
+    expect(link).toBeTruthy();
+  });
+  it('is article', () => {
+    fixture.componentRef.setInput('isLink', false);
+    fixture.detectChanges();
+    const article = fixture.nativeElement.querySelector('article');
+    expect(article).toBeTruthy();
+  });
+  it('should display album data', () => {
+    const title = fixture.nativeElement.querySelector('.album__title');
+    expect(title.textContent).toContain(mockAlbum.name);
+    const date = fixture.nativeElement.querySelector('.album__releasedate');
+    expect(date.textContent).toContain(mockAlbum.releasedate);
+  });
 });

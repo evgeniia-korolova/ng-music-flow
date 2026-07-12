@@ -8,6 +8,7 @@ import { TracksStore } from '../../../entities/track/model/track.store';
 // import { Router } from '@angular/router';
 const mockTrackStore = {
   tracks: signal([]),
+  isLoading: signal(false),
   loadTracks: () => {
     /* mock */
   },

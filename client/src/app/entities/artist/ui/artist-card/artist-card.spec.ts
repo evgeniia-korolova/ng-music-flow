@@ -22,4 +22,32 @@ describe('ArtistCard', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should render as a link when isLink is true', () => {
+    fixture.componentRef.setInput('isLink', true);
+    fixture.detectChanges();
+    const link = fixture.nativeElement.querySelector('a');
+    expect(link).toBeTruthy();
+    const paragraph = fixture.nativeElement.querySelector('p');
+    expect(paragraph).toBeTruthy();
+  });
+  it('should render as an article with links when isLink is false', () => {
+    fixture.componentRef.setInput('isLink', false);
+    fixture.detectChanges();
+
+    const article = fixture.nativeElement.querySelector('article');
+    expect(article).toBeTruthy();
+
+    const mainLinkWrapper = fixture.nativeElement.querySelector('a.artist-card');
+    expect(mainLinkWrapper).toBeNull();
+
+    const conatctLink = fixture.nativeElement.querySelector('a');
+    expect(conatctLink).toBeTruthy();
+
+    expect(conatctLink.getAttribute('target')).toBe('_blank');
+  });
+  it('should display artist name in h3', () => {
+    fixture.detectChanges();
+    const title = fixture.nativeElement.querySelector('h3');
+    expect(title.textContent).toContain('Test Artist');
+  });
 });

@@ -11,7 +11,7 @@ import { SearchStore } from '../../../../pages/search-page/model/search.store';
   styleUrl: './genre-card.scss',
 })
 export class GenreCard {
-  genre = input.required<Genre>();
+  readonly genre = input.required<Genre>();
   protected readonly store = inject(SearchStore);
   private readonly router = inject(Router);
 
