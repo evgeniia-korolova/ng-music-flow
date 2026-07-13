@@ -13,15 +13,33 @@ export class JamendoService {
     const baseUrl = this.configService.getOrThrow<string>('JAMENDO_BASE_URL');
     const clientId = this.configService.getOrThrow<string>('JAMENDO_CLIENT_ID');
 
-    try {
-      const res = await fetch(
-        `${baseUrl}/tracks/?client_id=${clientId}&id=${trackId}&format=json&include=stats`,
-      );
-      const data = (await res.json()) as JamendoResponse<JamendoTrackDto>;
+    const MAX_RETRIES = 5;
+    const RETRY_DELAY_MS = 500;
 
-      return data.results?.[0] ? mapJamendoToTrack(data.results[0]) : null;
-    } catch {
-      return null;
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+      try {
+        const res = await fetch(
+          `${baseUrl}/tracks/?client_id=${clientId}&id=${trackId}&format=json&include=stats`,
+        );
+
+        if (!res.ok) {
+          throw new Error(`HTTP Error Status: ${res.status}`);
+        }
+
+        const data = (await res.json()) as JamendoResponse<JamendoTrackDto>;
+
+        if (data.results?.length > 0) {
+          console.info(`Jamendo was successful on try #${attempt}`);
+          return data.results?.[0] ? mapJamendoToTrack(data.results[0]) : null;
+        }
+      } catch {
+        return null;
+      }
+      if (attempt < MAX_RETRIES) {
+        await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+      }
     }
+
+    return null;
   }
 }
