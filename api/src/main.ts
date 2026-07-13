@@ -20,6 +20,12 @@ async function bootstrap(): Promise<void> {
 
   const app = await NestFactory.create(AppModule);
 
+  console.info(
+    '=====================================================================================================' +
+      `Running app in ${process.env.ENVIRONMENT}` +
+      '=====================================================================================================',
+  );
+
   const apiPort = process.env.API_PORT ?? 3000;
   const clientPort = process.env.CLIENT_PORT ?? 4200;
 

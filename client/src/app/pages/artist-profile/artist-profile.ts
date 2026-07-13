@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { ArtistStore } from '../../entities/artist/model/artist.store';
 import { ArtistCard } from '../../entities/artist/ui/artist-card/artist-card';
 import { AlbumsList } from '../../widgets/albums-list/albums-list';
@@ -17,7 +17,9 @@ export class ArtistProfile {
   public readonly artistId = input.required<string>();
 
   constructor() {
-    this.artistStore.loadArtistProfile(this.artistId);
+    effect(() => {
+      this.artistStore.loadArtistProfile(this.artistId());
+    });
   }
 
   onLoadMore() {
