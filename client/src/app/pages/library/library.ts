@@ -3,7 +3,7 @@ import { LibrarySidebar } from '../../widgets/library-sidebar/library-sidebar';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { LibraryPlaylist } from '../../entities/playlist/model/playlist.model';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
 
 @Component({
@@ -15,6 +15,7 @@ import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
 })
 export default class Library {
   readonly playlistsStore = inject(PlaylistsStore);
+  readonly router = inject(Router);
 
   readonly isFormShow = signal<boolean>(false);
   readonly saveCurrentList = signal<LibraryPlaylist | null>(null);
@@ -25,18 +26,22 @@ export default class Library {
   //   this.saveCurrentList.set(null);
   // }
 
-  // onCreatePlayList(playlist: LibraryPlaylist) {
-  //   this.playlists.update((data) => [...data, playlist]);
-  // }
-
   public deletePlaylist(playlist: LibraryPlaylist): void {
+    const deletedId = playlist.id;
+    if (!deletedId) return;
     if (playlist.id) this.playlistsStore.deletePlaylist(playlist.id);
-  }
 
-  // deletePlaylist(playlistToDelete: LibraryPlaylist) {
-  //   this.playlists.update((data) => data.filter((item) => item.name !== playlistToDelete.name));
-  //   if (this.saveCurrentList()?.name === playlistToDelete.name) {
-  //     this.saveCurrentList.set(null);
-  //   }
-  // }
+    const currentUrl = this.router.url;
+    const isViewingDeleted = currentUrl.includes(`/library/playlists/${deletedId}`);
+
+    if (!isViewingDeleted) return;
+
+    const remainingPlaylists = this.playlistsStore.playlists().filter((p) => p.id !== deletedId);
+
+    if (remainingPlaylists.length > 0) {
+      void this.router.navigate(['/library/playlists', remainingPlaylists[0].id]);
+    } else {
+      void this.router.navigate(['/library/history']);
+    }
+  }
 }

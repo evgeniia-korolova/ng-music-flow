@@ -34,7 +34,6 @@ const initialState: PlaylistsState = {
 };
 
 export const PlaylistsStore = signalStore(
-  { providedIn: 'root' },
   withState(initialState),
 
   withComputed((store) => ({
@@ -58,18 +57,18 @@ export const PlaylistsStore = signalStore(
             const createPayload = {
               name: playlistData.name,
               description: playlistData.description || undefined,
-              tracks: playlistData.tracks.map((track) => ({
+              tracks: playlistData.tracks.map((track, index) => ({
                 trackId: track.id,
                 origin: track.origin || 'JAMENDO',
-                order: track.order,
+                order: track.order ?? index + 1,
               })),
             };
 
             return http.post<SinglePlaylistResponseDto>(apiAddr, createPayload).pipe(
-              tap((rawResponseFromBackend) => {
-                console.log('=== СЫРОЙ ОТВЕТ С БЭКА НА POST (СОЗДАНИЕ) ===');
-                console.dir(rawResponseFromBackend);
-              }),
+              // tap((rawResponseFromBackend) => {
+              //   console.log('=== СЫРОЙ ОТВЕТ С БЭКА НА POST (СОЗДАНИЕ) ===');
+              //   console.dir(rawResponseFromBackend);
+              // }),
               tapResponse({
                 next: (responseDto) => {
                   const playlistRawData = responseDto.data;
@@ -92,36 +91,6 @@ export const PlaylistsStore = signalStore(
                 },
               }),
             );
-
-            // return http.post<PlaylistResponseDto>(apiAddr, createPayload).pipe(
-            //   tap((rawResponseFromBackend) => {
-            //     console.log('=== СЫРОЙ ОТВЕТ С БЭКА НА POST (СОЗДАНИЕ) ===');
-            //     console.dir(rawResponseFromBackend);
-            //   }),
-            //   tapResponse({
-            //     next: (responseDto) => {
-
-            //       const savedPlaylist = mapPlaylistResponseToLibraryPlaylist(responseDto);
-
-            //       patchState(store, (state) => ({
-            //         playlists: [...state.playlists, savedPlaylist],
-            //         isLoading: false,
-            //       }));
-
-            //       if (onSuccess) {
-            //         onSuccess(savedPlaylist);
-            //       }
-            //     },
-            //     error: (err) => {
-            //       console.error('Failed to save playlist to Supabase via NestJS:', err);
-            //       patchState(store, { error: 'fail to create playlist', isLoading: false });
-
-            //       if (onError) {
-            //         onError(err);
-            //       }
-            //     },
-            //   }),
-            // );
           }),
         ),
       ),
@@ -168,8 +137,6 @@ export const PlaylistsStore = signalStore(
                     playlists: state.playlists.filter((p) => p.id !== playlistId),
                     isLoading: false,
                   }));
-
-                  console.log(`Playlist с ID ${playlistId} deleted!`);
                 },
                 error: (err) => {
                   console.error('Failed to delete playlist from NestJS:', err);

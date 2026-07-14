@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { JamendoResponse } from './jamendo-response.model';
+import { map, retry, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -20,9 +21,29 @@ export class JamendoApiService {
       },
     });
 
-    return this.http.get<JamendoResponse<T>>(`${this.baseUrl}/${endpoint}/`, {
-      params: httpParams,
-    });
+    return this.http
+      .get<JamendoResponse<T>>(`${this.baseUrl}/${endpoint}/`, {
+        params: httpParams,
+      })
+      .pipe(
+        map((response) => {
+          const status = response?.headers?.status;
+          const count = response?.headers?.results_count;
+
+          if (status === 'success' && count === 0) {
+            throw new Error('Jamendo Throttling: Empty array');
+          }
+
+          return response;
+        }),
+        retry({
+          count: 3,
+          delay: (error, retryCount) => {
+            console.warn(`Retry querry №${retryCount} because of: ${error.message}`);
+            return timer(1000);
+          },
+        }),
+      );
   }
 
   redirectToAuth(): void {

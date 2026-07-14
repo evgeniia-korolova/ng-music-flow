@@ -1,6 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { vi } from 'vitest';
 
 import Library from './library';
+import { signal } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
+
+const mockPlaylistsStore = {
+  playlists: signal([]),
+  isLoading: signal(false),
+  error: signal(null),
+  loadPlaylists: vi.fn(),
+  deletePlaylist: vi.fn(),
+};
 
 describe('Library', () => {
   let component: Library;
@@ -9,6 +21,7 @@ describe('Library', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Library],
+      providers: [provideRouter([]), { provide: PlaylistsStore, useValue: mockPlaylistsStore }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Library);

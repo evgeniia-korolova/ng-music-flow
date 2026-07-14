@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
+import { PlaylistsStore } from '../../entities/playlist/model/playlists.store';
 
 export const LIBRARY_ROUTES: Routes = [
   {
     path: '',
     loadComponent: () => import('./library').then((m) => m.default),
+    providers: [PlaylistsStore],
     children: [
       {
         path: '',

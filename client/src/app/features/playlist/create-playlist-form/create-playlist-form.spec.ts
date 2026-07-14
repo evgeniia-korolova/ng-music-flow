@@ -3,16 +3,38 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CreatePlaylistForm } from './create-playlist-form';
 import { signal } from '@angular/core';
 import { TracksStore } from '../../../entities/track/model/track.store';
-// import { Track } from '../../../entities/track/model/track.model';
-// import { vi } from 'vitest';
-// import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { LibraryPlaylist } from '../../../entities/playlist/model/playlist.model';
+import { Track } from '../../../entities/track/model/track.model';
+import { vi } from 'vitest';
+import { PlaylistsStore } from '../../../entities/playlist/model/playlists.store';
+import { provideRouter } from '@angular/router';
+import { provideLocationMocks } from '@angular/common/testing';
+import { TrackApiService } from '../../../entities/track/api/track-api-service';
+
 const mockTrackStore = {
-  tracks: signal([]),
+  tracks: signal<Track[]>([]),
   isLoading: signal(false),
   loadTracks: () => {
     /* mock */
   },
 };
+
+const mockPlaylistsStore = {
+  playlists: signal<LibraryPlaylist[]>([]),
+  isLoading: signal(false),
+  error: signal<string | null>(null),
+  loadPlaylists: () => {
+    /* mock */
+  },
+  createPlaylist: vi.fn(),
+  updatePlaylist: vi.fn(),
+};
+
+const mockTrackApiService = {
+  getUserTracks: () => of({ data: { tracks: [] } }),
+};
+
 describe('CreatePlaylistForm', () => {
   let component: CreatePlaylistForm;
   let fixture: ComponentFixture<CreatePlaylistForm>;
@@ -20,10 +42,20 @@ describe('CreatePlaylistForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CreatePlaylistForm],
+
+      providers: [
+        provideRouter([]),
+        provideLocationMocks(),
+        { provide: TrackApiService, useValue: mockTrackApiService },
+      ],
     })
+
       .overrideComponent(CreatePlaylistForm, {
         set: {
-          providers: [{ provide: TracksStore, useValue: mockTrackStore }],
+          providers: [
+            { provide: TracksStore, useValue: mockTrackStore },
+            { provide: PlaylistsStore, useValue: mockPlaylistsStore },
+          ],
         },
       })
       .compileComponents();
