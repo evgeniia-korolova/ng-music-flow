@@ -34,7 +34,6 @@ const initialState: PlaylistsState = {
 };
 
 export const PlaylistsStore = signalStore(
-  { providedIn: 'root' },
   withState(initialState),
 
   withComputed((store) => ({
