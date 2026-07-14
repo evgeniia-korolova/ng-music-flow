@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { PlaylistsStore } from '../../../../entities/playlist/model/playlists.store';
 import { DragDropList } from '../../../../widgets/drag-drop-list/drag-drop-list';
-import { DatePipe } from '@angular/common';
+import { DatePipe, UpperCasePipe } from '@angular/common';
 import { Button } from '../../../../shared/ui/button/button';
 import { Router, RouterLink } from '@angular/router';
 import { LibraryPlaylistTrack } from '../../../../entities/track/model/track.model';
 
 @Component({
   selector: 'app-playlist-view-page',
-  imports: [DragDropList, DatePipe, Button, RouterLink],
+  imports: [DragDropList, DatePipe, Button, RouterLink, UpperCasePipe],
   templateUrl: './playlist-view-page.html',
   styleUrl: './playlist-view-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

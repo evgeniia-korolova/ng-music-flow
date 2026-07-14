@@ -15,10 +15,9 @@ import { Icon } from '../../../shared/ui/icon/icon.component';
 import { TracksStore } from '../../../entities/track/model/track.store';
 import { Router } from '@angular/router';
 import { PlaylistsStore } from '../../../entities/playlist/model/playlists.store';
-import { FormNavigationService } from '../../../shared/services/form-navigation-service/form-navigation-service';
 import { FormError } from '../../../shared/ui/form-error/form-error';
 import { TrackApiService } from '../../../entities/track/api/track-api-service';
-// import { Location } from '@angular/common';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-create-playlist-form',
@@ -32,8 +31,7 @@ export class CreatePlaylistForm implements OnInit {
   readonly tracksStore = inject(TracksStore);
   readonly playlistsStore = inject(PlaylistsStore);
   private readonly router = inject(Router);
-  // private readonly location = inject(Location);
-  private readonly formNavigateService = inject(FormNavigationService);
+  private readonly location = inject(Location);
   private trackApiService = inject(TrackApiService);
   readonly selectedTracks = signal<LibraryPlaylistTrack[]>([]);
   readonly cancelForm = output<void>();
@@ -97,7 +95,7 @@ export class CreatePlaylistForm implements OnInit {
         playlistId: id,
         playlistData: updatePayload,
         onSuccess: () => {
-          console.log('Playlist successfully updated! Navigating back...');
+          //console.log('Playlist successfully updated! Navigating back...');
 
           this.playlistForm.reset();
           this.selectedTracks.set([]);
@@ -112,7 +110,7 @@ export class CreatePlaylistForm implements OnInit {
         tracks: this.selectedTracks(),
       };
 
-      console.log('ФРОНТЕНД ОТПРАВЛЯЕТ В СТОР:', createPayload.tracks);
+      //console.log('ФРОНТЕНД ОТПРАВЛЯЕТ В СТОР:', createPayload.tracks);
 
       this.playlistsStore.createPlaylist({
         playlistData: createPayload,
@@ -127,8 +125,8 @@ export class CreatePlaylistForm implements OnInit {
           if (freshPlaylist && freshPlaylist.id) {
             void this.router.navigate(['/library/playlists', freshPlaylist.id]);
           } else {
-            // this.navigateToPreviousOrFallback();
-            this.formNavigateService.goBackOrFallback('/library/custom-tracks');
+            this.navigateToPreviousOrFallback();
+            //this.formNavigateService.goBackOrFallback('/library/custom-tracks');
           }
         },
         onError: (err) => console.error('failed to create playlist:', err),
@@ -136,16 +134,17 @@ export class CreatePlaylistForm implements OnInit {
     }
   }
 
-  // private navigateToPreviousOrFallback(): void {
-  //   if (window.history.length > 1) {
-  //     this.location.back();
-  //   } else {
-  //     void this.router.navigate(['/library/custom-tracks']);
-  //   }
-  // }
+  private navigateToPreviousOrFallback(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      void this.router.navigate(['/library/history']);
+    }
+  }
 
   closeForm(): void {
-    this.formNavigateService.goBackOrFallback('/library/custom-tracks');
+    //this.formNavigateService.goBackOrFallback('/library/custom-tracks');
+    this.navigateToPreviousOrFallback();
   }
 
   onAddJamendoTrack(trackId: string) {

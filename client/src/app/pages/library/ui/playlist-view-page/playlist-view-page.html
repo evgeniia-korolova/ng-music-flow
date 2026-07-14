@@ -15,7 +15,7 @@
     >
       <div slot-header class="playlist-info-header">
         <div class="header-info">
-          <h2 class="playlist-info-header__title">{{ playlist.name }}</h2>
+          <h2 class="playlist-info-header__title">{{ playlist.name | uppercase }}</h2>
           @if (playlist.createdAt) {
             <span class="playlist-info-header__date">
               📅 Created: {{ playlist.createdAt | date: 'dd.MM.yyyy' }}
