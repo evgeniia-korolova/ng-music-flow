@@ -4,9 +4,11 @@ import { Observable } from 'rxjs';
 import {
   CustomTrackTitle,
   PaginatedTracksResponse,
+  Track,
   TrackServerResponse,
 } from '../model/track.model';
 import { environment } from '../../../../environments/environment';
+import { ApiResponse } from '../../../shared/api/api-response';
 
 @Injectable({
   providedIn: 'root',
@@ -15,8 +17,8 @@ export class TrackApiService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.appApiUrl;
 
-  uploadTrack(formData: FormData) {
-    return this.http.post(`${this.apiUrl}/tracks/upload`, formData);
+  uploadTrack(formData: FormData): Observable<ApiResponse<Track>> {
+    return this.http.post<ApiResponse<Track>>(`${this.apiUrl}/tracks/upload`, formData);
   }
 
   getCustomTrackTitles(): Observable<CustomTrackTitle[]> {

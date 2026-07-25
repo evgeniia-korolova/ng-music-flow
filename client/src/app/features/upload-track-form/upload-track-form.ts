@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { Button } from '../../shared/ui/button/button';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -15,6 +15,10 @@ import { TrackApiService } from '../../entities/track/api/track-api-service';
 export class UploadTrackForm {
   private readonly formNavigateService = inject(FormNavigationService);
   readonly trackApiService = inject(TrackApiService);
+
+  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
+
+  readonly error = signal('');
 
   uploadTrackForm = new FormGroup({
     title: new FormControl('', [
@@ -47,9 +51,32 @@ export class UploadTrackForm {
       next: () => {
         this.closeForm();
       },
+      error: ({ error: { error } }) => {
+        if (error.code) {
+          switch (error.code) {
+            case 'FILEUPLOAD.TOO_LARGE':
+            case 'FILEUPLOAD.INVALID_FORMAT': {
+              this.resetFileInput();
+              break;
+            }
+          }
+        }
+
+        this.error.set(error.message);
+      },
     });
   }
+
   closeForm() {
     this.formNavigateService.goBackOrFallback('/library/custom-tracks');
+  }
+
+  private resetFileInput() {
+    this.uploadTrackForm.controls.file.setValue(null);
+
+    const inputEl = this.fileInput()?.nativeElement;
+    if (inputEl) {
+      inputEl.value = '';
+    }
   }
 }

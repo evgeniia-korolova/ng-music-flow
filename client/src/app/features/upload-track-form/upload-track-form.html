@@ -32,8 +32,13 @@
     </div>
     <div class="base-form__line">
       <label for="file" class="base-form__label">File:</label>
-      <input type="file" accept="audio/*" (change)="onFileSelected($event)" id="file" />
+      <input type="file" accept="audio/*" (change)="onFileSelected($event)" id="file" #fileInput />
     </div>
+    @if (error()) {
+      <div class="base-form__line text-red-700">
+        {{ error() }}
+      </div>
+    }
     <div class="base-form__line">
       <app-button type="button" (click)="closeForm()">Cancel</app-button>
       <app-button type="submit" [disabled]="!uploadTrackForm.valid">Add track</app-button>
