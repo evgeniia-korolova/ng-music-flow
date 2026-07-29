@@ -5,7 +5,7 @@ import { Directive, ElementRef, inject, input, Renderer2 } from '@angular/core';
   host: {
     '(mouseenter)': 'show()',
     '(mouseleave)': 'hide()',
-    '(click)': 'hide()', // Скрываем при клике, чтобы тултип не висел после нажатия
+    '(click)': 'hide()',
   },
 })
 export class TooltipDirective {

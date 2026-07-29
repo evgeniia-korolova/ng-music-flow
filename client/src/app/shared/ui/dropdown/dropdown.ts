@@ -96,11 +96,6 @@ export class Dropdown {
   toggleDropdown(event: Event): void {
     event.stopPropagation();
     this.isOpen.update((prev) => !prev);
-
-    // Если открыли, можно программно сфокусировать первый элемент (для этого пригодится твоя директива)
-    // if (this.isOpen()) {
-    //   setTimeout(() => this.focusFirstItem(), 0);
-    // }
   }
 
   private focusFirstItem(): void {

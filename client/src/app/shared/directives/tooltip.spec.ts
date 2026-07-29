@@ -28,7 +28,7 @@ describe('TooltipDirective', () => {
     const buttonDebug = fixture.debugElement.query(By.css('button'));
     buttonEl = buttonDebug.nativeElement;
 
-    fixture.detectChanges(); // Первая инициализация
+    fixture.detectChanges();
   });
 
   afterEach(() => {

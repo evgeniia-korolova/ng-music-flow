@@ -23,7 +23,7 @@
 
   &.is-minimized {
     height: 0;
-    //transform: translateY(0);
+
     overflow: visible;
 
     .global-player {
@@ -177,7 +177,6 @@
     flex-direction: column;
     overflow-y: auto;
     flex: 1;
-    // padding: 0 12px 12px 12px;
 
     &::-webkit-scrollbar {
       width: 6px;
@@ -365,10 +364,8 @@
     width: 30%;
 
     @media (max-width: 1024px) {
-      //width: 100%;
       flex-direction: row;
       justify-content: center;
-      //gap: 2rem;
     }
 
     @media screen and (max-width: 430px) {
@@ -435,10 +432,6 @@
     position: relative;
     flex: 1;
     height: 32px;
-    // display: flex;
-    // align-items: center;
-    // background: rgba(255, 255, 255, 0.1); // Тонкая подложка под волну
-    // border-radius: 4px;
   }
 
   &__seek-slider {
