@@ -8,6 +8,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { ChangePasswordData } from '../../features/auth/change-password/change-password';
+import { AudioPlayerService } from '../../shared/services/audio-player/audio-player-service';
 
 export interface AuthState {
   user: UserProfile | null;
@@ -32,6 +33,7 @@ const TOKEN_KEY = 'ngMusicFlow:token';
 })
 export class AuthStore {
   private readonly http = inject(HttpClient);
+  private readonly playerService = inject(AudioPlayerService);
   private readonly baseUrl = `${environment.appApiUrl}/auth`;
 
   private readonly state = signal<AuthState>(initialState);
@@ -209,6 +211,7 @@ export class AuthStore {
       error: null,
     });
     this.cleanTokenFromLocalStorage();
+    this.playerService.stopAndReset();
   }
 
   async retrieveUserInformation() {

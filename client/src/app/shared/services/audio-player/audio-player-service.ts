@@ -223,6 +223,18 @@ export class AudioPlayerService {
     this.duration.set(0);
   }
 
+  public stopAndReset(): void {
+    if (this.audio) {
+      this.audio.pause();
+      this.audio.src = '';
+      this.audio.load();
+    }
+
+    this.resetPlayerState();
+
+    this.currentTrack.set(null);
+  }
+
   setVolume(value: number): void {
     const boundedVolume = Math.max(0, Math.min(1, value));
     this.volume.set(boundedVolume);

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { JamendoResponse } from './jamendo-response.model';
-import { map, retry, timer } from 'rxjs';
+import { catchError, map, of, retry, timer } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -40,8 +40,16 @@ export class JamendoApiService {
           count: 3,
           delay: (error, retryCount) => {
             console.warn(`Retry querry №${retryCount} because of: ${error.message}`);
-            return timer(1000);
+            const delayTime = retryCount * 1500;
+            return timer(delayTime);
           },
+        }),
+        catchError((err) => {
+          console.error('Jamendo API critically failed after all retries:', err.message);
+          return of({
+            headers: { status: 'success', results_count: 0 },
+            results: [],
+          } as unknown as JamendoResponse<T>);
         }),
       );
   }
