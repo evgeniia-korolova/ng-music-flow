@@ -4,9 +4,17 @@
   padding: 4rem 0.975rem;
 
   width: 100%;
+
+  .close-btn {
+    position: absolute;
+    top: 0.75em;
+    right: 1rem;
+  }
 }
 
 .auth-page-container {
+  position: relative;
+
   width: clamp(340px, 90%, 640px);
   border-radius: 1.5rem;
   overflow: hidden;
