@@ -30,6 +30,7 @@ export default class ChangePassword {
   readonly router = inject(Router);
 
   readonly wrongPassword = signal<string>('');
+  readonly successResult = signal(false);
 
   changePasswordForm = form(this.changePasswordModel, (schema) => {
     required(schema.oldPassword, { message: 'Old password is required' });
@@ -51,6 +52,16 @@ export default class ChangePassword {
     pattern(schema.newPassword, /.*\d.*/, { message: 'Must include number' });
     pattern(schema.newPassword, /.*[@$!%*?&].*/, { message: 'Must include special character' });
     pattern(schema.newPassword, /^\S+$/, { message: 'Must not include spaces' });
+    validate(schema.newPassword, (context) => {
+      const oldPassword = context.valueOf(schema.oldPassword);
+      const newPassword = context.valueOf(schema.newPassword);
+
+      if (oldPassword === newPassword) {
+        return { kind: 'same-password', message: 'New password cannot be same as old one' };
+      }
+
+      return null;
+    });
 
     required(schema.confirmPassword, { message: 'Retype your password' });
     validate(schema.confirmPassword, (context) => {
@@ -70,6 +81,13 @@ export default class ChangePassword {
       return { icon: 'warning', message: this.generalError() };
     }
 
+    if (this.successResult()) {
+      return {
+        icon: 'check',
+        message: 'Change password has been successful',
+      };
+    }
+
     return {
       icon: 'info',
       message: 'Fill in the fields below to change password to your account!',
@@ -87,6 +105,9 @@ export default class ChangePassword {
   async onSubmit() {
     if (!this.changePasswordForm().valid()) {
       this.generalError.set('Something went wrong');
+
+      this.successResult.set(false);
+
       return;
     }
 
@@ -106,6 +127,8 @@ export default class ChangePassword {
         this.generalError.set(this.store.error()!.message);
       }
 
+      this.successResult.set(false);
+
       return;
     }
 
@@ -117,6 +140,8 @@ export default class ChangePassword {
       newPassword: '',
       confirmPassword: '',
     });
+
+    this.successResult.set(true);
 
     this.changePasswordForm().reset();
   }

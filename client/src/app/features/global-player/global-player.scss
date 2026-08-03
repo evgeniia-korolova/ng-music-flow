@@ -374,6 +374,11 @@
       flex: none;
       justify-content: flex-end;
     }
+
+    .options__top {
+      display: flex;
+      gap: 2rem;
+    }
   }
 
   &__volume {
