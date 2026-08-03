@@ -8,6 +8,7 @@ import { Button } from '../../shared/ui/button/button';
 import { environment } from '../../../environments/environment';
 import { connectToJamendo } from '../../shared/utils/jamendo';
 import { Icon } from '../../shared/ui/icon/icon.component';
+import { AudioPlayerService } from '../../shared/services/audio-player/audio-player-service';
 
 export interface Submittable {
   submit: (data: LoginData | RegisterData) => Promise<void>;
@@ -22,6 +23,11 @@ export interface Submittable {
 export default class Auth {
   readonly router = inject(Router);
   private readonly authStore = inject(AuthStore);
+  private readonly audioService = inject(AudioPlayerService);
+
+  constructor() {
+    this.audioService.isQueueOpen.set(false);
+  }
 
   isOpen = computed(() => {
     const url = this.router.url;

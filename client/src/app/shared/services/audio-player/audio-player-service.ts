@@ -13,6 +13,7 @@ export class AudioPlayerService {
   readonly isPlaying = signal<boolean>(false);
   readonly isReady = signal<boolean>(false);
   readonly isBuffering = signal<boolean>(false);
+  readonly isQueueOpen = signal(false);
 
   readonly currentTime = signal<number>(0);
   readonly duration = signal<number>(0);
@@ -231,7 +232,7 @@ export class AudioPlayerService {
     }
 
     this.resetPlayerState();
-
+    this.isQueueOpen.set(false);
     this.currentTrack.set(null);
   }
 
@@ -250,5 +251,10 @@ export class AudioPlayerService {
     } else {
       this.setVolume(this.preMuteVolume || 0.5);
     }
+  }
+
+  toggleQueue(): void {
+    if (this.queue().length === 0) return;
+    this.isQueueOpen.update((open) => !open);
   }
 }

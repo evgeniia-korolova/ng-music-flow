@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Icon } from '../../shared/ui/icon/icon.component';
 import { AudioPlayerService } from '../../shared/services/audio-player/audio-player-service';
 import { TrackWaveform } from '../../entities/track/ui/track-waveform/track-waveform';
@@ -26,7 +26,7 @@ export class GlobalPlayer {
   readonly isPlaying = this.playerService.isPlaying;
   readonly progressPercent = this.playerService.progressPercent;
 
-  readonly isQueueOpen = signal<boolean>(false);
+  readonly isQueueOpen = this.playerService.isQueueOpen;
   readonly queueTracks = this.playerService.queue;
 
   readonly isMobileOrTablet = computed(() => !this.responsiveService.isLarge());
@@ -39,7 +39,7 @@ export class GlobalPlayer {
   }
 
   toggleQueueMenu(): void {
-    this.isQueueOpen.update((open) => !open);
+    this.playerService.toggleQueue();
   }
 
   onVolumeChange(event: Event): void {
