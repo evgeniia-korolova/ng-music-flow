@@ -51,6 +51,10 @@
     &.error {
       color: var(--color-text-danger);
     }
+
+     &.success {
+      color: var(--color-text-success);
+    }
   }
 
   @media (min-width: 640px) {
