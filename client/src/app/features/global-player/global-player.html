@@ -73,13 +73,22 @@
       </div>
 
       <div class="global-player__options">
-        <button
-          class="player-btn btn-queue"
-          (click)="toggleQueueMenu()"
-          [appTooltip]="isQueueOpen() ? 'Close Playlist' : 'Open Playlist'"
-        >
-          <app-icon icon="playlist-music" />
-        </button>
+        <div class="options__top">
+          <button
+            class="player-btn btn-queue"
+            (click)="toggleQueueMenu()"
+            [appTooltip]="isQueueOpen() ? 'Close Playlist' : 'Open Playlist'"
+          >
+            <app-icon icon="playlist-music" />
+          </button>
+          <button
+            class="player-btn player-btn--minimize"
+            (click)="playerService.minimize()"
+            appTooltip="Minimize Player"
+          >
+            <app-icon icon="arrow-up" />
+          </button>
+        </div>
 
         @if (responsiveService.isLarge()) {
           <div class="global-player__volume">
@@ -96,16 +105,6 @@
               (input)="onVolumeChange($event)"
             />
           </div>
-        }
-
-        @if (isMobileOrTablet()) {
-          <button
-            class="player-btn player-btn--minimize"
-            (click)="playerService.minimize()"
-            appTooltip="Minimize Player"
-          >
-            <app-icon icon="arrow-up" />
-          </button>
         }
       </div>
     </div>
@@ -138,7 +137,7 @@
     </div>
   </section>
 
-  @if (isMobileOrTablet() && isPlayerMinimized()) {
+  @if (isPlayerMinimized()) {
     <div class="player-mini-widget">
       @if (isPlaying()) {
         <div class="widget-pulse"></div>

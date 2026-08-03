@@ -15,7 +15,7 @@ import { ResponsiveService } from '../../shared/services/responsive-service/resp
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class.is-visible]': '!!currentTrack()',
-    '[class.is-minimized]': 'isMobileOrTablet() && isPlayerMinimized()',
+    '[class.is-minimized]': ' isPlayerMinimized()',
   },
 })
 export class GlobalPlayer {

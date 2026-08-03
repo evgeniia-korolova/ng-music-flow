@@ -1,50 +1,48 @@
 <div class="py-4 lg:px-4">
   @if (provider.isLoading()) {
     <p class="text-accent animate-pulse">Loading tracks...</p>
-  }
-
-  @if (provider.error()) {
+  } @else if (provider.error()) {
     <p class="text-red-500">{{ provider.error() }}</p>
-  }
-
-  <ul class="m-0 flex min-h-100 list-none flex-col gap-3 p-0" #listContainer>
-    @for (track of provider.tracks(); track track.id; let idx = $index) {
-      @defer (on viewport) {
-        <li
-          class="block min-h-33.75 w-full"
-          #item
-          [attr.data-track-id]="track.id"
-          data-testid="track-card"
-        >
-          @if (trackHeaderTemplate(); as headerTemplate) {
-            <ng-container
-              [ngTemplateOutlet]="headerTemplate"
-              [ngTemplateOutletContext]="{ $implicit: track, index: idx }"
+  } @else {
+    <ul class="m-0 flex min-h-100 list-none flex-col gap-3 p-0" #listContainer>
+      @for (track of provider.tracks(); track track.id; let idx = $index) {
+        @defer (on viewport) {
+          <li
+            class="block min-h-33.75 w-full"
+            #item
+            [attr.data-track-id]="track.id"
+            data-testid="track-card"
+          >
+            @if (trackHeaderTemplate(); as headerTemplate) {
+              <ng-container
+                [ngTemplateOutlet]="headerTemplate"
+                [ngTemplateOutletContext]="{ $implicit: track, index: idx }"
+              />
+            }
+            <!-- <ng-content select="[slot-meta-library]" /> -->
+            <app-track-card
+              [track]="track"
+              [showWave]="showWave()"
+              [playlistContext]="provider.tracks()"
+              [showExtraInfo]="false"
+              [priority]="$index < 3"
             />
-          }
-          <!-- <ng-content select="[slot-meta-library]" /> -->
-          <app-track-card
-            [track]="track"
-            [showWave]="showWave()"
-            [playlistContext]="provider.tracks()"
-            [showExtraInfo]="false"
-            [priority]="$index < 3"
-          />
-        </li>
-      } @placeholder (minimum 500ms) {
+          </li>
+        } @placeholder (minimum 500ms) {
+          <li
+            data-testid="track-placeholder"
+            class="bg-accent box-border min-h-33.75 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
+          >
+            Loading...
+          </li>
+        }
+      } @empty {
         <li
-          data-testid="track-placeholder"
-          class="bg-accent box-border min-h-[135px] w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
+          class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
         >
-          Loading...
+          No tracks found...
         </li>
       }
-    } @empty {
-      <li
-        class="bg-accent box-border h-12 w-full rounded-lg border border-slate-900 px-4 py-3 shadow-md"
-      >
-        No tracks found...
-      </li>
-    }
-  </ul>
+    </ul>
+  }
 </div>

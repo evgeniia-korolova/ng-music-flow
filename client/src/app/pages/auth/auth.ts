@@ -27,6 +27,7 @@ export default class Auth {
 
   constructor() {
     this.audioService.isQueueOpen.set(false);
+    this.audioService.minimize();
   }
 
   isOpen = computed(() => {
