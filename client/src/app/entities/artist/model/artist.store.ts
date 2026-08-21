@@ -61,7 +61,6 @@ export const ArtistStore = signalStore(
         ),
       ),
     ),
-
     loadArtistProfile: rxMethod<string>(
       pipe(
         tap(() => patchState(store, { isLoading: true, error: null })),

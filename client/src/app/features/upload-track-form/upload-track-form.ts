@@ -40,7 +40,7 @@ export class UploadTrackForm {
   }
   onSubmit() {
     if (this.uploadTrackForm.invalid) return;
-    console.log(this.uploadTrackForm.value.file);
+    // console.log(this.uploadTrackForm.value.file);
     const formData = new FormData();
     formData.append('title', this.uploadTrackForm.value.title!);
     formData.append('artist', this.uploadTrackForm.value.artist!);
