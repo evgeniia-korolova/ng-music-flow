@@ -1,12 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  CustomTrackTitle,
-  PaginatedTracksResponse,
-  Track,
-  TrackServerResponse,
-} from '../model/track.model';
+import { PaginatedTracksResponse, Track, TrackServerResponse } from '../model/track.model';
 import { environment } from '../../../../environments/environment';
 import { ApiResponse } from '../../../shared/api/api-response';
 
@@ -19,10 +14,6 @@ export class TrackApiService {
 
   uploadTrack(formData: FormData): Observable<ApiResponse<Track>> {
     return this.http.post<ApiResponse<Track>>(`${this.apiUrl}/tracks/upload`, formData);
-  }
-
-  getCustomTrackTitles(): Observable<CustomTrackTitle[]> {
-    return this.http.get<CustomTrackTitle[]>(`${this.apiUrl}/tracks/titles`);
   }
 
   getUserTracks(): Observable<TrackServerResponse<PaginatedTracksResponse>> {

@@ -1,4 +1,4 @@
-import { Component, inject, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { AlbumStore } from '../../entities/album/model/album.store';
 import { AlbumCard } from '../../entities/album/ui/album-card/album-card';
 import { TrackCard } from '../../entities/track/ui/track-card/track-card';
@@ -18,7 +18,9 @@ export class AlbumProfile {
   public readonly albumId = input.required<string>();
 
   constructor() {
-    this.albumStore.loadAlbumDetails(this.albumId);
+    effect(() => {
+      this.albumStore.loadAlbumDetails(this.albumId());
+    });
   }
 
   playFullAlbum() {

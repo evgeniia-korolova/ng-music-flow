@@ -34,9 +34,11 @@
 @media (width < 768px) {
   .playlists__menu-btn {
     display: block;
+    // position: absolute;
+    // right: 1rem;
   }
   app-library-sidebar {
-    padding: 30px 15px 100px;
+    padding: 90px 15px 100px;
     position: fixed;
     top: 4.5rem;
     left: 0;
